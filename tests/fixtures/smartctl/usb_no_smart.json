@@ -1,0 +1,43 @@
+{
+  "json_format_version": [
+    1,
+    0
+  ],
+  "smartctl": {
+    "version": [
+      7,
+      4
+    ],
+    "pre_release": false,
+    "svn_revision": "5530",
+    "platform_info": "x86_64-w64-mingw32-w10-22H2",
+    "build_info": "(sf-7.4-1)",
+    "argv": [
+      "smartctl",
+      "-a",
+      "--json",
+      "/dev/sdc"
+    ],
+    "exit_status": 2,
+    "messages": [
+      {
+        "string": "/dev/sdc: Unknown USB bridge [0x090c:0x1000 (0x1100)]",
+        "severity": "error"
+      },
+      {
+        "string": "Please specify device type with the -d option.",
+        "severity": "error"
+      }
+    ]
+  },
+  "local_time": {
+    "time_t": 1791300000,
+    "asctime": "Tue Oct  6 12:00:00 2026 RTZST"
+  },
+  "device": {
+    "name": "/dev/sdc",
+    "info_name": "/dev/sdc",
+    "type": "scsi",
+    "protocol": "SCSI"
+  }
+}

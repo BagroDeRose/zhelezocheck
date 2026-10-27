@@ -1,0 +1,301 @@
+{
+  "name": "mining_gpu",
+  "title": "Видеокарта после майнинга",
+  "description": "RTX 3070 с урезанным лимитом мощности и вентилятором на 100%.",
+  "snapshot": {
+    "collected_at": "2026-10-05T12:00:00",
+    "is_admin": true,
+    "system": {
+      "os_name": "Microsoft Windows 11 Pro",
+      "os_version": "10.0.22631",
+      "os_build": "22631",
+      "architecture": "64-bit",
+      "install_date": "2024-03-14T10:22:00",
+      "last_boot": "2026-10-05T09:01:00",
+      "manufacturer": "Micro-Star International Co., Ltd.",
+      "model": "MS-7C56",
+      "is_laptop": false,
+      "bios_vendor": "American Megatrends International, LLC.",
+      "bios_version": "A.H0",
+      "bios_date": "2023-08-21"
+    },
+    "cpu": {
+      "name": "AMD Ryzen 5 5600 6-Core Processor",
+      "manufacturer": "AuthenticAMD",
+      "cores": 6,
+      "threads": 12,
+      "max_clock_mhz": 3501,
+      "current_clock_mhz": 3501,
+      "socket": "AM4"
+    },
+    "memory": {
+      "total_mb": 32768,
+      "available_mb": 16384,
+      "modules": [
+        {
+          "capacity_mb": 16384,
+          "speed_mhz": 3200,
+          "configured_speed_mhz": 3200,
+          "manufacturer": "Kingston",
+          "part_number": "KF3200C16D4/16GX",
+          "slot": "DIMM_A2"
+        },
+        {
+          "capacity_mb": 16384,
+          "speed_mhz": 3200,
+          "configured_speed_mhz": 3200,
+          "manufacturer": "Kingston",
+          "part_number": "KF3200C16D4/16GX",
+          "slot": "DIMM_B2"
+        }
+      ],
+      "slots_total": 4
+    },
+    "board": {
+      "manufacturer": "Micro-Star International Co., Ltd.",
+      "product": "B550-A PRO (MS-7C56)",
+      "version": "2.0"
+    },
+    "gpus": [
+      {
+        "vendor": "NVIDIA",
+        "name": "NVIDIA GeForce RTX 3070",
+        "pci_vendor_id": "10de",
+        "pci_device_id": "2484",
+        "subsystem_id": "146b10de",
+        "vram_mb": 8192,
+        "vbios_version": "94.04.3A.00.7C",
+        "driver_version": "560.94",
+        "default_power_limit_w": 130.0,
+        "enforced_power_limit_w": 130.0,
+        "max_power_limit_w": 130.0,
+        "max_clocks": {
+          "graphics": 1500,
+          "sm": 1500,
+          "memory": 6001,
+          "video": 1400
+        },
+        "pcie_gen_current": 1,
+        "pcie_gen_max": 4,
+        "pcie_width_current": 1,
+        "pcie_width_max": 16,
+        "fan_speed_percent": 0.0,
+        "throttle_reasons": [
+          "gpu_idle"
+        ],
+        "pnp_device_id": "PCI\\VEN_10DE&DEV_2484&SUBSYS_146B10DE&REV_A1\\4&2F3C9A7&0&0008",
+        "source": "nvidia-smi"
+      }
+    ],
+    "disks": [
+      {
+        "model": "Samsung SSD 980 1TB",
+        "size_gb": 1000.2,
+        "media_type": "ssd",
+        "bus_type": "nvme",
+        "device": "/dev/sda",
+        "smart": {
+          "power_on_hours": 3120,
+          "power_cycles": 812,
+          "reallocated_sectors": null,
+          "pending_sectors": null,
+          "uncorrectable_sectors": null,
+          "wear_percent": 4.0,
+          "temperature_c": 38.0,
+          "crc_errors": null,
+          "media_errors": 0,
+          "health_passed": true,
+          "source": "smartctl"
+        },
+        "note": ""
+      },
+      {
+        "model": "WDC WD20EZBX-00AYRA0",
+        "size_gb": 2000.4,
+        "media_type": "hdd",
+        "bus_type": "sata",
+        "device": "/dev/sdb",
+        "smart": {
+          "power_on_hours": 14210,
+          "power_cycles": 1630,
+          "reallocated_sectors": 0,
+          "pending_sectors": 0,
+          "uncorrectable_sectors": 0,
+          "wear_percent": null,
+          "temperature_c": 34.0,
+          "crc_errors": 0,
+          "media_errors": null,
+          "health_passed": true,
+          "source": "smartctl"
+        },
+        "note": ""
+      }
+    ],
+    "battery": null,
+    "events": {
+      "days": 30,
+      "counts": {
+        "whea": 0,
+        "kernel_power_41": 0,
+        "bugcheck": 0,
+        "disk": 0
+      },
+      "last_seen": {},
+      "partial": false,
+      "note": ""
+    },
+    "errors": {}
+  },
+  "stress": {
+    "vram": {
+      "status": "passed",
+      "component": "gpu0",
+      "metrics": {
+        "errors": 0,
+        "iterations": 120,
+        "speed_gbps": 190.1,
+        "tested_mb": 7168
+      },
+      "notes": [],
+      "series": {
+        "component": "gpu0",
+        "points": {
+          "temp_c": [
+            40,
+            62,
+            66,
+            67
+          ],
+          "fan_pct": [
+            30,
+            45,
+            50,
+            50
+          ],
+          "clock_mhz": [
+            1777,
+            1890,
+            1875,
+            1875
+          ],
+          "power_w": [
+            60,
+            140,
+            145,
+            145
+          ],
+          "util_pct": [
+            99,
+            99
+          ]
+        }
+      }
+    },
+    "gpu_load": {
+      "status": "passed",
+      "component": "gpu0",
+      "metrics": {
+        "max_temp_c": 66.0,
+        "avg_temp_c": 63.0,
+        "max_fan_pct": 100.0,
+        "clock_drop_pct": 4.0,
+        "max_power_w": 129.0,
+        "throttle_reasons": [
+          "sw_power_cap"
+        ]
+      },
+      "notes": [],
+      "series": {
+        "component": "gpu0",
+        "points": {
+          "temp_c": [
+            45,
+            60,
+            65,
+            66,
+            66
+          ],
+          "fan_pct": [
+            100,
+            100,
+            100,
+            100,
+            100
+          ],
+          "clock_mhz": [
+            1500,
+            1480,
+            1450,
+            1440,
+            1440
+          ],
+          "power_w": [
+            90,
+            128,
+            129,
+            129,
+            129
+          ],
+          "util_pct": [
+            99,
+            99
+          ]
+        }
+      }
+    },
+    "cpu_load": {
+      "status": "passed",
+      "component": "cpu",
+      "metrics": {
+        "checksum_ok": true,
+        "clock_drop_pct": 2.5,
+        "start_clock_mhz": 4400,
+        "avg_clock_mhz": 4290,
+        "workers": 12
+      },
+      "notes": [],
+      "series": {
+        "component": "cpu",
+        "points": {
+          "clock_mhz": [
+            4400,
+            4310,
+            4290,
+            4290
+          ],
+          "perf_pct": [
+            125,
+            123,
+            122,
+            122
+          ]
+        }
+      }
+    },
+    "ram_quick": {
+      "status": "passed",
+      "component": "memory",
+      "metrics": {
+        "tested_mb": 11200,
+        "errors": 0,
+        "passes": 2
+      },
+      "notes": [
+        "Быстрый тест, не заменяет MemTest86."
+      ],
+      "series": null
+    },
+    "disk_read": {
+      "status": "passed",
+      "component": "disk",
+      "metrics": {
+        "read_mb": 2048,
+        "speed_mbps": 1850.0,
+        "read_errors": 0,
+        "files": 412
+      },
+      "notes": [],
+      "series": null
+    }
+  }
+}

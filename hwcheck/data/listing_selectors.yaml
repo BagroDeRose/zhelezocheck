@@ -1,0 +1,77 @@
+# CSS-селекторы для разбора страниц объявлений.
+# Если сайт поменял вёрстку — чините селекторы здесь, код менять не нужно.
+#
+# Каждое поле — список вариантов, берётся первый сработавший.
+# «селектор@атрибут» — взять значение атрибута, иначе — текст элемента.
+# Для сайтов без своего раздела используется раздел generic.
+
+sites:
+  avito:
+    domains: [avito.ru]
+    item:
+      title:
+        - '[data-marker="item-view/title-info"]'
+        - 'h1[itemprop="name"]'
+        - 'h1'
+      price:
+        - '[data-marker="item-view/item-price"]@content'
+        - 'meta[itemprop="price"]@content'
+        - '[itemprop="price"]@content'
+        - '[data-marker="item-view/item-price"]'
+      description:
+        - '[data-marker="item-view/item-description"]'
+        - '[itemprop="description"]'
+      params_items:
+        - '[data-marker="item-view/item-params"] li'
+        - '[class*="params-paramsList__item"]'
+      seller_name:
+        - '[data-marker="seller-info/name"]'
+        - '[data-marker="seller-link/link"]'
+      seller_since:
+        - '[data-marker="seller-info/postfix"]'
+        - '[data-marker="seller-info/summary"]'
+      seller_block:
+        - '[data-marker="seller-info"]'
+        - '[data-marker="item-view/seller-info"]'
+      city:
+        - '[itemprop="address"]'
+        - '[data-marker="delivery/location"]'
+        - '[class*="item-address__string"]'
+    search:
+      card: '[data-marker="item"]'
+      card_title:
+        - '[data-marker="item-title"]'
+        - '[itemprop="name"]'
+      card_price:
+        - 'meta[itemprop="price"]@content'
+        - '[data-marker="item-price"]@content'
+        - '[data-marker="item-price"]'
+
+  generic:
+    domains: []
+    item:
+      title:
+        - 'meta[property="og:title"]@content'
+        - 'h1'
+        - 'title'
+      price:
+        - 'meta[property="product:price:amount"]@content'
+        - 'meta[itemprop="price"]@content'
+        - '[itemprop="price"]@content'
+        - '[itemprop="price"]'
+      description:
+        - 'meta[property="og:description"]@content'
+        - '[itemprop="description"]'
+        - 'meta[name="description"]@content'
+      params_items: []
+      seller_name: []
+      seller_since: []
+      seller_block: []
+      city: []
+    search:
+      card: '[itemtype*="schema.org/Product"]'
+      card_title:
+        - '[itemprop="name"]'
+      card_price:
+        - '[itemprop="price"]@content'
+        - '[itemprop="price"]'

@@ -1,0 +1,1680 @@
+{
+  "version": 1,
+  "description": "Справочник популярных на вторичном рынке видеокарт. Значения — эталонные (референсные) по спецификациям производителей; у партнёрских версий частоты и мощность могут отличаться на 5–15%. verified=false: запись ещё не сверена вручную с источником.",
+  "cards": [
+    {
+      "model": "GeForce GT 730",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "1287",
+        "0f02",
+        "0f06",
+        "0fc9"
+      ],
+      "chip": "GK208B",
+      "vram_gb": [
+        1,
+        2,
+        4
+      ],
+      "memory_type": "DDR3/GDDR5",
+      "bus_width_bits": 64,
+      "base_clock_mhz": 902,
+      "boost_clock_mhz": 902,
+      "tdp_w": 38,
+      "typical_max_temp_c": 70,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_700_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce GT 1030",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "1d01"
+      ],
+      "chip": "GP108",
+      "vram_gb": [
+        2
+      ],
+      "memory_type": "GDDR5",
+      "bus_width_bits": 64,
+      "base_clock_mhz": 1227,
+      "boost_clock_mhz": 1468,
+      "tdp_w": 30,
+      "typical_max_temp_c": 70,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_10_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce GTX 1050",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "1c81",
+        "1c83"
+      ],
+      "chip": "GP107",
+      "vram_gb": [
+        2,
+        3
+      ],
+      "memory_type": "GDDR5",
+      "bus_width_bits": 128,
+      "base_clock_mhz": 1354,
+      "boost_clock_mhz": 1455,
+      "tdp_w": 75,
+      "typical_max_temp_c": 72,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_10_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce GTX 1050 Ti",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "1c82"
+      ],
+      "chip": "GP107",
+      "vram_gb": [
+        4
+      ],
+      "memory_type": "GDDR5",
+      "bus_width_bits": 128,
+      "base_clock_mhz": 1290,
+      "boost_clock_mhz": 1392,
+      "tdp_w": 75,
+      "typical_max_temp_c": 72,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_10_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce GTX 1060 3GB",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "1c02",
+        "1b84"
+      ],
+      "chip": "GP106",
+      "vram_gb": [
+        3
+      ],
+      "memory_type": "GDDR5",
+      "bus_width_bits": 192,
+      "base_clock_mhz": 1506,
+      "boost_clock_mhz": 1708,
+      "tdp_w": 120,
+      "typical_max_temp_c": 78,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_10_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce GTX 1060 6GB",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "1c03",
+        "1c06",
+        "1b83"
+      ],
+      "chip": "GP106",
+      "vram_gb": [
+        6
+      ],
+      "memory_type": "GDDR5/GDDR5X",
+      "bus_width_bits": 192,
+      "base_clock_mhz": 1506,
+      "boost_clock_mhz": 1708,
+      "tdp_w": 120,
+      "typical_max_temp_c": 78,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_10_series",
+      "verified": false
+    },
+    {
+      "model": "P106-100",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "1c07"
+      ],
+      "chip": "GP106",
+      "vram_gb": [
+        6
+      ],
+      "memory_type": "GDDR5",
+      "bus_width_bits": 192,
+      "base_clock_mhz": 1506,
+      "boost_clock_mhz": 1708,
+      "tdp_w": 120,
+      "typical_max_temp_c": 78,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_10_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce GTX 1070",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "1b81"
+      ],
+      "chip": "GP104",
+      "vram_gb": [
+        8
+      ],
+      "memory_type": "GDDR5",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 1506,
+      "boost_clock_mhz": 1683,
+      "tdp_w": 150,
+      "typical_max_temp_c": 80,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_10_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce GTX 1070 Ti",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "1b82"
+      ],
+      "chip": "GP104",
+      "vram_gb": [
+        8
+      ],
+      "memory_type": "GDDR5",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 1607,
+      "boost_clock_mhz": 1683,
+      "tdp_w": 180,
+      "typical_max_temp_c": 80,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_10_series",
+      "verified": false
+    },
+    {
+      "model": "P104-100",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "1b87"
+      ],
+      "chip": "GP104",
+      "vram_gb": [
+        4,
+        8
+      ],
+      "memory_type": "GDDR5X",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 1607,
+      "boost_clock_mhz": 1733,
+      "tdp_w": 180,
+      "typical_max_temp_c": 80,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_10_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce GTX 1080",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "1b80"
+      ],
+      "chip": "GP104",
+      "vram_gb": [
+        8
+      ],
+      "memory_type": "GDDR5X",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 1607,
+      "boost_clock_mhz": 1733,
+      "tdp_w": 180,
+      "typical_max_temp_c": 80,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_10_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce GTX 1080 Ti",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "1b06",
+        "1b01"
+      ],
+      "chip": "GP102",
+      "vram_gb": [
+        11,
+        10
+      ],
+      "memory_type": "GDDR5X",
+      "bus_width_bits": 352,
+      "base_clock_mhz": 1481,
+      "boost_clock_mhz": 1582,
+      "tdp_w": 250,
+      "typical_max_temp_c": 82,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_10_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce GTX 1650",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "1f82",
+        "2188",
+        "1f0a"
+      ],
+      "chip": "TU117",
+      "vram_gb": [
+        4
+      ],
+      "memory_type": "GDDR5/GDDR6",
+      "bus_width_bits": 128,
+      "base_clock_mhz": 1485,
+      "boost_clock_mhz": 1665,
+      "tdp_w": 75,
+      "typical_max_temp_c": 72,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_16_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce GTX 1650 SUPER",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "2187"
+      ],
+      "chip": "TU116",
+      "vram_gb": [
+        4
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 128,
+      "base_clock_mhz": 1530,
+      "boost_clock_mhz": 1725,
+      "tdp_w": 100,
+      "typical_max_temp_c": 72,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_16_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce GTX 1660",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "2184"
+      ],
+      "chip": "TU116",
+      "vram_gb": [
+        6
+      ],
+      "memory_type": "GDDR5",
+      "bus_width_bits": 192,
+      "base_clock_mhz": 1530,
+      "boost_clock_mhz": 1785,
+      "tdp_w": 120,
+      "typical_max_temp_c": 75,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_16_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce GTX 1660 SUPER",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "21c4",
+        "1f09"
+      ],
+      "chip": "TU116",
+      "vram_gb": [
+        6
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 192,
+      "base_clock_mhz": 1530,
+      "boost_clock_mhz": 1785,
+      "tdp_w": 125,
+      "typical_max_temp_c": 75,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_16_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce GTX 1660 Ti",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "2182"
+      ],
+      "chip": "TU116",
+      "vram_gb": [
+        6
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 192,
+      "base_clock_mhz": 1500,
+      "boost_clock_mhz": 1770,
+      "tdp_w": 120,
+      "typical_max_temp_c": 75,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_16_series",
+      "verified": false
+    },
+    {
+      "model": "CMP 30HX",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "2189"
+      ],
+      "chip": "TU116",
+      "vram_gb": [
+        6
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 192,
+      "base_clock_mhz": 1530,
+      "boost_clock_mhz": 1785,
+      "tdp_w": 125,
+      "typical_max_temp_c": 75,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_16_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 2060",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "1f08",
+        "1e89"
+      ],
+      "chip": "TU106",
+      "vram_gb": [
+        6
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 192,
+      "base_clock_mhz": 1365,
+      "boost_clock_mhz": 1680,
+      "tdp_w": 160,
+      "typical_max_temp_c": 75,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_20_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 2060 SUPER",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "1f06",
+        "1f42",
+        "1f47"
+      ],
+      "chip": "TU106",
+      "vram_gb": [
+        8
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 1470,
+      "boost_clock_mhz": 1650,
+      "tdp_w": 175,
+      "typical_max_temp_c": 75,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_20_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 2070",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "1f02",
+        "1f07"
+      ],
+      "chip": "TU106",
+      "vram_gb": [
+        8
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 1410,
+      "boost_clock_mhz": 1620,
+      "tdp_w": 175,
+      "typical_max_temp_c": 76,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_20_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 2070 SUPER",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "1e84",
+        "1ec2",
+        "1ec7"
+      ],
+      "chip": "TU104",
+      "vram_gb": [
+        8
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 1605,
+      "boost_clock_mhz": 1770,
+      "tdp_w": 215,
+      "typical_max_temp_c": 76,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_20_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 2080",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "1e82",
+        "1e87"
+      ],
+      "chip": "TU104",
+      "vram_gb": [
+        8
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 1515,
+      "boost_clock_mhz": 1710,
+      "tdp_w": 215,
+      "typical_max_temp_c": 76,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_20_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 2080 SUPER",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "1e81"
+      ],
+      "chip": "TU104",
+      "vram_gb": [
+        8
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 1650,
+      "boost_clock_mhz": 1815,
+      "tdp_w": 250,
+      "typical_max_temp_c": 78,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_20_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 2080 Ti",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "1e04",
+        "1e07",
+        "1e03"
+      ],
+      "chip": "TU102",
+      "vram_gb": [
+        11,
+        12
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 352,
+      "base_clock_mhz": 1350,
+      "boost_clock_mhz": 1545,
+      "tdp_w": 250,
+      "typical_max_temp_c": 80,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_20_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 3050",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "2582",
+        "2584",
+        "2583",
+        "2508"
+      ],
+      "chip": "GA107",
+      "vram_gb": [
+        8,
+        6,
+        4
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 128,
+      "base_clock_mhz": 1552,
+      "boost_clock_mhz": 1777,
+      "tdp_w": 130,
+      "typical_max_temp_c": 72,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_30_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 3060",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "2503",
+        "2504",
+        "2501",
+        "2509",
+        "2544",
+        "2487",
+        "24c7"
+      ],
+      "chip": "GA106",
+      "vram_gb": [
+        12,
+        8
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 192,
+      "base_clock_mhz": 1320,
+      "boost_clock_mhz": 1777,
+      "tdp_w": 170,
+      "typical_max_temp_c": 75,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_30_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 3060 Ti",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "2486",
+        "2489",
+        "248e",
+        "2414",
+        "24c9"
+      ],
+      "chip": "GA104",
+      "vram_gb": [
+        8
+      ],
+      "memory_type": "GDDR6/GDDR6X",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 1410,
+      "boost_clock_mhz": 1665,
+      "tdp_w": 200,
+      "typical_max_temp_c": 74,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_30_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 3070",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "2484",
+        "2488",
+        "248d",
+        "24c8"
+      ],
+      "chip": "GA104",
+      "vram_gb": [
+        8
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 1500,
+      "boost_clock_mhz": 1725,
+      "tdp_w": 220,
+      "typical_max_temp_c": 76,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_30_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 3070 Ti",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "2482",
+        "248c",
+        "2207"
+      ],
+      "chip": "GA104",
+      "vram_gb": [
+        8
+      ],
+      "memory_type": "GDDR6X",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 1575,
+      "boost_clock_mhz": 1770,
+      "tdp_w": 290,
+      "typical_max_temp_c": 78,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_30_series",
+      "verified": false
+    },
+    {
+      "model": "CMP 70HX",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "248a"
+      ],
+      "chip": "GA104",
+      "vram_gb": [
+        8
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 1500,
+      "boost_clock_mhz": 1725,
+      "tdp_w": 200,
+      "typical_max_temp_c": 76,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_30_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 3080",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "2206",
+        "2216",
+        "220a"
+      ],
+      "chip": "GA102",
+      "vram_gb": [
+        10,
+        12
+      ],
+      "memory_type": "GDDR6X",
+      "bus_width_bits": 320,
+      "base_clock_mhz": 1440,
+      "boost_clock_mhz": 1710,
+      "tdp_w": 320,
+      "typical_max_temp_c": 78,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_30_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 3080 Ti",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "2208",
+        "2205"
+      ],
+      "chip": "GA102",
+      "vram_gb": [
+        12,
+        20
+      ],
+      "memory_type": "GDDR6X",
+      "bus_width_bits": 384,
+      "base_clock_mhz": 1365,
+      "boost_clock_mhz": 1665,
+      "tdp_w": 350,
+      "typical_max_temp_c": 78,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_30_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 3090",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "2204"
+      ],
+      "chip": "GA102",
+      "vram_gb": [
+        24
+      ],
+      "memory_type": "GDDR6X",
+      "bus_width_bits": 384,
+      "base_clock_mhz": 1395,
+      "boost_clock_mhz": 1695,
+      "tdp_w": 350,
+      "typical_max_temp_c": 78,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_30_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 4060",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "2882",
+        "2808"
+      ],
+      "chip": "AD107",
+      "vram_gb": [
+        8
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 128,
+      "base_clock_mhz": 1830,
+      "boost_clock_mhz": 2460,
+      "tdp_w": 115,
+      "typical_max_temp_c": 70,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_40_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 4060 Ti",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "2803",
+        "2805",
+        "2788"
+      ],
+      "chip": "AD106",
+      "vram_gb": [
+        8,
+        16
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 128,
+      "base_clock_mhz": 2310,
+      "boost_clock_mhz": 2535,
+      "tdp_w": 160,
+      "typical_max_temp_c": 70,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_40_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 4070",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "2786",
+        "2709"
+      ],
+      "chip": "AD104",
+      "vram_gb": [
+        12
+      ],
+      "memory_type": "GDDR6X/GDDR6",
+      "bus_width_bits": 192,
+      "base_clock_mhz": 1920,
+      "boost_clock_mhz": 2475,
+      "tdp_w": 200,
+      "typical_max_temp_c": 70,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_40_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 4070 SUPER",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "2783"
+      ],
+      "chip": "AD104",
+      "vram_gb": [
+        12
+      ],
+      "memory_type": "GDDR6X",
+      "bus_width_bits": 192,
+      "base_clock_mhz": 1980,
+      "boost_clock_mhz": 2475,
+      "tdp_w": 220,
+      "typical_max_temp_c": 70,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_40_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 4070 Ti",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "2782"
+      ],
+      "chip": "AD104",
+      "vram_gb": [
+        12
+      ],
+      "memory_type": "GDDR6X",
+      "bus_width_bits": 192,
+      "base_clock_mhz": 2310,
+      "boost_clock_mhz": 2610,
+      "tdp_w": 285,
+      "typical_max_temp_c": 72,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_40_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 4070 Ti SUPER",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "2705",
+        "2689"
+      ],
+      "chip": "AD103",
+      "vram_gb": [
+        16
+      ],
+      "memory_type": "GDDR6X",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 2340,
+      "boost_clock_mhz": 2610,
+      "tdp_w": 285,
+      "typical_max_temp_c": 72,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_40_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 4080",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "2704"
+      ],
+      "chip": "AD103",
+      "vram_gb": [
+        16
+      ],
+      "memory_type": "GDDR6X",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 2205,
+      "boost_clock_mhz": 2505,
+      "tdp_w": 320,
+      "typical_max_temp_c": 70,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_40_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 4080 SUPER",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "2702",
+        "2703"
+      ],
+      "chip": "AD103",
+      "vram_gb": [
+        16
+      ],
+      "memory_type": "GDDR6X",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 2295,
+      "boost_clock_mhz": 2550,
+      "tdp_w": 320,
+      "typical_max_temp_c": 70,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_40_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 4090",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "2684",
+        "2685"
+      ],
+      "chip": "AD102",
+      "vram_gb": [
+        24
+      ],
+      "memory_type": "GDDR6X",
+      "bus_width_bits": 384,
+      "base_clock_mhz": 2235,
+      "boost_clock_mhz": 2520,
+      "tdp_w": 450,
+      "typical_max_temp_c": 72,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_40_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 5060",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "2d05",
+        "2f06"
+      ],
+      "chip": "GB206",
+      "vram_gb": [
+        8
+      ],
+      "memory_type": "GDDR7",
+      "bus_width_bits": 128,
+      "base_clock_mhz": 2280,
+      "boost_clock_mhz": 2497,
+      "tdp_w": 145,
+      "typical_max_temp_c": 70,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_50_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 5060 Ti",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "2d04"
+      ],
+      "chip": "GB206",
+      "vram_gb": [
+        8,
+        16
+      ],
+      "memory_type": "GDDR7",
+      "bus_width_bits": 128,
+      "base_clock_mhz": 2407,
+      "boost_clock_mhz": 2572,
+      "tdp_w": 180,
+      "typical_max_temp_c": 70,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_50_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 5070",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "2f04",
+        "2c09"
+      ],
+      "chip": "GB205",
+      "vram_gb": [
+        12
+      ],
+      "memory_type": "GDDR7",
+      "bus_width_bits": 192,
+      "base_clock_mhz": 2325,
+      "boost_clock_mhz": 2512,
+      "tdp_w": 250,
+      "typical_max_temp_c": 72,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_50_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 5070 Ti",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "2c05"
+      ],
+      "chip": "GB203",
+      "vram_gb": [
+        16
+      ],
+      "memory_type": "GDDR7",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 2295,
+      "boost_clock_mhz": 2452,
+      "tdp_w": 300,
+      "typical_max_temp_c": 72,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_50_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 5080",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "2c02"
+      ],
+      "chip": "GB203",
+      "vram_gb": [
+        16
+      ],
+      "memory_type": "GDDR7",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 2295,
+      "boost_clock_mhz": 2617,
+      "tdp_w": 360,
+      "typical_max_temp_c": 72,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_50_series",
+      "verified": false
+    },
+    {
+      "model": "GeForce RTX 5090",
+      "vendor": "NVIDIA",
+      "device_ids": [
+        "2b85",
+        "2b87"
+      ],
+      "chip": "GB202",
+      "vram_gb": [
+        32
+      ],
+      "memory_type": "GDDR7",
+      "bus_width_bits": 512,
+      "base_clock_mhz": 2017,
+      "boost_clock_mhz": 2407,
+      "tdp_w": 575,
+      "typical_max_temp_c": 75,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units#GeForce_50_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX 560",
+      "vendor": "AMD",
+      "device_ids": [
+        "67ff",
+        "67ef"
+      ],
+      "chip": "Baffin",
+      "vram_gb": [
+        2,
+        4
+      ],
+      "memory_type": "GDDR5",
+      "bus_width_bits": 128,
+      "base_clock_mhz": 1175,
+      "boost_clock_mhz": 1275,
+      "tdp_w": 80,
+      "typical_max_temp_c": 75,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_500_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX 470",
+      "vendor": "AMD",
+      "device_ids": [
+        "67df"
+      ],
+      "chip": "Ellesmere",
+      "vram_gb": [
+        4,
+        8
+      ],
+      "memory_type": "GDDR5",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 926,
+      "boost_clock_mhz": 1206,
+      "tdp_w": 120,
+      "typical_max_temp_c": 78,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_400_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX 480",
+      "vendor": "AMD",
+      "device_ids": [
+        "67df"
+      ],
+      "chip": "Ellesmere",
+      "vram_gb": [
+        4,
+        8
+      ],
+      "memory_type": "GDDR5",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 1120,
+      "boost_clock_mhz": 1266,
+      "tdp_w": 150,
+      "typical_max_temp_c": 80,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_400_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX 570",
+      "vendor": "AMD",
+      "device_ids": [
+        "67df"
+      ],
+      "chip": "Ellesmere",
+      "vram_gb": [
+        4,
+        8
+      ],
+      "memory_type": "GDDR5",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 1168,
+      "boost_clock_mhz": 1244,
+      "tdp_w": 150,
+      "typical_max_temp_c": 78,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_500_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX 580",
+      "vendor": "AMD",
+      "device_ids": [
+        "67df"
+      ],
+      "chip": "Ellesmere",
+      "vram_gb": [
+        4,
+        8
+      ],
+      "memory_type": "GDDR5",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 1257,
+      "boost_clock_mhz": 1340,
+      "tdp_w": 185,
+      "typical_max_temp_c": 80,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_500_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX 580 2048SP",
+      "vendor": "AMD",
+      "device_ids": [
+        "6fdf"
+      ],
+      "chip": "Ellesmere",
+      "vram_gb": [
+        4,
+        8
+      ],
+      "memory_type": "GDDR5",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 1168,
+      "boost_clock_mhz": 1284,
+      "tdp_w": 150,
+      "typical_max_temp_c": 78,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_500_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX 590",
+      "vendor": "AMD",
+      "device_ids": [
+        "67df"
+      ],
+      "chip": "Ellesmere",
+      "vram_gb": [
+        8
+      ],
+      "memory_type": "GDDR5",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 1469,
+      "boost_clock_mhz": 1545,
+      "tdp_w": 225,
+      "typical_max_temp_c": 80,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_500_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX Vega 56",
+      "vendor": "AMD",
+      "device_ids": [
+        "687f"
+      ],
+      "chip": "Vega 10",
+      "vram_gb": [
+        8
+      ],
+      "memory_type": "HBM2",
+      "bus_width_bits": 2048,
+      "base_clock_mhz": 1156,
+      "boost_clock_mhz": 1471,
+      "tdp_w": 210,
+      "typical_max_temp_c": 80,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_Vega_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX Vega 64",
+      "vendor": "AMD",
+      "device_ids": [
+        "687f"
+      ],
+      "chip": "Vega 10",
+      "vram_gb": [
+        8
+      ],
+      "memory_type": "HBM2",
+      "bus_width_bits": 2048,
+      "base_clock_mhz": 1247,
+      "boost_clock_mhz": 1546,
+      "tdp_w": 295,
+      "typical_max_temp_c": 85,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_Vega_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX 5600 XT",
+      "vendor": "AMD",
+      "device_ids": [
+        "731f"
+      ],
+      "chip": "Navi 10",
+      "vram_gb": [
+        6
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 192,
+      "base_clock_mhz": 1130,
+      "boost_clock_mhz": 1560,
+      "tdp_w": 150,
+      "typical_max_temp_c": 78,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_5000_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX 5700",
+      "vendor": "AMD",
+      "device_ids": [
+        "731f"
+      ],
+      "chip": "Navi 10",
+      "vram_gb": [
+        8
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 1465,
+      "boost_clock_mhz": 1725,
+      "tdp_w": 180,
+      "typical_max_temp_c": 80,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_5000_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX 5700 XT",
+      "vendor": "AMD",
+      "device_ids": [
+        "731f"
+      ],
+      "chip": "Navi 10",
+      "vram_gb": [
+        8
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 1605,
+      "boost_clock_mhz": 1905,
+      "tdp_w": 225,
+      "typical_max_temp_c": 82,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_5000_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX 6500 XT",
+      "vendor": "AMD",
+      "device_ids": [
+        "743f"
+      ],
+      "chip": "Navi 24",
+      "vram_gb": [
+        4,
+        8
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 64,
+      "base_clock_mhz": 2610,
+      "boost_clock_mhz": 2815,
+      "tdp_w": 107,
+      "typical_max_temp_c": 72,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_6000_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX 6600",
+      "vendor": "AMD",
+      "device_ids": [
+        "73ff"
+      ],
+      "chip": "Navi 23",
+      "vram_gb": [
+        8
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 128,
+      "base_clock_mhz": 1626,
+      "boost_clock_mhz": 2491,
+      "tdp_w": 132,
+      "typical_max_temp_c": 72,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_6000_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX 6600 XT",
+      "vendor": "AMD",
+      "device_ids": [
+        "73ff"
+      ],
+      "chip": "Navi 23",
+      "vram_gb": [
+        8
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 128,
+      "base_clock_mhz": 1968,
+      "boost_clock_mhz": 2589,
+      "tdp_w": 160,
+      "typical_max_temp_c": 75,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_6000_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX 6650 XT",
+      "vendor": "AMD",
+      "device_ids": [
+        "73ef"
+      ],
+      "chip": "Navi 23",
+      "vram_gb": [
+        8
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 128,
+      "base_clock_mhz": 2055,
+      "boost_clock_mhz": 2635,
+      "tdp_w": 180,
+      "typical_max_temp_c": 75,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_6000_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX 6700",
+      "vendor": "AMD",
+      "device_ids": [
+        "73df"
+      ],
+      "chip": "Navi 22",
+      "vram_gb": [
+        10
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 160,
+      "base_clock_mhz": 1941,
+      "boost_clock_mhz": 2450,
+      "tdp_w": 175,
+      "typical_max_temp_c": 75,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_6000_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX 6700 XT",
+      "vendor": "AMD",
+      "device_ids": [
+        "73df"
+      ],
+      "chip": "Navi 22",
+      "vram_gb": [
+        12
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 192,
+      "base_clock_mhz": 2321,
+      "boost_clock_mhz": 2581,
+      "tdp_w": 230,
+      "typical_max_temp_c": 78,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_6000_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX 6750 XT",
+      "vendor": "AMD",
+      "device_ids": [
+        "73df"
+      ],
+      "chip": "Navi 22",
+      "vram_gb": [
+        12
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 192,
+      "base_clock_mhz": 2150,
+      "boost_clock_mhz": 2600,
+      "tdp_w": 250,
+      "typical_max_temp_c": 78,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_6000_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX 6800",
+      "vendor": "AMD",
+      "device_ids": [
+        "73bf"
+      ],
+      "chip": "Navi 21",
+      "vram_gb": [
+        16
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 1700,
+      "boost_clock_mhz": 2105,
+      "tdp_w": 250,
+      "typical_max_temp_c": 75,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_6000_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX 6800 XT",
+      "vendor": "AMD",
+      "device_ids": [
+        "73bf"
+      ],
+      "chip": "Navi 21",
+      "vram_gb": [
+        16
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 1825,
+      "boost_clock_mhz": 2250,
+      "tdp_w": 300,
+      "typical_max_temp_c": 78,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_6000_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX 6900 XT",
+      "vendor": "AMD",
+      "device_ids": [
+        "73bf",
+        "73af"
+      ],
+      "chip": "Navi 21",
+      "vram_gb": [
+        16
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 1825,
+      "boost_clock_mhz": 2250,
+      "tdp_w": 300,
+      "typical_max_temp_c": 78,
+      "mining_popular": true,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_6000_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX 7600",
+      "vendor": "AMD",
+      "device_ids": [
+        "7480"
+      ],
+      "chip": "Navi 33",
+      "vram_gb": [
+        8
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 128,
+      "base_clock_mhz": 1720,
+      "boost_clock_mhz": 2655,
+      "tdp_w": 165,
+      "typical_max_temp_c": 75,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_7000_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX 7700 XT",
+      "vendor": "AMD",
+      "device_ids": [
+        "747e"
+      ],
+      "chip": "Navi 32",
+      "vram_gb": [
+        12
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 192,
+      "base_clock_mhz": 1700,
+      "boost_clock_mhz": 2544,
+      "tdp_w": 245,
+      "typical_max_temp_c": 78,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_7000_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX 7800 XT",
+      "vendor": "AMD",
+      "device_ids": [
+        "747e"
+      ],
+      "chip": "Navi 32",
+      "vram_gb": [
+        16
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 1295,
+      "boost_clock_mhz": 2430,
+      "tdp_w": 263,
+      "typical_max_temp_c": 78,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_7000_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX 7900 GRE",
+      "vendor": "AMD",
+      "device_ids": [
+        "744c"
+      ],
+      "chip": "Navi 31",
+      "vram_gb": [
+        16
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 1287,
+      "boost_clock_mhz": 2245,
+      "tdp_w": 260,
+      "typical_max_temp_c": 78,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_7000_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX 7900 XT",
+      "vendor": "AMD",
+      "device_ids": [
+        "744c"
+      ],
+      "chip": "Navi 31",
+      "vram_gb": [
+        20
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 320,
+      "base_clock_mhz": 1387,
+      "boost_clock_mhz": 2394,
+      "tdp_w": 315,
+      "typical_max_temp_c": 80,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_7000_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX 7900 XTX",
+      "vendor": "AMD",
+      "device_ids": [
+        "744c"
+      ],
+      "chip": "Navi 31",
+      "vram_gb": [
+        24
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 384,
+      "base_clock_mhz": 1855,
+      "boost_clock_mhz": 2499,
+      "tdp_w": 355,
+      "typical_max_temp_c": 80,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_7000_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX 9060 XT",
+      "vendor": "AMD",
+      "device_ids": [
+        "7590"
+      ],
+      "chip": "Navi 44",
+      "vram_gb": [
+        8,
+        16
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 128,
+      "base_clock_mhz": 1700,
+      "boost_clock_mhz": 3130,
+      "tdp_w": 160,
+      "typical_max_temp_c": 72,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_9000_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX 9070",
+      "vendor": "AMD",
+      "device_ids": [
+        "7550"
+      ],
+      "chip": "Navi 48",
+      "vram_gb": [
+        16
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 1330,
+      "boost_clock_mhz": 2520,
+      "tdp_w": 220,
+      "typical_max_temp_c": 72,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_9000_series",
+      "verified": false
+    },
+    {
+      "model": "Radeon RX 9070 XT",
+      "vendor": "AMD",
+      "device_ids": [
+        "7550"
+      ],
+      "chip": "Navi 48",
+      "vram_gb": [
+        16
+      ],
+      "memory_type": "GDDR6",
+      "bus_width_bits": 256,
+      "base_clock_mhz": 1660,
+      "boost_clock_mhz": 2970,
+      "tdp_w": 304,
+      "typical_max_temp_c": 75,
+      "mining_popular": false,
+      "source_url": "https://en.wikipedia.org/wiki/List_of_AMD_graphics_processing_units#Radeon_RX_9000_series",
+      "verified": false
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+[{"Key":"whea","Count":0,"Last":null,"Error":null},{"Key":"kernel_power_41","Count":0,"Last":null,"Error":null},{"Key":"bugcheck","Count":0,"Last":null,"Error":null},{"Key":"disk","Count":9,"Last":"2026-10-04T21:13:05","Error":null,"Disks":[{"Disk":1,"Count":7,"Bus":"USB"},{"Disk":3,"Count":1,"Bus":""},{"Disk":0,"Count":1,"Bus":"NVMe"}]}]

@@ -1,0 +1,19 @@
+https://github.com/GpuZelenograd/memtest_vulkan v0.5.0 by GpuZelenograd
+To finish testing use Ctrl+C
+
+1: Bus=0x01:00 DevId=0x1C03   6GB NVIDIA GeForce GTX 1060 6GB
+(first device will be autoselected in 8 seconds)   Override index to test:
+    ...first device autoselected
+Standard 5-minute test of 1: Bus=0x01:00 DevId=0x1C03   6GB NVIDIA GeForce GTX 1060 6GB
+      1 iteration. Passed  0.0712 seconds  written:    4.5GB  62.1GB/sec        checked:    6.7GB 101.3GB/sec
+Error found. Mode NEXT_RE_READ, total errors 0x20 out of 0x2C000000 (0.00000007%)
+Errors address range: 0x30000000..=0x3000007F  iteration:3
+values range: 0xFFFF7FFF..=0xFFFF7FFF   FFFFFFFF-like count:0    bit-level stats table:
+         0x0 0x1  0x2 0x3| 0x4 0x5  0x6 0x7| 0x8 0x9  0xA 0xB| 0xC 0xD  0xE 0xF
+SinglIdx                 |   1             |                 |
+TogglCnt       2   56 761|6673 42k 205k793k|  2M  6M  14M 25M| 39M 49M  50M 39M
+     13 iteration. Passed  1.0451 seconds  written:   58.5GB  61.9GB/sec        checked:   87.7GB 101.1GB/sec
+Error found. Mode INITIAL_READ, total errors 0x1A out of 0x2C000000 (0.00000006%)
+Errors address range: 0x51000040..=0x510000BF  iteration:17
+memtest_vulkan: memory/gpu errors found, testing FAILed.
+  press any key to continue...

@@ -1,0 +1,78 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hwcheck"
+version = "2.0.0"
+description = "ЖелезоЧек — бесплатная портативная проверка б/у компьютера перед покупкой"
+readme = "README.md"
+requires-python = ">=3.12"
+# Свободная лицензия MIT (версия 2.0): текст — LICENSE в корне.
+license = "MIT"
+license-files = ["LICENSE"]
+dependencies = [
+    "PySide6>=6.9",
+    "jinja2>=3.1",
+    "pyyaml>=6.0",
+    "psutil>=5.9",
+    "numpy>=1.26",
+    "wgpu>=0.19",
+    "beautifulsoup4>=4.12",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "pytest-qt>=4.4",
+    "pytest-timeout>=2.3",
+    "pytest-cov>=5",
+    "ruff>=0.6",
+    "pyright>=1.1.380",
+    "jsonschema>=4.21",
+    "pyinstaller>=6.10",
+    "detect-secrets>=1.5",
+]
+
+[project.scripts]
+hwcheck = "hwcheck.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["hwcheck*"]
+
+[tool.setuptools.package-data]
+hwcheck = ["data/*", "data/**/*", "report/templates/*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = ["tests/fixtures", "vendor", "dist", "build"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S603", "S604", "S602"]
+ignore = []
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S603"]
+
+[tool.pyright]
+typeCheckingMode = "standard"
+pythonVersion = "3.12"
+include = ["hwcheck", "tests", "scripts"]
+exclude = ["tests/fixtures", "vendor", "dist", "build", ".venv"]
+venvPath = "."
+venv = ".venv"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+timeout = 60
+addopts = "-p no:cacheprovider --basetemp=.tmp/pytest"
+qt_api = "pyside6"
+
+[tool.coverage.run]
+source = ["hwcheck"]
+
+[tool.coverage.report]
+# Ключевые модули (verdict, stress/vram, knowledge) должны быть покрыты ≥ 85% (PLAN.md 12.1).
+fail_under = 85
+show_missing = false

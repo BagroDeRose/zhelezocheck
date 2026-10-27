@@ -1,0 +1,26 @@
+# Ожидаемый вердикт для каждого демо-сценария (задача 5.2).
+# decision — итог; must_have — находки, которые обязательно должны быть.
+healthy_gaming_pc:
+  decision: buy
+  must_have: [gpu.ok, cpu.ok, ram.ok, disk.ok]
+mining_gpu:
+  decision: negotiate
+  must_have: [gpu.mining_bios, gpu.fan_worn, gpu.pcie_reduced, gpu.mining_popular]
+fake_gpu_relabel:
+  decision: walk_away
+  must_have: [gpu.fake, gpu.vram_errors]
+overheating_cpu:
+  decision: negotiate
+  must_have: [cpu.clock_drop]
+dying_hdd:
+  decision: walk_away
+  must_have: [disk.sectors_critical, disk.smart_failed, disk.read_errors, system.disk_events]
+worn_ssd:
+  decision: negotiate
+  must_have: [disk.ssd_wear_warning]
+laptop_worn_battery:
+  decision: negotiate
+  must_have: [battery.wear_warning]
+ram_errors:
+  decision: walk_away
+  must_have: [ram.errors, system.whea, ram.mixed]
