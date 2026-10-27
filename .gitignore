@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Окружение и сборка
+.venv/
+dist/
+build/
+
+# Данные программы (логи, отчёты, история, лицензия) — создаются при запуске
+/data/
+
+# Сторонние программы скачиваются скриптом, в git только контрольные суммы
+vendor/*/
+!vendor/CHECKSUMS.txt
+
+# Секреты лицензий — НИКОГДА не в git
+tools/keygen/private_key.pem
+tools/keygen/issued.csv
+*.pem
+
+# SPEC 1.1 (14.4): секреты и служебные папки
+.env
+*.env
+!.env.example
+*.key
+*.sqlite
+*.sqlite-journal
+*.session
+data/license*
+data/history.sqlite
+.tmp/
+.playwright/
+release/
+.idea/
+# Сохранённые владельцем страницы Авито в исходном виде (имена продавцов, картинки):
+# в git попадают только обезличенные копии real_*.html (задача 22.2).
+tests/fixtures/avito/*_files/
+tests/fixtures/avito/*Авито*.html

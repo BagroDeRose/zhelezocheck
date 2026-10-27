@@ -1,0 +1,7 @@
+https://github.com/GpuZelenograd/memtest_vulkan v0.5.0 by GpuZelenograd
+To finish testing use Ctrl+C
+
+1: Bus=0x05:00 DevId=0x1638   2GB AMD Radeon(TM) Graphics
+(first device will be autoselected in 8 seconds)   Override index to test:
+Standard 5-minute test of 1: Bus=0x05:00 DevId=0x1638   2GB AMD Radeon(TM) Graphics
+      1 iteration. Passed  0.2183 seconds  written:    1.0GB  45.2GB/sec        checked:    1.5GB  50.4GB/sec

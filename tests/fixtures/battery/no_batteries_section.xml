@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<BatteryReport xmlns="http://schemas.microsoft.com/battery/2012">
+  <SystemInformation><PlatformRole>Desktop</PlatformRole></SystemInformation>
+  <Batteries />
+</BatteryReport>

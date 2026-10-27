@@ -1,0 +1,6 @@
+Get-CimInstance : Отказано в доступе.
+строка:1 знак:1
++ Get-CimInstance -ClassName Win32_Foo
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : PermissionDenied: (root\cimv2:Win32_Foo:String) [Get-CimInstance], CimException
+    + FullyQualifiedErrorId : HRESULT 0x80041003,Microsoft.Management.Infrastructure.CimCmdlets.GetCimInstanceCommand

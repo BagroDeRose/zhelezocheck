@@ -1,0 +1,9 @@
+https://github.com/GpuZelenograd/memtest_vulkan v0.5.0 by GpuZelenograd
+To finish testing use Ctrl+C
+
+1: Bus=0x00:02 DevId=0x4680   2GB Intel(R) UHD Graphics 770
+2: Bus=0x01:00 DevId=0x2206   10GB NVIDIA GeForce RTX 3080
+(first device will be autoselected in 8 seconds)   Override index to test:
+Standard 5-minute test of 2: Bus=0x01:00 DevId=0x2206   10GB NVIDIA GeForce RTX 3080
+      1 iteration. Passed  0.0183 seconds  written:    8.0GB 610.2GB/sec        checked:   12.0GB 689.4GB/sec
+     58 iteration. Passed  1.0087 seconds  written:  464.0GB 611.0GB/sec        checked:  696.0GB 690.1GB/sec

@@ -1,0 +1,308 @@
+{
+  "name": "laptop_worn_battery",
+  "title": "Ноутбук с изношенной батареей",
+  "description": "Lenovo Legion 5: всё работает, но батарея потеряла 45% ёмкости.",
+  "snapshot": {
+    "collected_at": "2026-10-05T12:00:00",
+    "is_admin": true,
+    "system": {
+      "os_name": "Microsoft Windows 11 Pro",
+      "os_version": "10.0.22631",
+      "os_build": "22631",
+      "architecture": "64-bit",
+      "install_date": "2024-03-14T10:22:00",
+      "last_boot": "2026-10-05T09:01:00",
+      "manufacturer": "LENOVO",
+      "model": "82JW (Legion 5 15ACH6H)",
+      "is_laptop": true,
+      "bios_vendor": "LENOVO",
+      "bios_version": "HHCN31WW",
+      "bios_date": "2022-05-10"
+    },
+    "cpu": {
+      "name": "AMD Ryzen 7 5800H with Radeon Graphics",
+      "manufacturer": "AuthenticAMD",
+      "cores": 8,
+      "threads": 16,
+      "max_clock_mhz": 3201,
+      "current_clock_mhz": 3201,
+      "socket": "FP6"
+    },
+    "memory": {
+      "total_mb": 16384,
+      "available_mb": 8192,
+      "modules": [
+        {
+          "capacity_mb": 8192,
+          "speed_mhz": 3200,
+          "configured_speed_mhz": 3200,
+          "manufacturer": "Samsung",
+          "part_number": "M471A1K43DB1-CWE",
+          "slot": "DIMM 0"
+        },
+        {
+          "capacity_mb": 8192,
+          "speed_mhz": 3200,
+          "configured_speed_mhz": 3200,
+          "manufacturer": "Samsung",
+          "part_number": "M471A1K43DB1-CWE",
+          "slot": "DIMM 1"
+        }
+      ],
+      "slots_total": 2
+    },
+    "board": {
+      "manufacturer": "LENOVO",
+      "product": "LNVNB161216",
+      "version": "SDK0T76463 WIN"
+    },
+    "gpus": [
+      {
+        "vendor": "AMD",
+        "name": "AMD Radeon(TM) Graphics",
+        "pci_vendor_id": "1002",
+        "pci_device_id": "1638",
+        "subsystem_id": "3a5617aa",
+        "vram_mb": 512,
+        "vbios_version": "",
+        "driver_version": "31.0.12027.9001",
+        "default_power_limit_w": null,
+        "enforced_power_limit_w": null,
+        "max_power_limit_w": null,
+        "max_clocks": {},
+        "pcie_gen_current": null,
+        "pcie_gen_max": null,
+        "pcie_width_current": null,
+        "pcie_width_max": null,
+        "fan_speed_percent": null,
+        "throttle_reasons": [],
+        "pnp_device_id": "PCI\\VEN_1002&DEV_1638&SUBSYS_3A5617AA&REV_C5\\4&3A3B1C2D&0&0041",
+        "source": "wmi"
+      },
+      {
+        "vendor": "NVIDIA",
+        "name": "NVIDIA GeForce RTX 3060 Laptop GPU",
+        "pci_vendor_id": "10de",
+        "pci_device_id": "2520",
+        "subsystem_id": "3a5617aa",
+        "vram_mb": 6144,
+        "vbios_version": "94.06.2F.00.9A",
+        "driver_version": "560.94",
+        "default_power_limit_w": 130.0,
+        "enforced_power_limit_w": 130.0,
+        "max_power_limit_w": 130.0,
+        "max_clocks": {
+          "graphics": 2100,
+          "sm": 2100,
+          "memory": 7501,
+          "video": 1950
+        },
+        "pcie_gen_current": 1,
+        "pcie_gen_max": 4,
+        "pcie_width_current": 16,
+        "pcie_width_max": 16,
+        "fan_speed_percent": 0.0,
+        "throttle_reasons": [
+          "gpu_idle"
+        ],
+        "pnp_device_id": "PCI\\VEN_10DE&DEV_2520&SUBSYS_3A5617AA&REV_A1\\4&9B8A7C6&0&0009",
+        "source": "nvidia-smi"
+      }
+    ],
+    "disks": [
+      {
+        "model": "SAMSUNG MZVLQ512HBLU-00B00",
+        "size_gb": 512.1,
+        "media_type": "ssd",
+        "bus_type": "nvme",
+        "device": "/dev/sda",
+        "smart": {
+          "power_on_hours": 3120,
+          "power_cycles": 812,
+          "reallocated_sectors": null,
+          "pending_sectors": null,
+          "uncorrectable_sectors": null,
+          "wear_percent": 4.0,
+          "temperature_c": 38.0,
+          "crc_errors": null,
+          "media_errors": 0,
+          "health_passed": true,
+          "source": "smartctl"
+        },
+        "note": ""
+      }
+    ],
+    "battery": {
+      "design_capacity_mwh": 80000,
+      "full_charge_capacity_mwh": 44000,
+      "cycle_count": 640,
+      "manufacturer": "Celxpert",
+      "chemistry": "LiP"
+    },
+    "events": {
+      "days": 30,
+      "counts": {
+        "whea": 0,
+        "kernel_power_41": 0,
+        "bugcheck": 0,
+        "disk": 0
+      },
+      "last_seen": {},
+      "partial": false,
+      "note": ""
+    },
+    "errors": {}
+  },
+  "stress": {
+    "vram": {
+      "status": "passed",
+      "component": "gpu0",
+      "metrics": {
+        "errors": 0,
+        "iterations": 120,
+        "speed_gbps": 280.4,
+        "tested_mb": 5120
+      },
+      "notes": [],
+      "series": {
+        "component": "gpu0",
+        "points": {
+          "temp_c": [
+            40,
+            62,
+            66,
+            67
+          ],
+          "fan_pct": [
+            30,
+            45,
+            50,
+            50
+          ],
+          "clock_mhz": [
+            1777,
+            1890,
+            1875,
+            1875
+          ],
+          "power_w": [
+            60,
+            140,
+            145,
+            145
+          ],
+          "util_pct": [
+            99,
+            99
+          ]
+        }
+      }
+    },
+    "gpu_load": {
+      "status": "passed",
+      "component": "gpu0",
+      "metrics": {
+        "max_temp_c": 72.0,
+        "avg_temp_c": 68.5,
+        "max_fan_pct": 58.0,
+        "clock_drop_pct": 3.2,
+        "max_power_w": 168.0,
+        "throttle_reasons": [
+          "sw_power_cap"
+        ]
+      },
+      "notes": [],
+      "series": {
+        "component": "gpu0",
+        "points": {
+          "temp_c": [
+            41,
+            65,
+            71,
+            72,
+            72
+          ],
+          "fan_pct": [
+            30,
+            48,
+            55,
+            58,
+            58
+          ],
+          "clock_mhz": [
+            1890,
+            1875,
+            1845,
+            1830,
+            1830
+          ],
+          "power_w": [
+            70,
+            165,
+            168,
+            168,
+            167
+          ],
+          "util_pct": [
+            99,
+            99
+          ]
+        }
+      }
+    },
+    "cpu_load": {
+      "status": "passed",
+      "component": "cpu",
+      "metrics": {
+        "checksum_ok": true,
+        "clock_drop_pct": 2.5,
+        "start_clock_mhz": 4400,
+        "avg_clock_mhz": 4290,
+        "workers": 12
+      },
+      "notes": [],
+      "series": {
+        "component": "cpu",
+        "points": {
+          "clock_mhz": [
+            4400,
+            4310,
+            4290,
+            4290
+          ],
+          "perf_pct": [
+            125,
+            123,
+            122,
+            122
+          ]
+        }
+      }
+    },
+    "ram_quick": {
+      "status": "passed",
+      "component": "memory",
+      "metrics": {
+        "tested_mb": 11200,
+        "errors": 0,
+        "passes": 2
+      },
+      "notes": [
+        "Быстрый тест, не заменяет MemTest86."
+      ],
+      "series": null
+    },
+    "disk_read": {
+      "status": "passed",
+      "component": "disk",
+      "metrics": {
+        "read_mb": 2048,
+        "speed_mbps": 1850.0,
+        "read_errors": 0,
+        "files": 412
+      },
+      "notes": [],
+      "series": null
+    }
+  }
+}

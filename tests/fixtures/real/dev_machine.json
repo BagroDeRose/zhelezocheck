@@ -1,0 +1,152 @@
+{
+  "collected_at": "2026-10-06T00:06:46",
+  "is_admin": false,
+  "system": {
+    "os_name": "Майкрософт Windows 10 Pro",
+    "os_version": "10.0.19045",
+    "os_build": "19045",
+    "architecture": "64-разрядная",
+    "install_date": "2026-06-08T13:18:07+00:00",
+    "last_boot": "2026-10-05T16:55:17.500000+00:00",
+    "manufacturer": "System manufacturer",
+    "model": "System Product Name",
+    "is_laptop": false,
+    "bios_vendor": "American Megatrends Inc.",
+    "bios_version": "3202",
+    "bios_date": "2021-07-13T00:00:00+00:00"
+  },
+  "cpu": {
+    "name": "Intel(R) Core(TM) i5-9400F CPU @ 2.90GHz",
+    "manufacturer": "GenuineIntel",
+    "cores": 6,
+    "threads": 6,
+    "max_clock_mhz": 2904,
+    "current_clock_mhz": 2904,
+    "socket": "LGA1151"
+  },
+  "memory": {
+    "total_mb": 24576,
+    "available_mb": 15320,
+    "modules": [
+      {
+        "capacity_mb": 8192,
+        "speed_mhz": 2666,
+        "configured_speed_mhz": 2666,
+        "manufacturer": "Kingston",
+        "part_number": "KF2666C16D4/8G",
+        "slot": "ChannelA-DIMM1"
+      },
+      {
+        "capacity_mb": 8192,
+        "speed_mhz": 2666,
+        "configured_speed_mhz": 2666,
+        "manufacturer": "Kingston",
+        "part_number": "KF2666C16D4/8G",
+        "slot": "ChannelA-DIMM2"
+      },
+      {
+        "capacity_mb": 8192,
+        "speed_mhz": 2666,
+        "configured_speed_mhz": 2666,
+        "manufacturer": "Corsair",
+        "part_number": "CMK8GX4M1A2666C16",
+        "slot": "ChannelB-DIMM2"
+      }
+    ],
+    "slots_total": 4
+  },
+  "board": {
+    "manufacturer": "ASUSTeK COMPUTER INC.",
+    "product": "ROG STRIX B360-H GAMING",
+    "version": "Rev X.0x"
+  },
+  "gpus": [
+    {
+      "vendor": "NVIDIA",
+      "name": "NVIDIA GeForce GTX 1660",
+      "pci_vendor_id": "10de",
+      "pci_device_id": "2184",
+      "subsystem_id": "136610de",
+      "vram_mb": 6144,
+      "vbios_version": "90.16.34.00.63",
+      "driver_version": "617.14",
+      "default_power_limit_w": 120.0,
+      "enforced_power_limit_w": 120.0,
+      "max_power_limit_w": 120.0,
+      "max_clocks": {
+        "graphics": 2115,
+        "sm": 2115,
+        "memory": 4001,
+        "video": 1950
+      },
+      "pcie_gen_current": 3,
+      "pcie_gen_max": 3,
+      "pcie_width_current": 16,
+      "pcie_width_max": 16,
+      "fan_speed_percent": 0.0,
+      "throttle_reasons": [
+        "gpu_idle"
+      ],
+      "pnp_device_id": "PCI\\VEN_10DE&DEV_2184&SUBSYS_136610DE&REV_A1\\4&2D78AB8F&0&0008",
+      "source": "wmi+nvidia-smi"
+    }
+  ],
+  "disks": [
+    {
+      "model": "ARDOR GAMING m.2 NVME 256Gb AL1282",
+      "size_gb": 256.1,
+      "media_type": "ssd",
+      "bus_type": "nvme",
+      "device": "PhysicalDisk1",
+      "smart": {
+        "power_on_hours": null,
+        "power_cycles": null,
+        "reallocated_sectors": null,
+        "pending_sectors": null,
+        "uncorrectable_sectors": null,
+        "wear_percent": null,
+        "temperature_c": null,
+        "crc_errors": null,
+        "media_errors": null,
+        "health_passed": true,
+        "source": "windows"
+      },
+      "note": "Подробные данные о здоровье диска доступны только при запуске от администратора."
+    },
+    {
+      "model": "WDC WD10EZEX-22MFCA0",
+      "size_gb": 1000.2,
+      "media_type": "hdd",
+      "bus_type": "sata",
+      "device": "PhysicalDisk0",
+      "smart": {
+        "power_on_hours": null,
+        "power_cycles": null,
+        "reallocated_sectors": null,
+        "pending_sectors": null,
+        "uncorrectable_sectors": null,
+        "wear_percent": null,
+        "temperature_c": null,
+        "crc_errors": null,
+        "media_errors": null,
+        "health_passed": true,
+        "source": "windows"
+      },
+      "note": "Подробные данные о здоровье диска доступны только при запуске от администратора."
+    }
+  ],
+  "battery": null,
+  "events": {
+    "days": 30,
+    "counts": {
+      "whea": 0,
+      "kernel_power_41": 0,
+      "bugcheck": 0,
+      "disk": 0
+    },
+    "last_seen": {},
+    "partial": false,
+    "note": ""
+  },
+  "errors": {}
+}

@@ -1,0 +1,80 @@
+<?xml version="1.0" ?>
+<!DOCTYPE nvidia_smi_log SYSTEM "nvsmi_device_v12.dtd">
+<nvidia_smi_log>
+	<timestamp>Sun Sep 15 18:20:41 2024</timestamp>
+	<driver_version>560.94</driver_version>
+	<cuda_version>12.6</cuda_version>
+	<attached_gpus>1</attached_gpus>
+	<gpu id="00000000:2B:00.0">
+		<product_name>NVIDIA GeForce RTX 3060</product_name>
+		<product_brand>GeForce</product_brand>
+		<product_architecture>Ampere</product_architecture>
+		<serial>N/A</serial>
+		<uuid>GPU-00000000-0000-0000-0000-000000000002</uuid>
+		<vbios_version>94.06.2F.00.9A</vbios_version>
+		<pci>
+			<pci_bus>2B</pci_bus>
+			<pci_device_id>250310DE</pci_device_id>
+			<pci_bus_id>00000000:2B:00.0</pci_bus_id>
+			<pci_sub_system_id>397D1462</pci_sub_system_id>
+			<pci_gpu_link_info>
+				<pcie_gen>
+					<max_link_gen>4</max_link_gen>
+					<current_link_gen>4</current_link_gen>
+					<device_current_link_gen>4</device_current_link_gen>
+					<max_host_link_gen>4</max_host_link_gen>
+				</pcie_gen>
+				<link_widths>
+					<max_link_width>16x</max_link_width>
+					<current_link_width>8x</current_link_width>
+				</link_widths>
+			</pci_gpu_link_info>
+		</pci>
+		<fan_speed>53 %</fan_speed>
+		<performance_state>P2</performance_state>
+		<clocks_event_reasons>
+			<clocks_event_reason_gpu_idle>Not Active</clocks_event_reason_gpu_idle>
+			<clocks_event_reason_applications_clocks_setting>Not Active</clocks_event_reason_applications_clocks_setting>
+			<clocks_event_reason_sw_power_cap>Active</clocks_event_reason_sw_power_cap>
+			<clocks_event_reason_hw_slowdown>Not Active</clocks_event_reason_hw_slowdown>
+			<clocks_event_reason_hw_thermal_slowdown>Not Active</clocks_event_reason_hw_thermal_slowdown>
+			<clocks_event_reason_hw_power_brake_slowdown>Not Active</clocks_event_reason_hw_power_brake_slowdown>
+			<clocks_event_reason_sync_boost>Not Active</clocks_event_reason_sync_boost>
+			<clocks_event_reason_sw_thermal_slowdown>Active</clocks_event_reason_sw_thermal_slowdown>
+			<clocks_event_reason_display_clocks_setting>Not Active</clocks_event_reason_display_clocks_setting>
+		</clocks_event_reasons>
+		<fb_memory_usage>
+			<total>12288 MiB</total>
+			<reserved>226 MiB</reserved>
+			<used>1931 MiB</used>
+			<free>10131 MiB</free>
+		</fb_memory_usage>
+		<temperature>
+			<gpu_temp>71 C</gpu_temp>
+			<gpu_temp_max_threshold>98 C</gpu_temp_max_threshold>
+			<gpu_temp_slow_threshold>95 C</gpu_temp_slow_threshold>
+			<gpu_temp_max_gpu_threshold>93 C</gpu_temp_max_gpu_threshold>
+		</temperature>
+		<gpu_power_readings>
+			<power_state>P2</power_state>
+			<power_draw>165.32 W</power_draw>
+			<current_power_limit>170.00 W</current_power_limit>
+			<requested_power_limit>170.00 W</requested_power_limit>
+			<default_power_limit>170.00 W</default_power_limit>
+			<min_power_limit>100.00 W</min_power_limit>
+			<max_power_limit>212.00 W</max_power_limit>
+		</gpu_power_readings>
+		<clocks>
+			<graphics_clock>1867 MHz</graphics_clock>
+			<sm_clock>1867 MHz</sm_clock>
+			<mem_clock>7300 MHz</mem_clock>
+			<video_clock>1650 MHz</video_clock>
+		</clocks>
+		<max_clocks>
+			<graphics_clock>2100 MHz</graphics_clock>
+			<sm_clock>2100 MHz</sm_clock>
+			<mem_clock>7501 MHz</mem_clock>
+			<video_clock>1950 MHz</video_clock>
+		</max_clocks>
+	</gpu>
+</nvidia_smi_log>

@@ -1,0 +1,35 @@
+{
+  "json_format_version": [
+    1,
+    0
+  ],
+  "smartctl": {
+    "version": [
+      7,
+      5
+    ],
+    "pre_release": false,
+    "svn_revision": "5714",
+    "platform_info": "x86_64-w64-mingw32-w10-22H2",
+    "build_info": "(AppVeyor)",
+    "argv": [
+      "smartctl",
+      "-a",
+      "--json",
+      "-d",
+      "ata",
+      "/Device/Harddisk0/Partition0"
+    ],
+    "messages": [
+      {
+        "string": "Smartctl open device: /Device/Harddisk0/Partition0 failed: Invalid argument",
+        "severity": "error"
+      }
+    ],
+    "exit_status": 2
+  },
+  "local_time": {
+    "time_t": 1791235943,
+    "asctime": "Tue Oct 06 00:32:23 2026 RTZ"
+  }
+}

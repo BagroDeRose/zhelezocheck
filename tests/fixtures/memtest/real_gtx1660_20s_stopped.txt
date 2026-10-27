@@ -1,0 +1,7 @@
+https://github.com/GpuZelenograd/memtest_vulkan v0.5.0 by GpuZelenograd
+To finish testing use Ctrl+C
+1: Bus=0x01:00 DevId=0x2184   6GB NVIDIA GeForce GTX 1660
+Standard 5-minute test of 1: Bus=0x01:00 DevId=0x2184   6GB NVIDIA GeForce GTX 1660
+      1 iteration. Passed  0.0482 seconds  written:    2.2GB 144.2GB/sec        checked:    4.5GB 137.9GB/sec
+     22 iteration. Passed  1.0189 seconds  written:   47.2GB 142.1GB/sec        checked:   94.5GB 137.7GB/sec
+    125 iteration. Passed  5.0157 seconds  written:  231.8GB 141.7GB/sec        checked:  463.5GB 137.1GB/sec

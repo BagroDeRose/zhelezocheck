@@ -1,0 +1,10 @@
+List of valid properties to query for the switch "--query-gpu=":
+
+"timestamp"
+The timestamp of when the query was made in format "YYYY/MM/DD HH:MM:SS.msec".
+
+"clocks_throttle_reasons.supported"
+Bitmask of supported clock throttle reasons. See nvml.h for more details.
+
+"clocks_throttle_reasons.active"
+Bitmask of active clock throttle reasons. See nvml.h for more details.

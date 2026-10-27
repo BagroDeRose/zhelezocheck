@@ -1,0 +1,4 @@
+﻿# SHA-256 сторонних программ в vendor\. Формат: <sha256>  <путь относительно vendor>
+# Новые строки дописывает scripts\setup_vendor.ps1; владелец подтверждает их один раз.
+09e67704210762ae8d8ad70fe6d71275eefbe815cc2c0658cd5afc8e231d0df6  memtest_vulkan/memtest_vulkan.exe
+b5db94e5082c042be44994b7a4fa8f7b5c8e713b2ab1c9a560d8f7a7995ea27d  smartmontools/bin/smartctl.exe

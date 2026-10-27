@@ -1,0 +1,14 @@
+https://github.com/GpuZelenograd/memtest_vulkan v0.5.0 by GpuZelenograd
+To finish testing use Ctrl+C
+
+1: Bus=0x01:00 DevId=0x2503   12GB NVIDIA GeForce RTX 3060
+(first device will be autoselected in 8 seconds)   Override index to test:
+    ...first device autoselected
+Standard 5-minute test of 1: Bus=0x01:00 DevId=0x2503   12GB NVIDIA GeForce RTX 3060
+      1 iteration. Passed  0.0296 seconds  written:    5.5GB 238.4GB/sec        checked:    8.2GB 289.0GB/sec
+     27 iteration. Passed  1.0061 seconds  written:  143.0GB 237.1GB/sec        checked:  214.5GB 286.9GB/sec
+    196 iteration. Passed  6.0028 seconds  written:  929.5GB 236.9GB/sec        checked: 1394.2GB 286.9GB/sec
+   1162 iteration. Passed 30.0099 seconds  written: 5313.0GB 236.7GB/sec        checked: 7969.5GB 286.8GB/sec
+   5995 iteration. Passed 150.0151 seconds  written:26561.5GB 236.6GB/sec        checked:39842.2GB 286.7GB/sec
+memtest_vulkan: no any errors, testing PASSed.
+  press any key to continue...

@@ -1,0 +1,66 @@
+<?xml version="1.0" ?>
+<!DOCTYPE nvidia_smi_log SYSTEM "nvsmi_device_v12.dtd">
+<nvidia_smi_log>
+	<timestamp>Wed Jan 15 10:00:00 2025</timestamp>
+	<driver_version>566.36</driver_version>
+	<cuda_version>12.7</cuda_version>
+	<attached_gpus>2</attached_gpus>
+	<gpu id="00000000:01:00.0">
+		<product_name>NVIDIA GeForce RTX 4070</product_name>
+		<product_architecture>Ada Lovelace</product_architecture>
+		<vbios_version>95.04.41.00.42</vbios_version>
+		<pci>
+			<pci_device_id>278610DE</pci_device_id>
+			<pci_sub_system_id>51391458</pci_sub_system_id>
+			<pci_gpu_link_info>
+				<pcie_gen><max_link_gen>4</max_link_gen><current_link_gen>1</current_link_gen></pcie_gen>
+				<link_widths><max_link_width>16x</max_link_width><current_link_width>16x</current_link_width></link_widths>
+			</pci_gpu_link_info>
+		</pci>
+		<fan_speed>N/A</fan_speed>
+		<clocks_event_reasons>
+			<clocks_event_reason_gpu_idle>Active</clocks_event_reason_gpu_idle>
+		</clocks_event_reasons>
+		<fb_memory_usage><total>12282 MiB</total></fb_memory_usage>
+		<gpu_power_readings>
+			<current_power_limit>200.00 W</current_power_limit>
+			<default_power_limit>200.00 W</default_power_limit>
+			<max_power_limit>220.00 W</max_power_limit>
+		</gpu_power_readings>
+		<max_clocks>
+			<graphics_clock>3105 MHz</graphics_clock>
+			<sm_clock>3105 MHz</sm_clock>
+			<mem_clock>10501 MHz</mem_clock>
+			<video_clock>2415 MHz</video_clock>
+		</max_clocks>
+	</gpu>
+	<gpu id="00000000:05:00.0">
+		<product_name>NVIDIA GeForce RTX 3070</product_name>
+		<product_architecture>Ampere</product_architecture>
+		<vbios_version>94.04.3A.00.7C</vbios_version>
+		<pci>
+			<pci_device_id>248410DE</pci_device_id>
+			<pci_sub_system_id>146B10DE</pci_sub_system_id>
+			<pci_gpu_link_info>
+				<pcie_gen><max_link_gen>4</max_link_gen><current_link_gen>1</current_link_gen></pcie_gen>
+				<link_widths><max_link_width>16x</max_link_width><current_link_width>1x</current_link_width></link_widths>
+			</pci_gpu_link_info>
+		</pci>
+		<fan_speed>100 %</fan_speed>
+		<clocks_event_reasons>
+			<clocks_event_reason_gpu_idle>Active</clocks_event_reason_gpu_idle>
+		</clocks_event_reasons>
+		<fb_memory_usage><total>8192 MiB</total></fb_memory_usage>
+		<gpu_power_readings>
+			<current_power_limit>130.00 W</current_power_limit>
+			<default_power_limit>130.00 W</default_power_limit>
+			<max_power_limit>130.00 W</max_power_limit>
+		</gpu_power_readings>
+		<max_clocks>
+			<graphics_clock>1500 MHz</graphics_clock>
+			<sm_clock>1500 MHz</sm_clock>
+			<mem_clock>6001 MHz</mem_clock>
+			<video_clock>1400 MHz</video_clock>
+		</max_clocks>
+	</gpu>
+</nvidia_smi_log>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>{{ app_name }} — отчёт {{ report_id[:8] }}</title>
+<style>
+  @page { size: A4; margin: 14mm; }
+  * { box-sizing: border-box; }
+  body { font-family: "Segoe UI", Arial, sans-serif; color: #1d1d1f; background: #ffffff;
+         margin: 0 auto; max-width: 900px; padding: 24px; font-size: 14px; line-height: 1.45; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  h2 { font-size: 16px; margin: 28px 0 8px; border-bottom: 1px solid #ddd; padding-bottom: 4px; }
+  .meta { color: #555; font-size: 12px; }
+  .meta td { padding: 1px 12px 1px 0; vertical-align: top; }
+  .digest { font-family: Consolas, monospace; font-size: 11px; word-break: break-all; }
+  .verdict { border-radius: 10px; padding: 18px 20px; margin: 18px 0; color: #fff; }
+  .verdict .decision { font-size: 30px; font-weight: 700; letter-spacing: 1px; }
+  .verdict .summary { font-size: 15px; margin-top: 4px; }
+  .demo { background: #fff3cd; border: 1px solid #e0c36c; padding: 8px 12px; border-radius: 6px; }
+  .finding { border-left: 4px solid #999; padding: 6px 12px; margin: 10px 0; page-break-inside: avoid; }
+  .finding .tag { font-size: 11px; text-transform: uppercase; font-weight: 600; }
+  .finding .title { font-weight: 600; font-size: 15px; }
+  .finding .advice { color: #333; margin-top: 4px; }
+  .finding .evidence { color: #777; font-size: 11px; margin-top: 2px; }
+  ul.good li { color: #1b7f3b; }
+  table.data { border-collapse: collapse; width: 100%; margin: 6px 0; font-size: 13px; }
+  table.data th, table.data td { border: 1px solid #ddd; padding: 4px 6px; text-align: left; vertical-align: top; }
+  table.data th { background: #f4f4f6; font-weight: 600; }
+  .status-passed { color: #1b7f3b; } .status-failed { color: #b3261e; font-weight: 600; }
+  .status-warning { color: #b26a00; } .status-skipped, .status-error { color: #777; }
+  .chart { margin: 10px 0; page-break-inside: avoid; }
+  .footer { margin-top: 32px; color: #666; font-size: 12px; border-top: 1px solid #ddd; padding-top: 8px; }
+</style>
+</head>
+<body>
+
+<h1>{{ app_name }} — отчёт о проверке компьютера</h1>
+<table class="meta">
+  <tr><td>Номер отчёта</td><td>{{ report_id }}</td></tr>
+  <tr><td>Дата проверки</td><td>{{ started_at }}</td></tr>
+  <tr><td>Отчёт создан</td><td>{{ generated_at }}</td></tr>
+  <tr><td>Режим</td><td>{{ mode }}</td></tr>
+  <tr><td>Версия программы</td><td>{{ version }}</td></tr>
+  <tr><td>SHA-256 данных проверки</td><td class="digest">{{ digest }}</td></tr>
+</table>
+
+{% if demo %}
+<p class="demo"><b>Демо-режим.</b> Данные взяты из учебного сценария «{{ demo }}», а не с настоящего компьютера.</p>
+{% endif %}
+
+<div class="verdict" style="background: {{ decision_color }};">
+  <div class="decision">{{ decision_title | upper }}</div>
+  <div class="summary">{{ summary }}</div>
+</div>
+
+<h2>Причины</h2>
+{% for f in problems %}
+<div class="finding" style="border-left-color: {{ severity_colors[f.severity.value] }};">
+  <div class="tag" style="color: {{ severity_colors[f.severity.value] }};">{{ severity_names[f.severity.value] }}</div>
+  <div class="title">{{ f.title }}</div>
+  <div>{{ f.explanation }}</div>
+  {% if f.advice %}<div class="advice"><b>Что делать:</b> {{ f.advice }}</div>{% endif %}
+  {% if f.evidence %}<div class="evidence">Данные: {{ f.evidence }}</div>{% endif %}
+</div>
+{% else %}
+<p>Проблем не найдено.</p>
+{% endfor %}
+
+{% if good %}
+<h2>В порядке</h2>
+<ul class="good">
+{% for f in good %}  <li><b>{{ f.title }}.</b> {{ f.explanation }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if bargaining %}
+<h2>Аргументы для торга</h2>
+<ul>
+{% for point in bargaining %}  <li>{{ point }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+<h2>Что не удалось проверить</h2>
+{% if not_checked %}
+<ul>
+{% for item in not_checked %}  <li>{{ item }}</li>
+{% endfor %}
+</ul>
+{% else %}
+<p>Все запланированные проверки выполнены.</p>
+{% endif %}
+
+{% if listing %}
+<h2>Объявление</h2>
+<table class="data">
+  <tr><th>Заголовок</th><td>{{ listing.title }}</td></tr>
+  <tr><th>Адрес страницы</th><td>{{ listing.url }}</td></tr>
+  <tr><th>Цена</th><td>{{ listing.price }}{% if listing.market_count %} (средняя на рынке {{ listing.market }}, объявлений: {{ listing.market_count }}){% endif %}</td></tr>
+  <tr><th>Заявлено</th><td>{{ listing.claimed }}</td></tr>
+{% if listing.city %}  <tr><th>Город</th><td>{{ listing.city }}</td></tr>
+{% endif %}
+</table>
+{% endif %}
+
+<h2>Тесты</h2>
+<table class="data">
+  <tr><th>Тест</th><th>Итог</th><th>Время</th><th>Результат</th></tr>
+{% for t in tests %}
+  <tr>
+    <td>{{ t.name }}</td>
+    <td class="status-{{ t.status_key }}">{{ t.status }}</td>
+    <td>{{ t.duration }}</td>
+    <td>{{ t.summary }}{% for note in t.notes %}<br><small>{{ note }}</small>{% endfor %}</td>
+  </tr>
+{% endfor %}
+</table>
+
+{% for chart in charts %}
+<div class="chart">{{ chart | safe }}</div>
+{% endfor %}
+
+{% if laptop %}
+<h2>Ноутбук</h2>
+<table class="data">
+{% for label, text in laptop %}
+  <tr><th>{{ label }}</th><td>{{ text }}</td></tr>
+{% endfor %}
+</table>
+
+{% endif %}<h2>Железо</h2>
+<table class="data">
+{% if system %}
+  <tr><th>Компьютер</th><td>{{ system.manufacturer }} {{ system.model }}{% if system.is_laptop %} (ноутбук){% endif %}</td></tr>
+  <tr><th>Windows</th><td>{{ system.os_name }} {{ system.os_version }} ({{ system.architecture }})</td></tr>
+  <tr><th>BIOS платы</th><td>{{ system.bios_vendor }} {{ system.bios_version }}{% if system.bios_date %}, {{ system.bios_date[:10] }}{% endif %}</td></tr>
+{% endif %}
+{% if board %}
+  <tr><th>Материнская плата</th><td>{{ board.manufacturer }} {{ board.product }}</td></tr>
+{% endif %}
+{% if cpu %}
+  <tr><th>Процессор</th><td>{{ cpu.name }} — {{ cpu.cores }} ядер / {{ cpu.threads }} потоков{% if cpu.max_clock_mhz %}, {{ cpu.max_clock_mhz }} МГц{% endif %}</td></tr>
+{% endif %}
+{% if memory %}
+  <tr><th>Оперативная память</th><td>{{ (memory.total_mb / 1024) | round(1) }} ГБ
+  {% for m in memory.modules %}<br><small>{{ m.slot }}: {{ (m.capacity_mb / 1024) | round(1) }} ГБ {{ m.manufacturer }} {{ m.part_number }} {{ m.speed_mhz or "" }} МГц</small>{% endfor %}</td></tr>
+{% endif %}
+{% if battery %}
+  <tr><th>Батарея</th><td>износ {{ battery.wear_percent }}%, циклов: {{ battery.cycle_count if battery.cycle_count is not none else "—" }} ({{ battery.full_charge_capacity_mwh }} из {{ battery.design_capacity_mwh }} мВт·ч)</td></tr>
+{% endif %}
+</table>
+
+{% if gpus %}
+<h2>Видеокарты</h2>
+<table class="data">
+  <tr><th>Имя в Windows</th><th>Чип по коду устройства</th><th>Память</th><th>BIOS карты</th><th>Драйвер</th><th>Лимит мощности</th><th>Код</th></tr>
+{% for g in gpus %}
+  <tr><td>{{ g.name }}</td><td>{{ g.chip }}</td><td>{{ g.vram }}</td><td>{{ g.vbios }}</td><td>{{ g.driver }}</td><td>{{ g.power }}</td><td>{{ g.ids }}</td></tr>
+{% endfor %}
+</table>
+{% endif %}
+
+{% if disks %}
+<h2>Накопители</h2>
+<table class="data">
+  <tr><th>Модель</th><th>Объём</th><th>Тип</th><th>Наработка, ч</th><th>Износ</th><th>Повреждённые участки</th><th>Самодиагностика</th></tr>
+{% for d in disks %}
+  <tr><td>{{ d.model }}</td><td>{{ d.size }}</td><td>{{ d.type }}</td><td>{{ d.hours }}</td><td>{{ d.wear }}</td><td>{{ d.sectors }}</td><td>{{ d.health }}</td></tr>
+{% endfor %}
+</table>
+{% endif %}
+
+<div class="footer">
+  Ни одна программа не даёт 100% гарантии: подготовленный продавец может временно скрыть часть проблем.
+  Отчёт снижает риск, но не заменяет здравый смысл — договаривайтесь о гарантии и не переводите деньги заранее.
+  <br>Отчёт создан программой {{ app_name }} {{ version }}. Программа ничего не устанавливала на проверяемый компьютер.
+</div>
+
+</body>
+</html>

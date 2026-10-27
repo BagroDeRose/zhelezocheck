@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Пороги ЖелезоЧек",
+  "type": "object",
+  "required": ["version", "thresholds", "durations_s"],
+  "properties": {
+    "version": {"type": "integer"},
+    "thresholds": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["value", "unit", "why"],
+        "properties": {
+          "value": {"type": "number"},
+          "unit": {"type": "string"},
+          "why": {"type": "string", "minLength": 20}
+        }
+      }
+    },
+    "durations_s": {
+      "type": "object",
+      "required": ["quick", "full", "short"],
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": {"type": "number", "exclusiveMinimum": 0}
+      }
+    }
+  }
+}

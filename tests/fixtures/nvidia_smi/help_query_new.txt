@@ -1,0 +1,7 @@
+List of valid properties to query for the switch "--query-gpu=":
+
+"clocks_event_reasons.supported" or "clocks_throttle_reasons.supported"
+Bitmask of supported clock event reasons. See nvml.h for more details.
+
+"clocks_event_reasons.active" or "clocks_throttle_reasons.active"
+Bitmask of active clock event reasons. See nvml.h for more details.

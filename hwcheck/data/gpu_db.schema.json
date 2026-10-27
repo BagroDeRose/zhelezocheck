@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Справочник видеокарт ЖелезоЧек",
+  "type": "object",
+  "required": ["version", "cards"],
+  "properties": {
+    "version": {"type": "integer"},
+    "description": {"type": "string"},
+    "cards": {
+      "type": "array",
+      "minItems": 60,
+      "maxItems": 80,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "model", "vendor", "device_ids", "chip", "vram_gb", "memory_type", "bus_width_bits",
+          "base_clock_mhz", "boost_clock_mhz", "tdp_w", "typical_max_temp_c", "mining_popular",
+          "source_url", "verified"
+        ],
+        "properties": {
+          "model": {"type": "string", "minLength": 3},
+          "vendor": {"enum": ["NVIDIA", "AMD"]},
+          "device_ids": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "pattern": "^[0-9a-f]{4}$"}
+          },
+          "chip": {"type": "string", "minLength": 2},
+          "vram_gb": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "number", "exclusiveMinimum": 0, "maximum": 64}
+          },
+          "memory_type": {"type": "string"},
+          "bus_width_bits": {"type": "integer", "minimum": 32, "maximum": 4096},
+          "base_clock_mhz": {"type": "integer", "minimum": 300, "maximum": 4000},
+          "boost_clock_mhz": {"type": "integer", "minimum": 300, "maximum": 4000},
+          "tdp_w": {"type": "number", "minimum": 10, "maximum": 700},
+          "typical_max_temp_c": {"type": "number", "minimum": 40, "maximum": 100},
+          "mining_popular": {"type": "boolean"},
+          "source_url": {"type": "string", "pattern": "^https://"},
+          "verified": {"type": "boolean"}
+        }
+      }
+    }
+  }
+}
