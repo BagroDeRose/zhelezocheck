@@ -24,7 +24,6 @@ class BuildConfig:
     contact_telegram: str = ""
     contact_email: str = ""
     contact_github: str = ""
-    feedback_form_url: str = ""
     # Постоянная ссылка на последнюю версию: публичная страница релизов на GitHub.
     download_latest: str = DEFAULT_DOWNLOAD
 
@@ -42,6 +41,5 @@ def load_build_config() -> BuildConfig:
         contact_telegram=str(contacts.get("telegram") or ""),
         contact_email=str(contacts.get("email") or ""),
         contact_github=str(contacts.get("github") or ""),
-        feedback_form_url=str(contacts.get("feedback_form_url") or ""),
         download_latest=str(data.get("download_latest") or DEFAULT_DOWNLOAD),
     )

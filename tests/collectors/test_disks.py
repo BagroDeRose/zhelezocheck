@@ -57,6 +57,24 @@ def test_ssd_worn() -> None:
     assert disk.smart.wear_percent == 93.0
 
 
+def test_nvme_written_spare_and_unsafe_shutdowns() -> None:
+    """NVMe: сколько записано (единица — 512 000 байт), резерв ячеек и аварийные выключения."""
+    smart = disks.parse_smartctl(_smart("real_ardor_nvme.json")).smart
+    assert smart is not None
+    assert smart.data_written_tb == 46.6  # 91 033 445 × 512 000 байт
+    assert smart.available_spare_pct == 100 and smart.available_spare_threshold_pct == 1
+    assert smart.unsafe_shutdowns == 34
+    healthy = disks.parse_smartctl(_smart("nvme_healthy.json")).smart
+    assert healthy is not None and healthy.data_written_tb == 15.4
+
+
+def test_sata_written_not_guessed() -> None:
+    """У SATA атрибут 241 в единицах производителя — «записано» не выдумываем."""
+    for name in ("sata_ssd_healthy.json", "ssd_worn.json", "hdd_reallocated.json"):
+        smart = disks.parse_smartctl(_smart(name)).smart
+        assert smart is not None and smart.data_written_tb is None, name
+
+
 def test_usb_without_smart() -> None:
     disk = disks.parse_smartctl(_smart("usb_no_smart.json"))
     assert disk.smart is None
@@ -187,6 +205,41 @@ def test_real_smartctl_without_admin_enriched_from_windows() -> None:
     assert hdd.smart is not None and hdd.smart.reallocated_sectors == 0
     assert hdd.smart.source == "smartctl"
     assert nvme.media_type == "ssd" and nvme.smart is not None and nvme.smart.wear_percent == 16.0
+
+
+def test_enrich_asks_windows_only_for_size_and_type() -> None:
+    """Дополнение сведений smartctl — без счётчиков надёжности и с коротким ожиданием.
+
+    С правами администратора `Get-StorageReliabilityCounter` по-настоящему опрашивает каждое
+    устройство и на USB-флешке висел все 60 с (журнал владельца, 01.11.2026): сводка ждала
+    минуту. Для дополнения нужны только объём и тип — их даёт `Get-PhysicalDisk`."""
+    calls: list[tuple[str, float]] = []
+    scripted = ScriptedRun(
+        {
+            "--scan-open": _ok(fixture_text("smartctl", "real_scan_open_noadmin.json")),
+            "/dev/sda": _ok(fixture_text("smartctl", "real_wd_hdd_ata.json"), code=4),
+            "/dev/sdb": _ok(fixture_text("smartctl", "real_ardor_nvme.json")),
+            "Get-PhysicalDisk": _ok(fixture_text("powershell", "disks_fallback_noadmin.json")),
+        }
+    )
+
+    def recording(cmd: list[str], timeout: float = 60.0, **kwargs: Any) -> RunResult:
+        if "Get-PhysicalDisk" in " ".join(cmd):
+            calls.append((" ".join(cmd), timeout))
+        return scripted(cmd, timeout, **kwargs)
+
+    hdd, _nvme = disks.collect(run_fn=recording, smartctl="smartctl.exe")
+    assert hdd.size_gb == 1000.2  # объём по-прежнему берётся из Windows
+    assert len(calls) == 1
+    command, timeout = calls[0]
+    assert "Get-StorageReliabilityCounter" not in command
+    assert timeout <= disks.ENRICH_TIMEOUT_S <= 20
+
+
+def test_fallback_reliability_skips_usb() -> None:
+    """Полный запасной путь (smartctl нет): счётчики надёжности USB-устройств не спрашиваем —
+    на них запрос может зависнуть, а S.M.A.R.T. флешки всё равно не отдают."""
+    assert "BusType -ne 7" in disks.FALLBACK_SCRIPT
 
 
 # ---------------------------------------------------------------- 15.7 устройство без названия

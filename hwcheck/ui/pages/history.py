@@ -1,11 +1,19 @@
-"""Страница «История и отчёты» (Pro): прошлые проверки и их отчёты."""
+"""Страница «История и отчёты»: прошлые проверки и их отчёты.
+
+История читается в фоновом потоке: на флешке открытие базы истории может занять несколько
+секунд (журнал владельца 01.11.2026 — 3,3 с), и окно при переключении вкладок не должно
+замирать. Пока идёт чтение, повторные переключения новое чтение не запускают — после
+окончания историю перечитывают один раз.
+"""
 
 from __future__ import annotations
 
 import logging
 import sqlite3
+import threading
 from pathlib import Path
 
+from PySide6.QtCore import Signal
 from PySide6.QtWidgets import (
     QAbstractItemView,
     QHBoxLayout,
@@ -22,12 +30,20 @@ from hwcheck.ui import strings
 from hwcheck.ui.context import AppContext
 from hwcheck.ui.pages.common import escape, text_label, title_label
 
+log = logging.getLogger(__name__)
+
 
 class HistoryPage(QWidget):
+    # Итог фонового чтения: список записей истории или ошибка.
+    _loaded = Signal(object)
+
     def __init__(self, ctx: AppContext) -> None:
         super().__init__()
         self.ctx = ctx
         self.entries: list[HistoryEntry] = []
+        self.loading = False  # идёт фоновое чтение истории
+        self._reload_pending = False  # пока читали, историю попросили обновить ещё раз
+        self._loaded.connect(self._on_loaded)
         layout = QVBoxLayout(self)
         layout.addWidget(title_label(strings.HISTORY_TITLE))
         self.note = text_label("", muted=True)
@@ -47,17 +63,47 @@ class HistoryPage(QWidget):
         layout.addLayout(buttons)
 
     def refresh(self) -> None:
+        """Перечитывает историю в фоне; таблица обновится, когда чтение закончится."""
         self.table.setEnabled(True)
         self.open_button.setEnabled(True)
         self.note.setVisible(True)
+        if self.loading:
+            self._reload_pending = True
+            return
+        self.loading = True
+        if not self.entries:
+            self.note.setText(strings.HISTORY_LOADING)
+        threading.Thread(target=self._load, name="history-load", daemon=True).start()
+
+    def _load(self) -> None:
+        result: object
         try:
-            self.entries = self.ctx.history.list()
+            result = self.ctx.history.list()
         except (OSError, sqlite3.Error) as error:
-            logging.getLogger(__name__).warning("История недоступна: %s", error)
+            log.warning("История недоступна: %s", error)
+            result = error
+        except Exception as error:  # непредвиденное — в журнал, а страница не «ждёт вечно»
+            log.exception("Не удалось прочитать историю")
+            result = error
+        try:
+            self._loaded.emit(result)
+        except RuntimeError:  # окно уже закрыто
+            log.info("История прочитана после закрытия окна")
+
+    def _on_loaded(self, result: object) -> None:
+        self.loading = False
+        if isinstance(result, list):
+            self._show(result)
+        else:
             self.entries = []
             self.table.setRowCount(0)
             self.note.setText(strings.HISTORY_UNAVAILABLE)
-            return
+        if self._reload_pending:
+            self._reload_pending = False
+            self.refresh()
+
+    def _show(self, entries: list[HistoryEntry]) -> None:
+        self.entries = entries
         self.note.setText("" if self.entries else strings.HISTORY_EMPTY)
         self.table.setRowCount(len(self.entries))
         for row, entry in enumerate(self.entries):

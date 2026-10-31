@@ -21,9 +21,25 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from hwcheck import __version__
 from hwcheck.knowledge.gpu_db import identify
 from hwcheck.laptop.details import laptop_details
-from hwcheck.models import CheckSession, SensorSample, Severity, TestResult, vram_text
+from hwcheck.models import (
+    CheckSession,
+    MemoryModule,
+    SensorSample,
+    Severity,
+    SmartData,
+    TestResult,
+    vram_text,
+)
 from hwcheck.thresholds import Thresholds, load_thresholds
 from hwcheck.ui import strings
+from hwcheck.ui.summary_cards import (
+    EVENT_PARAMS,
+    computer_name,
+    hours_text,
+    moment,
+    pcie_text,
+    written_text,
+)
 
 TEMPLATES = Path(__file__).resolve().parent / "templates"
 
@@ -184,10 +200,95 @@ def metrics_summary(result: TestResult) -> str:
     return ", ".join(parts)
 
 
+def _date_text(text: str | None, with_time: bool = False) -> str:
+    """Дата из снимка → «14.03.2024» (или «05.10.2026 09:01»). Не разобрали → пусто."""
+    value = moment(text)
+    if value is None:
+        return ""
+    return value.strftime("%d.%m.%Y %H:%M" if with_time else "%d.%m.%Y")
+
+
+def _gb(megabytes: int) -> str:
+    """16384 МБ → «16 ГБ», 7680 → «7.5 ГБ»."""
+    return f"{round(megabytes / 1024, 1):g} ГБ"
+
+
+def _module_note(module: MemoryModule) -> str:
+    """Строка о планке памяти: слот, объём, производитель, модель и частота."""
+    parts = [f"{module.slot}:" if module.slot else "", _gb(module.capacity_mb)]
+    parts += [module.manufacturer, module.part_number]
+    working, rated = module.configured_speed_mhz, module.speed_mhz
+    if working and rated and working < rated:
+        parts.append(f"— работает на {working} МГц, умеет {rated} МГц")
+    elif working or rated:
+        parts.append(f"— {working or rated} МГц")
+    return " ".join(part.strip() for part in parts if part and part.strip())
+
+
+def _hardware_rows(session: CheckSession) -> list[dict[str, Any]]:
+    """Раздел «Железо»: строки (название, текст, пояснения мелким шрифтом)."""
+    snap = session.snapshot
+    rows: list[dict[str, Any]] = []
+
+    def add(label: str, text: str, notes: list[str] | None = None) -> None:
+        rows.append({"label": label, "text": text.strip() or "—", "notes": notes or []})
+
+    system = snap.system
+    if system:
+        name = computer_name(system.manufacturer, system.model)
+        if name:
+            add("Компьютер", name + (" (ноутбук)" if system.is_laptop else ""))
+        notes = []
+        if _date_text(system.install_date):
+            notes.append(f"установлена {_date_text(system.install_date)}")
+        if _date_text(system.last_boot, with_time=True):
+            notes.append(f"последний запуск {_date_text(system.last_boot, with_time=True)}")
+        arch = f" ({system.architecture})" if system.architecture else ""
+        add("Windows", f"{system.os_name} {system.os_version}".strip() + arch, notes)
+        bios_date = f", {system.bios_date[:10]}" if system.bios_date else ""
+        add("BIOS платы", f"{system.bios_vendor} {system.bios_version}".strip() + bios_date)
+    if snap.board:
+        add("Материнская плата", f"{snap.board.manufacturer} {snap.board.product}")
+    cpu = snap.cpu
+    if cpu:
+        parts = [f"{cpu.name} — {cpu.cores} ядер / {cpu.threads} потоков"]
+        if cpu.max_clock_mhz:
+            parts.append(f"до {cpu.max_clock_mhz} МГц")
+        if cpu.socket.strip():
+            parts.append(f"сокет {cpu.socket.strip()}")
+        add("Процессор", ", ".join(parts))
+    memory = snap.memory
+    if memory:
+        text = _gb(memory.total_mb) if memory.total_mb else "—"
+        if memory.modules:
+            slots = f" из {memory.slots_total}" if memory.slots_total else ""
+            text += f", занято {len(memory.modules)}{slots} слотов"
+        add("Оперативная память", text, [_module_note(m) for m in memory.modules])
+    battery = snap.battery
+    if battery:
+        wear = battery.wear_percent
+        parts = [f"износ {wear:.0f}%" if wear is not None else "износ не определён"]
+        parts.append(
+            f"циклов: {battery.cycle_count}" if battery.cycle_count is not None else "циклов: —"
+        )
+        if battery.full_charge_capacity_mwh and battery.design_capacity_mwh:
+            parts.append(
+                f"ёмкость {battery.full_charge_capacity_mwh} из {battery.design_capacity_mwh} мВт·ч"
+            )
+        add("Батарея", ", ".join(parts))
+    return rows
+
+
 def _gpu_rows(session: CheckSession) -> list[dict[str, Any]]:
     rows = []
     for gpu in session.snapshot.gpus:
         ident = identify(gpu)
+        power = gpu.enforced_power_limit_w or gpu.default_power_limit_w
+        extra = []
+        if pcie_text(gpu):
+            extra.append(f"шина {pcie_text(gpu)}")
+        if gpu.max_power_limit_w and power and gpu.max_power_limit_w > power:
+            extra.append(f"лимит мощности можно поднять до {gpu.max_power_limit_w:.0f} Вт")
         rows.append(
             {
                 "name": gpu.name,
@@ -195,13 +296,54 @@ def _gpu_rows(session: CheckSession) -> list[dict[str, Any]]:
                 "vram": vram_text(gpu) or "—",
                 "vbios": gpu.vbios_version or "—",
                 "driver": gpu.driver_version or "—",
-                "power": f"{gpu.default_power_limit_w:.0f} Вт"
-                if gpu.default_power_limit_w
-                else "—",
+                "power": f"{power:.0f} Вт" if power else "—",
                 "ids": f"{gpu.pci_vendor_id}:{gpu.pci_device_id}",
+                "extra": "; ".join(extra),
             }
         )
     return rows
+
+
+def _disk_extra(smart: SmartData | None) -> str:
+    """Дополнительные сведения SMART одной строкой (что известно)."""
+    if smart is None:
+        return ""
+    parts = []
+    if smart.power_cycles is not None:
+        parts.append(f"включений: {smart.power_cycles}")
+    if smart.temperature_c is not None:
+        parts.append(f"температура {smart.temperature_c:.0f} °C")
+    if smart.data_written_tb is not None:
+        parts.append(f"записано {written_text(smart.data_written_tb)}")
+    if smart.unsafe_shutdowns is not None:
+        parts.append(f"аварийных выключений: {smart.unsafe_shutdowns}")
+    if smart.available_spare_pct is not None:
+        limit = smart.available_spare_threshold_pct
+        parts.append(
+            f"резерв ячеек {smart.available_spare_pct}%"
+            + (f" (порог {limit}%)" if limit is not None else "")
+        )
+    if smart.crc_errors:
+        parts.append(f"ошибок передачи (CRC): {smart.crc_errors}")
+    return "; ".join(parts)
+
+
+def _event_context(session: CheckSession) -> dict[str, Any] | None:
+    """Журнал Windows: сколько сбоев каждого вида и когда был последний."""
+    events = session.snapshot.events
+    if events is None:
+        return None
+    names = [*EVENT_PARAMS, ("disk_removable", "Ошибки съёмных дисков")]
+    rows = [
+        {
+            "name": name,
+            "count": events.counts.get(key, 0),
+            "last": _date_text(events.last_seen.get(key), with_time=True) or "—",
+        }
+        for key, name in names
+        if key in events.counts or key != "disk_removable"
+    ]
+    return {"days": events.days, "partial": events.partial, "note": events.note, "rows": rows}
 
 
 def _disk_rows(session: CheckSession) -> list[dict[str, Any]]:
@@ -213,9 +355,10 @@ def _disk_rows(session: CheckSession) -> list[dict[str, Any]]:
                 "model": disk.model,
                 "size": f"{disk.size_gb:.0f} ГБ" if disk.size_gb else "—",
                 "type": {"ssd": "SSD", "hdd": "HDD"}.get(disk.media_type, "—"),
-                "hours": smart.power_on_hours
+                "hours": hours_text(smart.power_on_hours)
                 if smart and smart.power_on_hours is not None
                 else "—",
+                "extra": _disk_extra(smart),
                 "wear": f"{smart.wear_percent:.0f}%"
                 if smart and smart.wear_percent is not None
                 else "—",
@@ -238,7 +381,6 @@ def build_context(session: CheckSession, generated_at: datetime | None = None) -
     verdict = session.verdict
     decision = verdict.decision.value if verdict else "negotiate"
     findings = verdict.findings if verdict else []
-    snap = session.snapshot
     return {
         "app_name": strings.APP_NAME,
         "version": session.app_version or __version__,
@@ -258,13 +400,10 @@ def build_context(session: CheckSession, generated_at: datetime | None = None) -
         "severity_colors": SEVERITY_COLORS,
         "bargaining": verdict.bargaining_points if verdict else [],
         "not_checked": verdict.not_checked if verdict else [],
-        "system": snap.system,
-        "cpu": snap.cpu,
-        "memory": snap.memory,
-        "board": snap.board,
+        "hardware": _hardware_rows(session),
         "gpus": _gpu_rows(session),
         "disks": _disk_rows(session),
-        "battery": snap.battery,
+        "events": _event_context(session),
         "laptop": laptop_details(session),
         "tests": [
             {

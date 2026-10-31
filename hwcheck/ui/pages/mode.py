@@ -1,4 +1,4 @@
-"""Страница «Выбор режима»: быстрая или полная (Pro) проверка и предупреждение о нагрузке."""
+"""Страница «Выбор режима»: быстрая или полная проверка и предупреждение о нагрузке."""
 
 from __future__ import annotations
 
@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import (
+    QButtonGroup,
     QCheckBox,
     QHBoxLayout,
     QPushButton,
@@ -33,6 +34,12 @@ class ModePage(QWidget):
         self.quick = QRadioButton(strings.MODE_QUICK)
         self.quick.setChecked(True)
         self.full = QRadioButton(strings.MODE_FULL)
+        # Кнопки лежат в разных карточках (разные родители), поэтому сами по себе Qt их не
+        # связывает — без общей группы можно было отметить оба режима сразу.
+        self.mode_group = QButtonGroup(self)
+        self.mode_group.setExclusive(True)
+        self.mode_group.addButton(self.quick)
+        self.mode_group.addButton(self.full)
         layout.addWidget(card(self.quick, text_label(strings.MODE_QUICK_DESC, muted=True)))
         self.full_note = text_label(strings.MODE_FULL_DESC, muted=True)
         layout.addWidget(card(self.full, self.full_note))

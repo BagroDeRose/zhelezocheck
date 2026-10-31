@@ -146,6 +146,7 @@ class ListingPage(QWidget):
         self.ctx = ctx
         self.request_id = 0
         self.pending_id: int | None = None
+        self._claims: ListingClaims | None = None  # показанное объявление
         # Сведения о железе для сверки (передаёт главное окно после сбора на встрече).
         self.snapshot_provider: Callable[[], HardwareSnapshot | None] = lambda: None
         self._parsed.connect(self._on_parsed)
@@ -266,6 +267,7 @@ class ListingPage(QWidget):
 
     def show_listing(self, claims: ListingClaims | None) -> None:
         """Показывает сохранённое объявление карточками (или пустое состояние)."""
+        self._claims = claims
         self.empty_label.setVisible(claims is None)
         self.results.setVisible(claims is not None)
         self.clear_button.setVisible(claims is not None)
@@ -279,10 +281,11 @@ class ListingPage(QWidget):
         self.match_label.setText(match_html(claims, self.snapshot_provider()))
 
     def showEvent(self, event: QShowEvent) -> None:  # noqa: N802 — имя метода Qt
-        # Сведения о железе могли появиться — обновляем карточку сверки.
+        # Сведения о железе могли появиться — обновляем карточку сверки. Файл объявления
+        # не перечитываем: это уже сделал refresh() при переходе на вкладку.
         super().showEvent(event)
         if self.pending_id is None:
-            self.show_listing(self.ctx.listings.load())
+            self.show_listing(self._claims)
 
     # -- разбор ------------------------------------------------------------------
 

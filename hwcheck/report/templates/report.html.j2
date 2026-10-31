@@ -131,24 +131,9 @@
 
 {% endif %}<h2>Железо</h2>
 <table class="data">
-{% if system %}
-  <tr><th>Компьютер</th><td>{{ system.manufacturer }} {{ system.model }}{% if system.is_laptop %} (ноутбук){% endif %}</td></tr>
-  <tr><th>Windows</th><td>{{ system.os_name }} {{ system.os_version }} ({{ system.architecture }})</td></tr>
-  <tr><th>BIOS платы</th><td>{{ system.bios_vendor }} {{ system.bios_version }}{% if system.bios_date %}, {{ system.bios_date[:10] }}{% endif %}</td></tr>
-{% endif %}
-{% if board %}
-  <tr><th>Материнская плата</th><td>{{ board.manufacturer }} {{ board.product }}</td></tr>
-{% endif %}
-{% if cpu %}
-  <tr><th>Процессор</th><td>{{ cpu.name }} — {{ cpu.cores }} ядер / {{ cpu.threads }} потоков{% if cpu.max_clock_mhz %}, {{ cpu.max_clock_mhz }} МГц{% endif %}</td></tr>
-{% endif %}
-{% if memory %}
-  <tr><th>Оперативная память</th><td>{{ (memory.total_mb / 1024) | round(1) }} ГБ
-  {% for m in memory.modules %}<br><small>{{ m.slot }}: {{ (m.capacity_mb / 1024) | round(1) }} ГБ {{ m.manufacturer }} {{ m.part_number }} {{ m.speed_mhz or "" }} МГц</small>{% endfor %}</td></tr>
-{% endif %}
-{% if battery %}
-  <tr><th>Батарея</th><td>износ {{ battery.wear_percent }}%, циклов: {{ battery.cycle_count if battery.cycle_count is not none else "—" }} ({{ battery.full_charge_capacity_mwh }} из {{ battery.design_capacity_mwh }} мВт·ч)</td></tr>
-{% endif %}
+{% for row in hardware %}
+  <tr><th>{{ row.label }}</th><td>{{ row.text }}{% for note in row.notes %}<br><small>{{ note }}</small>{% endfor %}</td></tr>
+{% endfor %}
 </table>
 
 {% if gpus %}
@@ -156,7 +141,7 @@
 <table class="data">
   <tr><th>Имя в Windows</th><th>Чип по коду устройства</th><th>Память</th><th>BIOS карты</th><th>Драйвер</th><th>Лимит мощности</th><th>Код</th></tr>
 {% for g in gpus %}
-  <tr><td>{{ g.name }}</td><td>{{ g.chip }}</td><td>{{ g.vram }}</td><td>{{ g.vbios }}</td><td>{{ g.driver }}</td><td>{{ g.power }}</td><td>{{ g.ids }}</td></tr>
+  <tr><td>{{ g.name }}{% if g.extra %}<br><small>{{ g.extra }}</small>{% endif %}</td><td>{{ g.chip }}</td><td>{{ g.vram }}</td><td>{{ g.vbios }}</td><td>{{ g.driver }}</td><td>{{ g.power }}</td><td>{{ g.ids }}</td></tr>
 {% endfor %}
 </table>
 {% endif %}
@@ -164,11 +149,22 @@
 {% if disks %}
 <h2>Накопители</h2>
 <table class="data">
-  <tr><th>Модель</th><th>Объём</th><th>Тип</th><th>Наработка, ч</th><th>Износ</th><th>Повреждённые участки</th><th>Самодиагностика</th></tr>
+  <tr><th>Модель</th><th>Объём</th><th>Тип</th><th>Наработка</th><th>Износ</th><th>Повреждённые участки</th><th>Самодиагностика</th></tr>
 {% for d in disks %}
-  <tr><td>{{ d.model }}</td><td>{{ d.size }}</td><td>{{ d.type }}</td><td>{{ d.hours }}</td><td>{{ d.wear }}</td><td>{{ d.sectors }}</td><td>{{ d.health }}</td></tr>
+  <tr><td>{{ d.model }}{% if d.extra %}<br><small>{{ d.extra }}</small>{% endif %}</td><td>{{ d.size }}</td><td>{{ d.type }}</td><td>{{ d.hours }}</td><td>{{ d.wear }}</td><td>{{ d.sectors }}</td><td>{{ d.health }}</td></tr>
 {% endfor %}
 </table>
+{% endif %}
+
+{% if events %}
+<h2>Журнал Windows за {{ events.days }} дней</h2>
+<table class="data">
+  <tr><th>Событие</th><th>Сколько раз</th><th>Последний раз</th></tr>
+{% for e in events.rows %}
+  <tr><td>{{ e.name }}</td><td>{{ e.count }}</td><td>{{ e.last }}</td></tr>
+{% endfor %}
+</table>
+{% if events.partial %}<p><small>Журнал прочитан не полностью{% if events.note %}: {{ events.note }}{% endif %}.</small></p>{% endif %}
 {% endif %}
 
 <div class="footer">

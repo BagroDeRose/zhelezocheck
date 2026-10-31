@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "hwcheck"
-version = "2.0.0"
+version = "2.0.1"
 description = "ЖелезоЧек — бесплатная портативная проверка б/у компьютера перед покупкой"
 readme = "README.md"
 requires-python = ">=3.12"

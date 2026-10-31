@@ -179,6 +179,42 @@ def test_personal_data_ok(name: str, text: str) -> None:
     assert ss.personal_data_findings(name, text) == []
 
 
+# Примеры склеены из частей: целиком такой путь в этом файле нашла бы сама проверка.
+@pytest.mark.parametrize(
+    "text",
+    [
+        r"<process_name>C:\Users" + r"\ivan\AppData\Roaming\Telegram Desktop\Telegram.exe",
+        "путь C:/Users" + "/ivan.petrov/Documents",
+        r"D:\\Users" + r"\\someone\\x",
+    ],
+)
+def test_user_profile_paths_are_found(text: str) -> None:
+    """Путь в профиль пользователя Windows выдаёт имя учётной записи (так в публичный репозиторий
+    попало имя пользователя из настоящего вывода nvidia-smi, 01.11.2026)."""
+    assert ss.user_path_findings(text) == ["путь с именем пользователя Windows"]
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        r"C:\Users\User\AppData\Local",
+        r"C:\Users\Public\Desktop",
+        r"C:\Users\<имя>\AppData",
+        r"C:\Users\%USERNAME%\AppData",
+        r"C:\Users\{user}\x",
+        r"C:\Users\...\AppData",
+        "%LOCALAPPDATA%",
+    ],
+)
+def test_generic_user_paths_are_ok(text: str) -> None:
+    assert ss.user_path_findings(text) == []
+
+
+def test_working_tree_has_no_user_profile_paths() -> None:
+    findings = ss.user_path_scan(ROOT, ss.working_tree_files(ROOT))
+    assert findings == [], findings
+
+
 def test_real_legal_files_have_no_personal_data() -> None:
     files = ss.working_tree_files(ROOT)
     findings = ss.personal_data_scan(ROOT, files)

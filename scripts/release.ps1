@@ -80,7 +80,7 @@ $Sha = (Get-Content -LiteralPath "$Archive.sha256" -Encoding UTF8).Split(' ')[0]
 if (-not $Final) {
     Write-Step '7. Кандидат: коммит версии и вывода самопроверки (без тега и релиза)'
     git add pyproject.toml hwcheck\__init__.py "docs\qa\smoke_$Version*"
-    git commit -m "Кандидат $Tag (без тега и релиза)" -m "Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
+    git commit -m "Кандидат $Tag (без тега и релиза)" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
     if ($LASTEXITCODE -ne 0) { throw 'Коммит не удался' }
     Write-Step "Готово: кандидат $Archive, SHA-256 $Sha."
     exit 0
@@ -88,7 +88,7 @@ if (-not $Final) {
 
 Write-Step '7. Финальный выпуск: коммит, тег, push, релиз'
 git add pyproject.toml hwcheck\__init__.py "docs\qa\smoke_$Version*"
-git commit -m "Выпуск $Tag" -m "Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
+git commit -m "Выпуск $Tag" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 if ($LASTEXITCODE -ne 0) { throw 'Коммит не удался' }
 git tag -a $Tag -m "ЖелезоЧек $Tag"
 Invoke-Checked 'scan_secrets перед push' { & $Python scripts\scan_secrets.py . }

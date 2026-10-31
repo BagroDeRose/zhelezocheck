@@ -29,6 +29,7 @@ from hwcheck.platform.runner import RunFn
 log = logging.getLogger(__name__)
 
 _GB = 1000**3  # производители дисков считают в десятичных гигабайтах
+_NVME_DATA_UNIT = 512_000  # «data unit» NVMe = 1000 × 512 байт
 
 # Биты кода завершения smartctl, означающие, что данные НЕ прочитаны:
 # бит 0 — ошибка командной строки, бит 1 — устройство не открылось.
@@ -37,16 +38,26 @@ _SMARTCTL_FATAL_BITS = 0b11
 # Атрибуты ATA, где нормализованное значение = «осталось ресурса, %».
 _WEAR_REMAINING_ATTRS = (177, 231, 233, 202, 169)
 
-FALLBACK_SCRIPT = (
+_DISKS_PART = (
     "$disks = @(Get-PhysicalDisk | Select-Object DeviceId,FriendlyName,Model,MediaType,"
     "BusType,Size,HealthStatus); "
-    "$relError = $null; "
-    "$rel = @(try { Get-PhysicalDisk | Get-StorageReliabilityCounter -ErrorAction Stop | "
+)
+# Полный запасной путь (smartctl нет). Счётчики надёжности USB-устройств (BusType 7) не
+# спрашиваем: с правами администратора запрос по-настоящему идёт к устройству и на флешке
+# может висеть до таймаута, а S.M.A.R.T. флешки всё равно не отдают.
+FALLBACK_SCRIPT = (
+    _DISKS_PART + "$relError = $null; "
+    "$rel = @(try { Get-PhysicalDisk | Where-Object { $_.BusType -ne 7 } | "
+    "Get-StorageReliabilityCounter -ErrorAction Stop | "
     "Select-Object DeviceId,PowerOnHours,Temperature,Wear,ReadErrorsUncorrected,"
     "ReadErrorsTotal,WriteErrorsUncorrected,StartStopCycleCount } "
     "catch { $relError = $_.Exception.Message }); "
     "[PSCustomObject]@{ Disks = $disks; Reliability = $rel; ReliabilityError = $relError }"
 )
+# Дополнение сведений smartctl объёмом и типом: только список дисков, без счётчиков надёжности
+# (журнал владельца 01.11.2026: с ними сводка с правами администратора ждала 60 с).
+ENRICH_SCRIPT = _DISKS_PART + "[PSCustomObject]@{ Disks = $disks }"
+ENRICH_TIMEOUT_S = 20.0
 
 UNKNOWN_DISK_MODEL = "Накопитель без названия"
 NO_SMART_NOTE = "S.M.A.R.T. недоступен для этого устройства (например, USB-флешка)."
@@ -147,6 +158,13 @@ def parse_smartctl(data: dict[str, Any]) -> DiskInfo:
         smart.power_on_hours = smart.power_on_hours or to_int(nvme.get("power_on_hours"))
         if smart.temperature_c is None:
             smart.temperature_c = to_float(nvme.get("temperature"))
+        # Единица «data units» в NVMe — 1000 блоков по 512 байт (стандарт NVMe).
+        units = to_int(nvme.get("data_units_written"))
+        if units is not None:
+            smart.data_written_tb = round(units * _NVME_DATA_UNIT / 1e12, 1)
+        smart.unsafe_shutdowns = to_int(nvme.get("unsafe_shutdowns"))
+        smart.available_spare_pct = to_int(nvme.get("available_spare"))
+        smart.available_spare_threshold_pct = to_int(nvme.get("available_spare_threshold"))
     attrs = _ata_attributes(data)
     if attrs:
         smart.reallocated_sectors = _raw(attrs, 5)
@@ -246,7 +264,7 @@ def collect(run_fn: RunFn = runner.run, smartctl: str | None = "auto") -> list[D
             if any(disk.size_gb == 0 or disk.media_type == "unknown" for disk in disks):
                 # smartctl иногда не сообщает объём и тип (например, без прав администратора) —
                 # дополняем сведениями Windows.
-                return enrich(disks, _collect_fallback(run_fn))
+                return enrich(disks, _collect_sizes(run_fn))
             return disks
         # smartctl видит диски, но не может их прочитать (бывает без прав администратора).
         log.info("smartctl не прочитал ни одного накопителя, переходим к средствам Windows")
@@ -259,6 +277,16 @@ def _collect_fallback(run_fn: RunFn) -> list[DiskInfo]:
     except PowerShellError as error:
         log.warning("Get-PhysicalDisk недоступен: %s", error)
         return []
+
+
+def _collect_sizes(run_fn: RunFn) -> list[DiskInfo]:
+    """Только объём и тип дисков из Windows (для дополнения сведений smartctl)."""
+    try:
+        data = ps_json(ENRICH_SCRIPT, timeout=ENRICH_TIMEOUT_S, run_fn=run_fn)
+    except PowerShellError as error:
+        log.warning("Объём и тип дисков из Windows недоступны: %s", error)
+        return []
+    return parse_fallback(data)
 
 
 def _same_model(a: str, b: str) -> bool:

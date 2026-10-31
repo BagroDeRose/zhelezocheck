@@ -135,7 +135,8 @@ class SettingsPage(QWidget):
         self.scroll_area.ensureWidgetVisible(self.notices_card)
 
     def _contacts_card(self) -> QWidget:
-        """«Контактная информация» (22.1): ссылки — кнопками, открываются только по нажатию."""
+        """«Контактная информация» (22.1): Telegram, GitHub и почта. Ссылки — кнопками, открываются
+        только по нажатию."""
         config = load_build_config()
         telegram = short_url(config.contact_telegram)
         self.contacts_label = text_label(
@@ -143,7 +144,6 @@ class SettingsPage(QWidget):
                 telegram="@" + telegram.removeprefix("t.me/") if telegram else "—",
                 email=escape(config.contact_email or "—"),
                 github=escape(short_url(config.contact_github) or "—"),
-                form=strings.CONTACTS_FORM_LINE if config.feedback_form_url else "",
             )
         )
         self.contact_buttons: dict[str, QPushButton] = {}
@@ -151,7 +151,6 @@ class SettingsPage(QWidget):
         for key, title, url in (
             ("telegram", strings.CONTACTS_TELEGRAM, config.contact_telegram),
             ("github", strings.CONTACTS_GITHUB, config.contact_github),
-            ("form", strings.CONTACTS_FORM, config.feedback_form_url),
         ):
             if not url:
                 continue

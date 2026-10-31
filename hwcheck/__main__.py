@@ -37,6 +37,8 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument(
         "--smoke-test", action="store_true", help="самопроверка сборки (только с --demo)"
     )
+    # Ставит кнопка «Перезапустить с правами администратора» (см. platform/elevation.py).
+    parser.add_argument("--relaunched", default="", metavar="КЛЮЧ", help=argparse.SUPPRESS)
     return parser.parse_args(argv)
 
 
@@ -63,21 +65,33 @@ def main(argv: list[str] | None = None) -> int:
     if args.demo and args.demo not in list_scenarios():
         print(f"Неизвестный сценарий «{args.demo}». Доступны: {', '.join(list_scenarios())}")
         return 2
-    from hwcheck import crash_guard
+    from hwcheck import __version__, crash_guard
+    from hwcheck.platform.elevation import is_admin
     from hwcheck.ui.app import show_error_dialog
 
     paths = get_paths()
     setup_logging(paths)
-    app = ensure_application(sys.argv)
+    log = logging.getLogger(__name__)
+    # По этой строке в журнале видно, дошла ли до запуска копия с правами администратора.
+    log.info(
+        "Запуск ЖелезоЧек %s: права администратора=%s, сборка=%s, аргументы=%s",
+        __version__,
+        is_admin(),
+        bool(getattr(sys, "frozen", False)),
+        sys.argv[1:],
+    )
     # Необработанная ошибка — в журнал и сообщение пользователю, а не молчаливое закрытие.
     # В самопроверке сборки окно с сообщением заблокировало бы выход, поэтому только журнал.
+    # Ставится до создания окна Qt: «вылет» и там запишется в data/logs/crash.log.
     crash_guard.install(paths, notify=None if args.smoke_test else show_error_dialog)
+    app = ensure_application(sys.argv)
     # Вторая копия программы с той же флешки не запускается (20.3).
     from hwcheck.single_instance import InstanceLock
     from hwcheck.ui.app import show_already_running
 
     instance = InstanceLock(paths.data / "hwcheck.lock")
     if not instance.acquire():
+        log.warning("Другая копия программы уже открыта — эта закрывается")
         show_already_running()
         return 1
     time_scale = args.time_scale if args.time_scale is not None else DEMO_TIME_SCALE
@@ -93,9 +107,13 @@ def main(argv: list[str] | None = None) -> int:
     from hwcheck.ui.watchdog import UiWatchdog
 
     started = time.monotonic()
+    log.info("Создаю окно")
     window = create_window(args.demo, time_scale=time_scale)
+    # Перед перезапуском с правами окно отпускает замок; рядом с замком — отметка «готова».
+    window.ctx.instance_lock = instance if instance.active else None
+    window.ctx.relaunch_token = args.relaunched
     window.show()
-    logging.getLogger(__name__).info("Окно открыто за %.1f с", time.monotonic() - started)
+    log.info("Окно открыто за %.1f с", time.monotonic() - started)
     watchdog = UiWatchdog()  # подвисания окна дольше 2 с — в журнал (задача 22.7)
     watchdog.start()
     code = app.exec()

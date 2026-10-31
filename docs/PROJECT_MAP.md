@@ -159,8 +159,6 @@
 | `hwcheck/ui/pages/settings.py` | Настройки (тема), пороги для просмотра, о программе, лицензии |
 | `hwcheck/crash_guard.py` | Перехват необработанных ошибок: журнал + сообщение вместо молчаливого закрытия, crash.log при «вылете» |
 | `hwcheck/laptop/details.py` | Блок «Ноутбук» для вердикта и отчёта: батарея, время работы, итоги тестов экрана и клавиатуры |
-| `hwcheck/platform/disk_identity.py` | Чтение накопителя по букве диска через CIM (только чтение) |
-| `hwcheck/platform/disk_serial_ioctl.py` | Второе чтение серийного номера флешки напрямую у устройства (IOCTL_STORAGE_QUERY_PROPERTY), без прав администратора (SPEC 1.5, 37.1) |
 | `hwcheck/platform/event_time.py` | Время последнего события журнала Windows «Система» (только чтение) |
 | `hwcheck/build_config.py` | Настройки сборки (имя бота продаж для инструкции на странице «Лицензия») |
 | `hwcheck/single_instance.py` | Защита от второй копии программы (замок data/hwcheck.lock) |
@@ -182,7 +180,6 @@
 | `tests/test_logging_setup.py` | Проверка, что ключи и телефоны не попадают в логи |
 | `tests/fixtures/encodings/` | Одна строка в 7 кодировках — для проверки декодирования |
 | `tests/platform/test_runner.py` | Проверка кодировок, таймаута, отмены и запрета запуска через оболочку |
-| `tests/platform/test_disk_serial.py` | Проверка второго чтения серийного номера через IOCTL |
 | `tests/fixtures/powershell/` | Образцы вывода PowerShell (объект, массив, пусто, ошибка) |
 | `tests/platform/test_powershell.py` | Проверка разбора вывода PowerShell |
 | `tests/platform/test_elevation.py` | Проверка логики прав администратора с подменой WinAPI |

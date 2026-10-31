@@ -1,20 +1,51 @@
 """Сводка «Что найдено» карточками по компонентам (задача 22.5).
 
 Из снимка железа собирается список карточек: плата, BIOS, процессор, память, видеокарты,
-накопители, Windows и (у ноутбуков) батарея. В карточке — иконка, заголовок, 2–4 ключевых
-параметра и цветной статус. Здесь только данные; рисует их `widgets/summary_grid.py`.
+накопители, Windows, журнал событий и (у ноутбуков) батарея. В карточке — иконка, заголовок,
+2–7 ключевых параметров и цветной статус. Здесь только данные; рисует их
+`widgets/summary_grid.py`.
 
 Статус — короткая подсказка по уже собранным сведениям, а не вердикт: вердикт выносится
-после тестов. Пороги износа и секторов берутся из `thresholds.json`.
+после тестов. Пороги износа, секторов и ширины шины берутся из `thresholds.json`.
 """
 
 from __future__ import annotations
 
+from collections import Counter
 from dataclasses import dataclass, field
+from datetime import datetime
 
-from hwcheck.models import BatteryInfo, DiskInfo, GpuInfo, HardwareSnapshot, vram_text
+from hwcheck.knowledge.gpu_db import IdentStatus, identify
+from hwcheck.models import (
+    BatteryInfo,
+    DiskInfo,
+    EventSummary,
+    GpuInfo,
+    HardwareSnapshot,
+    MemoryModule,
+    vram_text,
+)
 from hwcheck.thresholds import Thresholds, load_thresholds
 from hwcheck.ui import strings
+
+# Windows, установленная за столько дней до проверки, могла «стереть» историю сбоев.
+RECENT_INSTALL_DAYS = 14
+# Начала строк-заглушек, которые сборные компьютеры пишут вместо производителя и модели.
+OEM_PLACEHOLDERS = (
+    "system manufacturer",
+    "system product name",
+    "to be filled",
+    "default string",
+    "not applicable",
+    "o.e.m.",
+)
+# Счётчики журнала, которые показываем в карточке: ключ сборщика → название.
+EVENT_PARAMS = [
+    ("whea", "Аппаратные сбои (WHEA)"),
+    ("bugcheck", "Синие экраны"),
+    ("kernel_power_41", "Внезапные выключения"),
+    ("disk", "Ошибки дисков"),
+]
 
 OK, INFO, WARNING, CRITICAL = "ok", "info", "warning", "critical"
 
@@ -23,7 +54,7 @@ OK, INFO, WARNING, CRITICAL = "ok", "info", "warning", "critical"
 class SummaryCard:
     """Одна карточка сводки."""
 
-    key: str  # board / bios / cpu / memory / gpu0 / disk0 / windows / battery / errors
+    key: str  # board / bios / cpu / memory / gpu0 / disk0 / windows / events / battery / errors
     icon: str
     title: str
     params: list[tuple[str, str]] = field(default_factory=list)  # (название, значение)
@@ -46,6 +77,73 @@ def _size_gb(size: float) -> str:
     return f"{size / 1024:.1f} ТБ" if size >= 1000 else f"{size:.0f} ГБ"
 
 
+def _number(value: int) -> str:
+    """12345 → «12 345» (разряды через пробел, как принято в русском тексте)."""
+    return f"{value:,}".replace(",", " ")
+
+
+def _decimal(value: float) -> str:
+    """46.6 → «46,6» (десятичная запятая)."""
+    return f"{value:.1f}".replace(".", ",")
+
+
+def hours_text(hours: int) -> str:
+    """Наработка: «14 210 ч (≈1,6 г.)» или «3 120 ч (≈4 мес.)»."""
+    years = hours / 8760
+    if years >= 1:
+        return f"{_number(hours)} ч (≈{_decimal(years)} г.)"
+    months = round(hours / 730)
+    return f"{_number(hours)} ч (≈{months} мес.)" if months else f"{_number(hours)} ч"
+
+
+def written_text(terabytes: float) -> str:
+    """Сколько записано на SSD: «46,6 ТБ», а меньше терабайта — в гигабайтах."""
+    return f"{_decimal(terabytes)} ТБ" if terabytes >= 1 else f"{terabytes * 1000:.0f} ГБ"
+
+
+def moment(text: str | None) -> datetime | None:
+    """Дата из снимка → местное время без пояса (чтобы даты можно было вычитать)."""
+    if not text:
+        return None
+    try:
+        value = datetime.fromisoformat(text)
+    except ValueError:
+        return None
+    return value.astimezone().replace(tzinfo=None) if value.tzinfo else value
+
+
+def uptime_text(seconds: float) -> str:
+    """Сколько компьютер работает без перезагрузки: «2 ч 59 мин» или «3 дн. 4 ч»."""
+    minutes = int(seconds // 60)
+    days, hours, minutes = minutes // 1440, minutes // 60 % 24, minutes % 60
+    if days:
+        return f"{days} дн. {hours} ч"
+    return f"{hours} ч {minutes} мин" if hours else f"{minutes} мин"
+
+
+def modules_text(modules: list[MemoryModule]) -> str:
+    """Планки по группам: «16 ГБ Kingston ×2» или «8 ГБ Kingston ×2, 8 ГБ Corsair»."""
+    groups = Counter(
+        f"{m.capacity_mb / 1024:g} ГБ {m.manufacturer.strip()}".strip()
+        for m in modules
+        if m.capacity_mb
+    )
+    return ", ".join(name + (f" ×{count}" if count > 1 else "") for name, count in groups.items())
+
+
+def is_placeholder(text: str) -> bool:
+    """Заглушка вместо названия у сборных компьютеров: «System Product Name», «To be filled…»."""
+    value = text.strip().lower()
+    return not value or value.startswith(OEM_PLACEHOLDERS)
+
+
+def computer_name(manufacturer: str, model: str) -> str:
+    """Название компьютера без заглушек. Модель — заглушка → пусто (показывать нечего)."""
+    if is_placeholder(model):
+        return ""
+    return " ".join(part.strip() for part in (manufacturer, model) if not is_placeholder(part))
+
+
 def _board(snapshot: HardwareSnapshot) -> SummaryCard | None:
     board, system = snapshot.board, snapshot.system
     if board is None and system is None:
@@ -54,9 +152,9 @@ def _board(snapshot: HardwareSnapshot) -> SummaryCard | None:
         ("Производитель", _value(board.manufacturer if board else system and system.manufacturer)),
         ("Модель", _value(board.product if board else system and system.model)),
     ]
-    if system and system.model:
+    if system and computer_name(system.manufacturer, system.model):
         kind = "Ноутбук" if system.is_laptop else "Компьютер"
-        params.append((kind, f"{system.manufacturer} {system.model}".strip()))
+        params.append((kind, computer_name(system.manufacturer, system.model)))
     return SummaryCard("board", "🧩", strings.CARD_BOARD, params, OK, strings.CARD_READ_OK)
 
 
@@ -83,6 +181,8 @@ def _cpu(snapshot: HardwareSnapshot) -> SummaryCard | None:
     ]
     if cpu.max_clock_mhz:
         params.append(("Частота", f"до {cpu.max_clock_mhz / 1000:.1f} ГГц"))
+    if cpu.socket.strip():
+        params.append(("Сокет", cpu.socket.strip()))
     return SummaryCard("cpu", "🔲", strings.CARD_CPU, params, OK, strings.CARD_READ_OK)
 
 
@@ -99,6 +199,8 @@ def _memory(snapshot: HardwareSnapshot) -> SummaryCard | None:
         ("Планки", slots if modules else strings.CARD_UNKNOWN),
         ("Частота", f"{min(known)} МГц" if known else strings.CARD_UNKNOWN),
     ]
+    if modules_text(modules):
+        params.append(("Модули", modules_text(modules)))
     if len(modules) == 1:
         return SummaryCard(
             "memory", "🧠", strings.CARD_MEMORY, params, INFO, strings.CARD_MEMORY_SINGLE
@@ -111,13 +213,41 @@ def _memory(snapshot: HardwareSnapshot) -> SummaryCard | None:
     return SummaryCard("memory", "🧠", strings.CARD_MEMORY, params, OK, strings.CARD_READ_OK)
 
 
-def _gpu(index: int, gpu: GpuInfo) -> SummaryCard:
+def pcie_text(gpu: GpuInfo) -> str:
+    """Шина видеокарты: «PCIe 4.0 ×16». В простое поколение снижается — берём максимальное."""
+    generation = gpu.pcie_gen_max or gpu.pcie_gen_current
+    width = gpu.pcie_width_current or gpu.pcie_width_max
+    if not (generation or width):
+        return ""
+    text = f"PCIe {generation}.0" if generation else "PCIe"
+    return f"{text} ×{width}" if width else text
+
+
+def _gpu(index: int, gpu: GpuInfo, thresholds: Thresholds) -> SummaryCard:
+    ident = identify(gpu)
     params = [
         ("Модель", _value(gpu.name)),
         ("Видеопамять", vram_text(gpu) or strings.CARD_UNKNOWN),
         ("Драйвер", _value(gpu.driver_version)),
     ]
-    return SummaryCard(f"gpu{index}", "🎮", strings.CARD_GPU, params, OK, strings.CARD_READ_OK)
+    if ident.real_chip:
+        params.append(("Чип", ident.real_chip))
+    if pcie_text(gpu):
+        params.append(("Шина", pcie_text(gpu)))
+    power = gpu.enforced_power_limit_w or gpu.default_power_limit_w
+    if power:
+        params.append(("Лимит мощности", f"{power:.0f} Вт"))
+
+    current, maximum = gpu.pcie_width_current, gpu.pcie_width_max
+    if ident.status is IdentStatus.FAKE:
+        status, text = CRITICAL, strings.CARD_GPU_FAKE
+    elif current and maximum and current < maximum * thresholds.get("gpu.pcie_width_ratio"):
+        status, text = WARNING, strings.CARD_GPU_PCIE.format(current=current, maximum=maximum)
+    elif ident.status is IdentStatus.MATCH:
+        status, text = OK, strings.CARD_GPU_MATCH
+    else:
+        status, text = OK, strings.CARD_READ_OK
+    return SummaryCard(f"gpu{index}", "🎮", strings.CARD_GPU, params, status, text)
 
 
 def disk_status(disk: DiskInfo, thresholds: Thresholds) -> tuple[str, str]:
@@ -131,6 +261,9 @@ def disk_status(disk: DiskInfo, thresholds: Thresholds) -> tuple[str, str]:
     )
     if smart.health_passed is False or sectors >= thresholds.get("disk.sectors_critical"):
         return CRITICAL, strings.CARD_DISK_CRITICAL
+    spare, spare_limit = smart.available_spare_pct, smart.available_spare_threshold_pct
+    if spare is not None and spare_limit is not None and spare <= spare_limit:
+        return WARNING, strings.CARD_DISK_SPARE_LOW
     if sectors >= thresholds.get("disk.sectors_warning") or (smart.media_errors or 0) > 0:
         return WARNING, strings.CARD_DISK_WARNING
     return OK, strings.CARD_DISK_OK
@@ -144,8 +277,15 @@ def _disk(index: int, disk: DiskInfo, thresholds: Thresholds) -> SummaryCard:
         ("Объём", _size_gb(disk.size_gb)),
         ("Тип", f"{kind}, {bus}" if bus else kind),
     ]
-    if disk.smart and disk.smart.wear_percent is not None:
-        params.append(("Износ", f"{disk.smart.wear_percent:.0f}%"))
+    smart = disk.smart
+    if smart and smart.wear_percent is not None:
+        params.append(("Износ", f"{smart.wear_percent:.0f}%"))
+    if smart and smart.power_on_hours is not None:
+        params.append(("Наработка", hours_text(smart.power_on_hours)))
+    if smart and smart.data_written_tb is not None:
+        params.append(("Записано", written_text(smart.data_written_tb)))
+    if smart and smart.temperature_c is not None:
+        params.append(("Температура", f"{smart.temperature_c:.0f} °C"))
     status, text = disk_status(disk, thresholds)
     return SummaryCard(f"disk{index}", "💽", strings.CARD_DISK, params, status, text)
 
@@ -159,7 +299,31 @@ def _windows(snapshot: HardwareSnapshot) -> SummaryCard | None:
         ("Сборка", _value(system.os_build or system.os_version)),
         ("Разрядность", _value(system.architecture)),
     ]
+    installed, booted = moment(system.install_date), moment(system.last_boot)
+    checked = moment(snapshot.collected_at)
+    if installed:
+        params.append(("Установлена", installed.strftime("%d.%m.%Y")))
+    if booted and checked and checked >= booted:
+        params.append(("Без перезагрузки", uptime_text((checked - booted).total_seconds())))
+    if installed and checked and 0 <= (checked - installed).days <= RECENT_INSTALL_DAYS:
+        return SummaryCard(
+            "windows", "💻", strings.CARD_WINDOWS, params, INFO, strings.CARD_WINDOWS_RECENT
+        )
     return SummaryCard("windows", "💻", strings.CARD_WINDOWS, params, OK, strings.CARD_READ_OK)
+
+
+def _events(events: EventSummary | None) -> SummaryCard | None:
+    if events is None:
+        return None
+    params = [(name, str(events.counts.get(key, 0))) for key, name in EVENT_PARAMS]
+    title = f"{strings.CARD_EVENTS} ({events.days} дн.)"
+    if any(events.counts.get(key, 0) > 0 for key, _ in EVENT_PARAMS):
+        status, text = WARNING, strings.CARD_EVENTS_FOUND.format(days=events.days)
+    elif events.partial:
+        status, text = INFO, strings.CARD_EVENTS_PARTIAL
+    else:
+        status, text = OK, strings.CARD_EVENTS_OK.format(days=events.days)
+    return SummaryCard("events", "📋", title, params, status, text)
 
 
 def battery_status(battery: BatteryInfo, thresholds: Thresholds) -> tuple[str, str]:
@@ -210,7 +374,8 @@ def build_cards(
     """Карточки сводки в порядке показа. Отсутствующие сведения — без карточки."""
     limits = thresholds or load_thresholds()
     cards = [_board(snapshot), _bios(snapshot), _cpu(snapshot), _memory(snapshot)]
-    cards += [_gpu(i, gpu) for i, gpu in enumerate(snapshot.gpus)]
+    cards += [_gpu(i, gpu, limits) for i, gpu in enumerate(snapshot.gpus)]
     cards += [_disk(i, disk, limits) for i, disk in enumerate(snapshot.disks)]
-    cards += [_windows(snapshot), _battery(snapshot, limits), _errors(snapshot)]
+    cards += [_windows(snapshot), _events(snapshot.events)]
+    cards += [_battery(snapshot, limits), _errors(snapshot)]
     return [card for card in cards if card is not None]

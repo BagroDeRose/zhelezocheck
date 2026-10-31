@@ -240,6 +240,11 @@ class SmartData(JsonModel):
     media_errors: int | None = None
     health_passed: bool | None = None
     source: str = ""
+    # Только NVMe (единицы стандартизованы; у SATA атрибут 241 у каждого производителя свой).
+    data_written_tb: float | None = None  # сколько записано за всю жизнь, ТБ
+    unsafe_shutdowns: int | None = None  # выключений без корректного завершения
+    available_spare_pct: int | None = None  # резерв ячеек, %
+    available_spare_threshold_pct: int | None = None  # порог резерва от производителя, %
 
 
 # Встроенная графика AMD называется «… Radeon(TM) Graphics», «… Vega 8 Graphics», «… 780M Graphics»;

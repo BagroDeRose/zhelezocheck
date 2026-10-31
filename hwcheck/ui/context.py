@@ -7,6 +7,7 @@
 
 from __future__ import annotations
 
+import threading
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -17,7 +18,8 @@ from PySide6.QtGui import QDesktopServices
 from hwcheck.backends.base import HardwareBackend
 from hwcheck.config import AppPaths
 from hwcheck.models import Finding
-from hwcheck.platform.elevation import is_admin, relaunch_elevated
+from hwcheck.platform.elevation import ElevatedProcess, is_admin, relaunch_elevated
+from hwcheck.single_instance import InstanceLock
 from hwcheck.storage.history import History
 from hwcheck.storage.listings import ListingStore
 from hwcheck.storage.settings import Settings, load_settings, save_settings
@@ -40,13 +42,22 @@ class AppContext:
     demo_scenario: str = ""
     read_only: bool = False  # в папку программы нельзя писать (флешка защищена от записи)
     admin_check: Callable[[], bool] = is_admin
-    relaunch: Callable[[], bool] = relaunch_elevated
+    relaunch: Callable[[str], ElevatedProcess | None] = relaunch_elevated
     open_path: Callable[[Path], None] = open_with_system
     open_url: Callable[[str], None] = open_url_with_system
     settings: Settings = field(default_factory=Settings)
     # Результаты ручных проверок ноутбука: «screen»/«keyboard» → (находка, аргумент для торга).
     manual_findings: dict[str, tuple[Finding, str | None]] = field(default_factory=dict)
+    # Замок «одна копия с флешки»: перед перезапуском с правами его отпускают, чтобы новая
+    # копия сразу его заняла; по нему же видно, что копия с правами действительно запустилась.
+    instance_lock: InstanceLock | None = None
+    # Ключ от старого окна, если эта копия запущена кнопкой «Перезапустить с правами»
+    # (аргумент --relaunched): когда окно соберёт сведения, ключ пишется в отметку «готова»,
+    # и только тогда старое окно закрывается. Пусто — обычный запуск.
+    relaunch_token: str = ""
     _history: History | None = field(default=None, repr=False)
+    # История открывается и из фонового потока (страница истории), и из потока окна.
+    _history_lock: threading.Lock = field(default_factory=threading.Lock, repr=False)
 
     @classmethod
     def create(
@@ -71,9 +82,10 @@ class AppContext:
 
     @property
     def history(self) -> History:
-        if self._history is None:
-            self._history = History(self.paths.history_db)
-        return self._history
+        with self._history_lock:
+            if self._history is None:
+                self._history = History(self.paths.history_db)
+            return self._history
 
     @property
     def listings(self) -> ListingStore:

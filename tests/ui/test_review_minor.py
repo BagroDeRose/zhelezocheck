@@ -25,6 +25,7 @@ def test_history_finds_report_after_drive_letter_change(qtbot: QtBot, tmp_path: 
     report.write_text("ОТЧЁТ С ФЛЕШКИ", encoding="utf-8")  # метка: файл не должен пересоздаться
     ctx.history.save(session, report_path=Path("Z:/старая_буква") / report.name)
     window.go_to("history")
+    qtbot.waitUntil(lambda: window.history_page.table.rowCount() == 1, timeout=5000)
     window.history_page.table.selectRow(0)
     assert window.history_page.open_selected() == report
     assert opened == [report]

@@ -26,7 +26,7 @@ def make_window(
         FakeBackend(scenario, time_scale=time_scale), get_paths(tmp_path), scenario if demo else ""
     )
     ctx.admin_check = lambda: False
-    ctx.relaunch = lambda: False
+    ctx.relaunch = lambda token: None
     ctx.open_path = opened.append
     window = MainWindow(ctx)
     qtbot.addWidget(window)

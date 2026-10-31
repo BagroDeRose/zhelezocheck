@@ -87,4 +87,6 @@ def test_history_errors_do_not_hide_verdict(
     qtbot.waitUntil(lambda: window.current_page_name() == "verdict", timeout=20000)
     assert window.verdict_page.save_report() is None
     window.go_to("history")
-    assert window.history_page.note.text() == strings.HISTORY_UNAVAILABLE
+    qtbot.waitUntil(
+        lambda: window.history_page.note.text() == strings.HISTORY_UNAVAILABLE, timeout=5000
+    )

@@ -8,6 +8,7 @@ from pytestqt.qtbot import QtBot
 
 from hwcheck import __version__
 from hwcheck.build_config import BuildConfig, load_build_config
+from hwcheck.config import package_data_dir
 from hwcheck.ui import strings
 from tests.ui.helpers import make_window
 
@@ -17,7 +18,6 @@ def test_contacts_come_from_build_config() -> None:
     assert config.contact_telegram == "https://t.me/BagroDeRose"
     assert config.contact_email == "bagroderose@gmail.com"
     assert config.contact_github == "https://github.com/BagroDeRose"
-    assert config.feedback_form_url.startswith("https://forms.gle/")
 
 
 def test_links_open_only_on_click(qtbot: QtBot, tmp_path: Path) -> None:
@@ -28,13 +28,21 @@ def test_links_open_only_on_click(qtbot: QtBot, tmp_path: Path) -> None:
     assert opened == []  # ничего не открывается само
     page.contact_buttons["telegram"].click()
     page.contact_buttons["github"].click()
-    page.contact_buttons["form"].click()
-    assert opened == [
-        "https://t.me/BagroDeRose",
-        "https://github.com/BagroDeRose",
-        load_build_config().feedback_form_url,
-    ]
+    assert opened == ["https://t.me/BagroDeRose", "https://github.com/BagroDeRose"]
     assert "bagroderose@gmail.com" in page.contacts_label.text()
+
+
+def test_contacts_only_telegram_github_email(qtbot: QtBot, tmp_path: Path) -> None:
+    """Владелец 01.11.2026: в контактах только Telegram, GitHub и почта — без формы обратной
+    связи и без упоминаний оплаты (программа бесплатная с версии 2.0)."""
+    window, _, _ = make_window(qtbot, tmp_path)
+    page = window.settings_page
+    assert set(page.contact_buttons) == {"telegram", "github", "download"}
+    text = page.contacts_label.text()
+    for word in ("Форма", "форм", "оплат", "ключ", "заказ"):
+        assert word not in text, word
+    config_text = (package_data_dir() / "build_config.json").read_text(encoding="utf-8")
+    assert "forms.gle" not in config_text and "feedback" not in config_text
 
 
 def test_copy_email(qtbot: QtBot, tmp_path: Path) -> None:
@@ -46,7 +54,7 @@ def test_copy_email(qtbot: QtBot, tmp_path: Path) -> None:
     assert page.copy_email_button.text() == strings.CONTACTS_COPIED
 
 
-def test_empty_form_link_is_hidden(
+def test_empty_github_link_is_hidden(
     qtbot: QtBot, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     from hwcheck.ui.pages import settings
@@ -58,8 +66,7 @@ def test_empty_form_link_is_hidden(
     )
     window, _, _ = make_window(qtbot, tmp_path)
     page = window.settings_page
-    assert "form" not in page.contact_buttons and "github" not in page.contact_buttons
-    assert "Форма" not in page.contacts_label.text()
+    assert "github" not in page.contact_buttons
 
 
 def test_about_shows_version(qtbot: QtBot, tmp_path: Path) -> None:

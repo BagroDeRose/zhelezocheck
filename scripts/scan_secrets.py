@@ -214,12 +214,41 @@ def personal_data_scan(repo: Path, files: list[str]) -> list[Finding]:
     return findings
 
 
+# Путь в профиль пользователя Windows (C:\Users\<имя>\...) выдаёт имя учётной записи — так в
+# публичный репозиторий попало имя пользователя из настоящего вывода nvidia-smi (01.11.2026).
+# Проверяются текущие файлы и коммит, но не история: старые коммиты не переписываются.
+USER_PATH_KIND = "путь с именем пользователя Windows"
+_USER_PATH = re.compile(r"[A-Za-z]:[\\/]+Users[\\/]+([^\\/\s\"'<>|]+)", re.IGNORECASE)
+_GENERIC_USERS = {"user", "public", "default", "all users", "username", "имя", "..."}
+
+
+def user_path_findings(text: str) -> list[str]:
+    for match in _USER_PATH.finditer(text):
+        name = match.group(1)
+        generic = name.lower() in _GENERIC_USERS or name[0] in "<{%.…*$"
+        if not generic:
+            return [USER_PATH_KIND]
+    return []
+
+
+def user_path_scan(repo: Path, files: list[str]) -> list[Finding]:
+    findings: list[Finding] = []
+    for name in files:
+        path = repo / name
+        if not path.is_file() or path.stat().st_size > 2_000_000:
+            continue
+        text = path.read_bytes().decode("utf-8", errors="replace")
+        findings += [Finding("рабочее дерево", name, kind) for kind in user_path_findings(text)]
+    return findings
+
+
 def scan_project(repo: Path) -> list[Finding]:
     files = working_tree_files(repo)
     return (
         detect_secrets_scan(repo, files)
         + pattern_scan(repo, files, "рабочее дерево")
         + personal_data_scan(repo, files)
+        + user_path_scan(repo, files)
         + history_scan(repo)
         + forbidden_tracked(repo)
     )
@@ -244,6 +273,7 @@ def scan_staged(repo: Path) -> list[Finding]:
             findings += [Finding("к коммиту", filename, kind) for kind in _match_kinds(line)]
     findings += [Finding("к коммиту", f.location, f.kind) for f in detect_secrets_scan(repo, names)]
     findings += [Finding("к коммиту", f.location, f.kind) for f in personal_data_scan(repo, names)]
+    findings += [Finding("к коммиту", f.location, f.kind) for f in user_path_scan(repo, names)]
     return findings
 
 
