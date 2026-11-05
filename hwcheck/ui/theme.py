@@ -24,6 +24,7 @@ def stylesheet(theme: str) -> str:
     return f"""
     QWidget {{ background: {c["bg"]}; color: {c["text"]}; font-size: 14px; }}
     QLabel, QRadioButton, QCheckBox {{ background: transparent; }}
+    QWidget#plainRow {{ background: transparent; }}
     QLabel#title {{ font-size: 22px; font-weight: 600; }}
     QLabel#muted {{ color: {c["muted"]}; }}
     QLabel#badge {{ background: #fff3cd; color: #5a4300; padding: 4px 8px; border-radius: 4px; }}
@@ -80,6 +81,13 @@ def stylesheet(theme: str) -> str:
     QPushButton#primary:focus {{ outline: none; border: 1px solid {c["text"]};
                                 background: {c["accent"]}; }}
     QCheckBox:focus, QRadioButton:focus {{ outline: none; color: {c["accent"]}; }}
+    QRadioButton::indicator {{ width: 12px; height: 12px; border-radius: 8px;
+                              border: 2px solid {c["muted"]}; background: {c["panel"]}; }}
+    QRadioButton::indicator:checked {{ border: 2px solid {c["accent"]};
+        background: qradialgradient(cx: 0.5, cy: 0.5, radius: 0.5, fx: 0.5, fy: 0.5,
+                                    stop: 0 {c["accent"]}, stop: 0.55 {c["accent"]},
+                                    stop: 0.6 {c["panel"]}, stop: 1 {c["panel"]}); }}
+    QRadioButton::indicator:disabled {{ border: 2px solid {c["border"]}; }}
     QComboBox:focus {{ outline: none; border: 1px solid {c["accent"]}; }}
     QPlainTextEdit, QTextEdit {{ background: {c["panel"]}; color: {c["text"]};
                                 border: 1px solid {c["border"]}; border-radius: 6px; }}

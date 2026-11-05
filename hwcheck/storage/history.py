@@ -15,6 +15,7 @@ from datetime import datetime
 from pathlib import Path
 
 from hwcheck.models import CheckSession, is_discrete_gpu
+from hwcheck.schema import SchemaError, load_session
 
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS checks (
@@ -130,10 +131,22 @@ class History:
         return HistoryEntry(*row) if row else None
 
     def load_session(self, check_id: str) -> CheckSession | None:
-        """Полная проверка из истории (для повторного открытия отчёта)."""
+        """Полная проверка из истории (для повторного открытия отчёта).
+
+        Проверки старых версий приводятся к текущей схеме при чтении — запись в базе не
+        переписывается. Испорченная запись не открывается (None), но и не удаляется.
+        """
         with self._connect() as db:
             row = db.execute("SELECT session_json FROM checks WHERE id = ?", (check_id,)).fetchone()
-        return CheckSession.from_json(row[0]) if row else None
+        if row is None:
+            return None
+        try:
+            return load_session(row[0])
+        except SchemaError as error:
+            logging.getLogger(__name__).warning(
+                "Проверка %s из истории не читается: %s", check_id, error
+            )
+            return None
 
     def delete(self, check_id: str) -> None:
         with self._connect() as db:

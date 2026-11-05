@@ -21,6 +21,7 @@ from hwcheck.models import (
     TestResult,
     TestStatus,
     Verdict,
+    is_external_usb,
 )
 from hwcheck.thresholds import Thresholds, load_thresholds
 from hwcheck.ui import strings
@@ -47,7 +48,7 @@ def not_checked(
     if snapshot.events is not None and snapshot.events.partial:
         items.append(f"{strings.COLLECTOR_NAMES['events']} — {snapshot.events.note}")
     for disk in snapshot.disks:
-        if disk.smart is None:
+        if disk.smart is None and not is_external_usb(disk):
             items.append(f"Здоровье диска «{disk.model}» — {disk.note or 'данные недоступны.'}")
     gpu_load = results.get(STRESS_GPU_LOAD)
     if gpu_load is not None and gpu_load.status not in (TestStatus.SKIPPED, TestStatus.ERROR):
@@ -85,6 +86,8 @@ def decide(
         (finding, bargain_text(finding, evidence)) for finding, evidence in evaluate_rules(ctx)
     ]
     pairs += extra_findings or []
+    for finding, text in pairs:
+        finding.bargain = text or ""  # аргумент для торга — при самой находке
     pairs.sort(key=lambda pair: (_SEVERITY_ORDER[pair[0].severity], -pair[0].weight))
     findings = [finding for finding, _ in pairs]
 
@@ -107,5 +110,14 @@ def decide(
         not_checked=not_checked(snapshot, by_name, expected),
         score=round(sum(f.weight for f in critical) + warning_weight, 2),
         bargaining_points=bargaining if decision is Decision.NEGOTIATE else [],
-        summary=strings.DECISION_SUMMARIES[decision.value],
+        summary=_summary(decision, critical),
     )
+
+
+def _summary(decision: Decision, critical: list[Finding]) -> str:
+    """Короткий итог под решением. «Уходить» только из-за несовпадения с объявлением — не
+    «неисправности»: компьютер может быть исправен, но это не то, что продают (ручная
+    проверка 2.1.0-rc3)."""
+    if critical and all(f.component == "listing" for f in critical):
+        return strings.SUMMARY_LISTING_MISMATCH
+    return strings.DECISION_SUMMARIES[decision.value]

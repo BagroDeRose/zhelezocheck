@@ -1,0 +1,156 @@
+# Расшифровка событий журнала Windows для отчёта (SPEC_V2_1, этап 46).
+#
+# groups — группы событий (ключи сборщика events.py): название, связанный компонент и
+# значимость по умолчанию. events — конкретные события «источник:код» (или «источник:*» — все
+# коды источника): краткая расшифровка (title), компонент, значимость (высокая/средняя/низкая)
+# и оговорка (note). Компонент указывается, только если связь обоснована самим событием.
+# Это справка для отчёта, а не правила вердикта: вердикт — в rules.yaml.
+
+groups:
+  whea:
+    title: "Аппаратные ошибки (WHEA)"
+    component: "процессор, память или шина PCIe"
+    significance: "высокая"
+  bugcheck:
+    title: "Синие экраны (BugCheck)"
+    component: "система (причину показывает код остановки)"
+    significance: "высокая"
+  kernel_power_41:
+    title: "Перезагрузки без корректного завершения (Kernel-Power 41)"
+    component: "система"
+    significance: "средняя"
+  disk:
+    title: "Ошибки внутренних дисков"
+    component: "накопитель"
+    significance: "высокая"
+  disk_removable:
+    title: "Ошибки флешек и отключённых дисков"
+    component: "съёмный накопитель"
+    significance: "низкая"
+  disk_mixed:
+    title: "Ошибки дисков — внутренних и съёмных вместе (номер диска — в тексте события)"
+    component: "накопитель"
+    significance: "средняя"
+  storage:
+    title: "Файловая система и контроллеры дисков (Ntfs, storahci, stornvme)"
+    component: "накопитель или его контроллер"
+    significance: "средняя"
+  gpu_driver:
+    title: "Ошибки драйвера видеокарты"
+    component: "видеокарта (драйвер)"
+    significance: "средняя"
+  unexpected_shutdown:
+    title: "Неожиданные выключения (6008)"
+    component: "система"
+    significance: "средняя"
+
+events:
+  "Microsoft-Windows-WHEA-Logger:1":
+    title: "Неисправимая аппаратная ошибка"
+    significance: "высокая"
+  "Microsoft-Windows-WHEA-Logger:17":
+    title: "Исправленная аппаратная ошибка (часто шина PCIe)"
+    significance: "средняя"
+    note: "Исправленные ошибки иногда безобидны (энергосбережение PCIe), но частые — повод проверить слот и видеокарту."
+  "Microsoft-Windows-WHEA-Logger:18":
+    title: "Неисправимая ошибка оборудования (Machine Check)"
+    significance: "высокая"
+  "Microsoft-Windows-WHEA-Logger:19":
+    title: "Исправленная ошибка процессора или кэша"
+    significance: "средняя"
+  "Microsoft-Windows-WHEA-Logger:20":
+    title: "Неисправимая ошибка оборудования"
+    significance: "высокая"
+  "Microsoft-Windows-WHEA-Logger:47":
+    title: "Исправленная ошибка памяти"
+    component: "оперативная память"
+    significance: "средняя"
+  "Microsoft-Windows-WHEA-Logger:*":
+    title: "Аппаратная ошибка (WHEA)"
+    significance: "высокая"
+  "Microsoft-Windows-Kernel-Power:41":
+    title: "Система перезагрузилась без корректного завершения работы"
+    significance: "средняя"
+    note: "Это признак некорректного завершения (зависание, сброс, пропадание питания, долгое нажатие кнопки), а не доказательство неисправности блока питания."
+  "Microsoft-Windows-WER-SystemErrorReporting:1001":
+    title: "Синий экран (BugCheck) — компьютер перезагрузился после критической ошибки"
+    significance: "высокая"
+    note: "Причина — в коде остановки: бывают и драйверы, и железо."
+  "disk:7":
+    title: "Повреждённый блок на устройстве"
+    significance: "высокая"
+  "disk:11":
+    title: "Ошибка контроллера диска"
+    significance: "высокая"
+  "disk:51":
+    title: "Ошибка ввода-вывода при страничном обмене"
+    significance: "средняя"
+  "disk:153":
+    title: "Операция ввода-вывода повторена"
+    significance: "средняя"
+  "Microsoft-Windows-Ntfs:55":
+    title: "Повреждена структура файловой системы"
+    significance: "высокая"
+  "Microsoft-Windows-Ntfs:98":
+    title: "Том нужно проверить на ошибки"
+    significance: "средняя"
+  "Microsoft-Windows-Ntfs:137":
+    title: "Ошибка журнала транзакций файловой системы"
+    significance: "средняя"
+  "Microsoft-Windows-Ntfs:*":
+    title: "Ошибка файловой системы NTFS"
+    significance: "средняя"
+  "Ntfs:*":
+    title: "Ошибка файловой системы NTFS"
+    significance: "средняя"
+  "storahci:129":
+    title: "Сброс устройства на контроллере SATA"
+    significance: "средняя"
+    note: "Бывает из-за кабеля, питания или самого диска — требует интерпретации."
+  "storahci:*":
+    title: "Ошибка контроллера SATA"
+    significance: "средняя"
+  "stornvme:11":
+    title: "Ошибка контроллера NVMe"
+    significance: "высокая"
+  "stornvme:129":
+    title: "Сброс накопителя NVMe"
+    significance: "средняя"
+    note: "Бывает из-за драйвера, энергосбережения или самого накопителя — требует интерпретации."
+  "stornvme:*":
+    title: "Ошибка контроллера NVMe"
+    significance: "средняя"
+  "nvlddmkm:13":
+    title: "Ошибка графического движка NVIDIA (Graphics Exception)"
+    significance: "средняя"
+  "nvlddmkm:14":
+    title: "Ошибка графического движка NVIDIA"
+    significance: "средняя"
+  "nvlddmkm:153":
+    title: "Драйвер NVIDIA перезапустил видеокарту после ошибки"
+    significance: "средняя"
+  "nvlddmkm:*":
+    title: "Ошибка драйвера NVIDIA"
+    significance: "средняя"
+    note: "Может быть из-за драйвера, разгона, перегрева или самой карты — требует интерпретации."
+  "amdkmdag:*":
+    title: "Ошибка драйвера AMD"
+    significance: "средняя"
+    note: "Может быть из-за драйвера, разгона, перегрева или самой карты — требует интерпретации."
+  "amdwddmg:*":
+    title: "Ошибка драйвера AMD"
+    significance: "средняя"
+  "igfx:*":
+    title: "Ошибка драйвера Intel Graphics"
+    significance: "низкая"
+  "igfxn:*":
+    title: "Ошибка драйвера Intel Graphics"
+    significance: "низкая"
+  "Display:4101":
+    title: "Видеодрайвер перестал отвечать и был восстановлен (TDR)"
+    significance: "средняя"
+    note: "Может быть из-за драйвера, разгона, перегрева или самой карты — требует интерпретации."
+  "EventLog:6008":
+    title: "Предыдущее завершение работы было неожиданным"
+    significance: "средняя"
+    note: "Признак некорректного выключения (пропадание питания, зависание, кнопка), сам по себе не диагноз."

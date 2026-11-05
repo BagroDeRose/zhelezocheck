@@ -17,7 +17,9 @@
       "is_laptop": true,
       "bios_vendor": "LENOVO",
       "bios_version": "HHCN31WW",
-      "bios_date": "2022-05-10"
+      "bios_date": "2022-05-10",
+      "computer_name": "DEMO-LAPTOP",
+      "secure_boot": true
     },
     "cpu": {
       "name": "AMD Ryzen 7 5800H with Radeon Graphics",
@@ -26,7 +28,11 @@
       "threads": 16,
       "max_clock_mhz": 3201,
       "current_clock_mhz": 3201,
-      "socket": "FP6"
+      "socket": "FP6",
+      "cpuid": "Family 25 Model 80 Stepping 0",
+      "l2_cache_kb": 4096,
+      "l3_cache_kb": 16384,
+      "virtualization_enabled": true
     },
     "memory": {
       "total_mb": 16384,
@@ -38,7 +44,10 @@
           "configured_speed_mhz": 3200,
           "manufacturer": "Samsung",
           "part_number": "M471A1K43DB1-CWE",
-          "slot": "DIMM 0"
+          "slot": "DIMM 0",
+          "memory_type": "DDR4",
+          "voltage_mv": 1200,
+          "serial_number": "DEMO0001"
         },
         {
           "capacity_mb": 8192,
@@ -46,7 +55,10 @@
           "configured_speed_mhz": 3200,
           "manufacturer": "Samsung",
           "part_number": "M471A1K43DB1-CWE",
-          "slot": "DIMM 1"
+          "slot": "DIMM 1",
+          "memory_type": "DDR4",
+          "voltage_mv": 1200,
+          "serial_number": "DEMO0002"
         }
       ],
       "slots_total": 2
@@ -127,9 +139,37 @@
           "crc_errors": null,
           "media_errors": 0,
           "health_passed": true,
-          "source": "smartctl"
+          "source": "smartctl",
+          "tool_version": "7.4",
+          "data_written_tb": 18.4,
+          "unsafe_shutdowns": 37,
+          "available_spare_pct": 100,
+          "available_spare_threshold_pct": 10,
+          "nvme_log": {
+            "critical_warning": 0,
+            "temperature": 38,
+            "available_spare": 100,
+            "available_spare_threshold": 10,
+            "percentage_used": 4,
+            "data_units_read": 41208331,
+            "data_units_written": 35937500,
+            "host_reads": 512004119,
+            "host_writes": 398771052,
+            "controller_busy_time": 1877,
+            "power_cycles": 812,
+            "power_on_hours": 3120,
+            "unsafe_shutdowns": 37,
+            "media_errors": 0,
+            "num_err_log_entries": 0
+          },
+          "attributes": [],
+          "self_test": "Completed without error"
         },
-        "note": ""
+        "note": "",
+        "model_family": "",
+        "serial_number": "S676NF0R200002",
+        "firmware": "FXM7201Q",
+        "interface_speed": ""
       }
     ],
     "battery": {
@@ -149,7 +189,8 @@
       },
       "last_seen": {},
       "partial": false,
-      "note": ""
+      "note": "",
+      "items": []
     },
     "errors": {}
   },
@@ -194,6 +235,24 @@
           "util_pct": [
             99,
             99
+          ],
+          "vram_used_mb": [
+            600,
+            5520,
+            5540,
+            5540
+          ],
+          "mem_util_pct": [
+            5,
+            96,
+            98,
+            98
+          ],
+          "mem_clock_mhz": [
+            405,
+            7000,
+            7000,
+            7000
           ]
         }
       }
@@ -246,6 +305,27 @@
           "util_pct": [
             99,
             99
+          ],
+          "vram_used_mb": [
+            600,
+            2300,
+            2340,
+            2350,
+            2350
+          ],
+          "mem_util_pct": [
+            4,
+            38,
+            41,
+            42,
+            42
+          ],
+          "mem_clock_mhz": [
+            405,
+            7000,
+            7000,
+            7000,
+            7000
           ]
         }
       }
@@ -275,6 +355,12 @@
             123,
             122,
             122
+          ],
+          "util_pct": [
+            12,
+            100,
+            100,
+            100
           ]
         }
       }

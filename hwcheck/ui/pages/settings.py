@@ -6,6 +6,7 @@ from PySide6.QtCore import QTimer, Signal
 from PySide6.QtWidgets import (
     QAbstractItemView,
     QApplication,
+    QCheckBox,
     QComboBox,
     QFormLayout,
     QFrame,
@@ -62,6 +63,10 @@ class SettingsPage(QWidget):
         self.theme.setCurrentIndex(1 if ctx.settings.theme == "dark" else 0)
         self.theme.currentIndexChanged.connect(self._theme_changed)
         form.addRow(strings.THEME_LABEL, self.theme)
+        self.hide_identifiers = QCheckBox(strings.HIDE_IDENTIFIERS)
+        self.hide_identifiers.setChecked(ctx.settings.hide_identifiers)
+        self.hide_identifiers.toggled.connect(self._hide_identifiers_changed)
+        form.addRow(self.hide_identifiers)
         form_widget = QWidget()
         form_widget.setLayout(form)
         layout.addWidget(card(form_widget))
@@ -197,6 +202,10 @@ class SettingsPage(QWidget):
             self.copy_email_button,
             lambda: self.copy_email_button.setText(strings.CONTACTS_COPY_EMAIL),
         )
+
+    def _hide_identifiers_changed(self, checked: bool) -> None:
+        self.ctx.settings.hide_identifiers = checked
+        self.ctx.save_settings()
 
     def _theme_changed(self) -> None:
         theme = str(self.theme.currentData())

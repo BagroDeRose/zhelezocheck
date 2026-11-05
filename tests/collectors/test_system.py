@@ -46,3 +46,18 @@ def test_collect_uses_powershell() -> None:
     info = system.collect(run_fn=fake)
     assert info.os_build == "19045"
     assert "Win32_OperatingSystem" in fake.commands[0][-1]
+
+
+def test_parse_real_extended_fields_v21() -> None:
+    """2.1: имя компьютера (в фикстуре обезличено) и Secure Boot из реестра без админа."""
+    info = system.parse(fixture_json("powershell", "real_system_v21.json"))
+    assert info.computer_name == "DESKTOP-TEST000"
+    assert info.secure_boot is True
+
+
+def test_secure_boot_unknown_is_none_not_false() -> None:
+    data = fixture_json("powershell", "real_system_v21.json")
+    data["SecureBoot"] = None  # ключа нет в реестре
+    assert system.parse(data).secure_boot is None
+    data["SecureBoot"] = 0
+    assert system.parse(data).secure_boot is False

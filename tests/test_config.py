@@ -14,7 +14,6 @@ def test_all_paths_inside_root(tmp_path: Path) -> None:
         paths.reports,
         paths.logs,
         paths.history_db,
-        paths.listings,
     ):
         assert p.resolve().is_relative_to(tmp_path.resolve()), p
 

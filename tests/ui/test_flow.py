@@ -25,6 +25,8 @@ def test_full_flow(qtbot: QtBot, tmp_path: Path, scenario: str, decision: str) -
     qtbot.waitUntil(lambda: window.current_page_name() == "verdict", timeout=20000)
     assert strings.DECISION_TITLES[decision].upper() in window.verdict_page.banner.text()
     window.verdict_page.save_button.click()
+    # С 2.1.0-rc2 отчёт пишется в фоне: «Открыть отчёт» становится доступной после записи.
+    qtbot.waitUntil(window.verdict_page.open_button.isEnabled, timeout=20000)
     window.verdict_page.open_button.click()
     assert len(opened) == 1 and opened[0].suffix == ".html"
     assert strings.DECISION_TITLES[decision].upper() in opened[0].read_text(encoding="utf-8")

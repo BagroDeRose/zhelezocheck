@@ -394,7 +394,7 @@ def test_history_refresh_does_not_block_window(
     started = time.monotonic()
     for _ in range(5):  # быстрые переключения туда-обратно
         window.go_to("history")
-        window.go_to("listing")
+        window.go_to("laptop")
     window.go_to("history")
     assert time.monotonic() - started < 0.3  # окно не ждёт флешку
     qtbot.waitUntil(lambda: page.table.rowCount() == 1, timeout=5000)

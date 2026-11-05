@@ -7,11 +7,11 @@
 | Страница | Светлая тема | Тёмная тема |
 |---|---|---|
 | Старт: сводка «Что найдено» | ![Старт: сводка «Что найдено»](images/start_light.png) | ![Старт: сводка «Что найдено»](images/start_dark.png) |
-| Выбор режима проверки | ![Выбор режима проверки](images/mode_light.png) | ![Выбор режима проверки](images/mode_dark.png) |
+| Выбор режима и сверка с объявлением | ![Выбор режима и сверка с объявлением](images/mode_light.png) | ![Выбор режима и сверка с объявлением](images/mode_dark.png) |
 | Идёт проверка | ![Идёт проверка](images/progress_light.png) | ![Идёт проверка](images/progress_dark.png) |
 | Вердикт | ![Вердикт](images/verdict_light.png) | ![Вердикт](images/verdict_dark.png) |
+| Вердикт: вид «Для специалиста» | ![Вердикт: вид «Для специалиста»](images/verdict_specialist_light.png) | ![Вердикт: вид «Для специалиста»](images/verdict_specialist_dark.png) |
 | История и отчёты | ![История и отчёты](images/history_light.png) | ![История и отчёты](images/history_dark.png) |
-| Проверка объявления | ![Проверка объявления](images/listing_light.png) | ![Проверка объявления](images/listing_dark.png) |
 | Ноутбук | ![Ноутбук](images/laptop_light.png) | ![Ноутбук](images/laptop_dark.png) |
 | Настройки | ![Настройки](images/settings_light.png) | ![Настройки](images/settings_dark.png) |
 

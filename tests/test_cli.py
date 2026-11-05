@@ -70,7 +70,9 @@ def test_verdict_demo_mining(capsys: pytest.CaptureFixture[str]) -> None:
     assert cli.main(["verdict", "--demo", "mining_gpu"]) == 0
     text = capsys.readouterr().out
     assert text.startswith("Вердикт: ТОРГОВАТЬСЯ")
-    assert "майнинговая прошивка" in text
+    # С 2.1 (этап 49) — факт без диагноза: сниженный лимит мощности не доказывает майнинг.
+    assert "Лимит мощности видеокарты ниже заводского" in text
+    assert "майнинговая прошивка" not in text
     assert "Аргументы для торга:" in text
     assert "Что не удалось проверить:" in text
 

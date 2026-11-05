@@ -388,6 +388,8 @@ def test_cpu_temperature_is_information_not_warning() -> None:
     evidence = rules.RULES["cpu.temp_unmeasured"](ctx(results=cpu_metrics(start_clock_mhz=4000)))
     finding = rules.make_finding("cpu.temp_unmeasured", evidence[0])
     assert finding.severity.value == "info" and finding.weight == 0
-    assert "напрямую не измеряется" in finding.explanation and "PawnIO" not in finding.explanation
+    # 2.1 (этап 49): честно «не измерена», без вывода о температуре по частоте.
+    assert "не сообщает температуру процессора" in finding.explanation
+    assert "PawnIO" not in finding.explanation and "по частоте" not in finding.title
     zone = rules.RULES["cpu.temp_zone"](ctx(results=cpu_metrics(zone_temp_max_c=71.0)))
     assert "примерно" in rules.make_finding("cpu.temp_zone", zone[0]).title

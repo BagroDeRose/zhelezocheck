@@ -13,7 +13,8 @@ log = logging.getLogger(__name__)
 @dataclass
 class Settings:
     theme: str = "light"  # light / dark
-    listing_scripts: bool = False  # скрипты сайтов во встроенном браузере (22.2)
+    # Скрывать имя компьютера и серийные номера в сохранённых отчётах (2.1, этап 48).
+    hide_identifiers: bool = True
 
 
 def load_settings(path: Path) -> Settings:
@@ -27,7 +28,8 @@ def load_settings(path: Path) -> Settings:
     theme = data.get("theme")
     return Settings(
         theme=theme if theme in ("light", "dark") else "light",
-        listing_scripts=data.get("listing_scripts") is True,
+        # Старое поле «listing_scripts» (встроенный браузер, удалён) просто не читается.
+        hide_identifiers=data.get("hide_identifiers") is not False,  # нет поля — скрывать
     )
 
 

@@ -38,6 +38,7 @@ OEM_PLACEHOLDERS = (
     "default string",
     "not applicable",
     "o.e.m.",
+    "rev x.0x",  # ревизия платы ASUS без значения (ручная проверка 2.1.0-rc1)
 )
 # Счётчики журнала, которые показываем в карточке: ключ сборщика → название.
 EVENT_PARAMS = [
@@ -135,6 +136,12 @@ def is_placeholder(text: str) -> bool:
     """Заглушка вместо названия у сборных компьютеров: «System Product Name», «To be filled…»."""
     value = text.strip().lower()
     return not value or value.startswith(OEM_PLACEHOLDERS)
+
+
+def is_placeholder_serial(text: str) -> bool:
+    """Серийный номер-заглушка: одни нули или F («00000000», «FFFFFFFF», «0x00000000»)."""
+    value = text.strip().lower().removeprefix("0x")
+    return len(value) >= 4 and (set(value) == {"0"} or set(value) == {"f"})
 
 
 def computer_name(manufacturer: str, model: str) -> str:

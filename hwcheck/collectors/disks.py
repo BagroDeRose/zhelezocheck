@@ -21,7 +21,7 @@ from typing import Any
 
 from hwcheck.collectors._util import as_list, clean, to_float, to_int
 from hwcheck.config import get_paths
-from hwcheck.models import DiskInfo, SmartData
+from hwcheck.models import DiskInfo, SmartAttribute, SmartData
 from hwcheck.platform import runner
 from hwcheck.platform.powershell import PowerShellError, ps_json
 from hwcheck.platform.runner import RunFn
@@ -122,6 +122,55 @@ def _smartctl_media(data: dict[str, Any], protocol: str) -> tuple[str, str]:
     return media, bus
 
 
+def _smartctl_version(data: dict[str, Any]) -> str:
+    """Версия smartctl из его JSON: [7, 5] → «7.5»."""
+    version = (data.get("smartctl") or {}).get("version")
+    if isinstance(version, list) and all(isinstance(part, int) for part in version):
+        return ".".join(str(part) for part in version)
+    return ""
+
+
+def _all_attributes(data: dict[str, Any]) -> list[SmartAttribute]:
+    """Все атрибуты SATA как есть. Порог, которого нет в выводе, — None (не 0)."""
+    table = (data.get("ata_smart_attributes") or {}).get("table") or []
+    attributes = []
+    for item in table:
+        if not isinstance(item, dict):
+            continue
+        raw = item.get("raw") or {}
+        flags = item.get("flags") or {}
+        prefailure = flags.get("prefailure")
+        attributes.append(
+            SmartAttribute(
+                id=to_int(item.get("id")) or 0,
+                name=clean(item.get("name")),
+                value=to_int(item.get("value")),
+                worst=to_int(item.get("worst")),
+                threshold=to_int(item.get("thresh")),
+                raw=to_int(raw.get("value")),
+                raw_text=clean(raw.get("string")),
+                when_failed=clean(item.get("when_failed")),
+                prefailure=prefailure if isinstance(prefailure, bool) else None,
+            )
+        )
+    return attributes
+
+
+def _self_test(data: dict[str, Any]) -> str:
+    """Итог последнего самотеста накопителя (как его пишет smartctl) или пусто."""
+    ata = ((data.get("ata_smart_data") or {}).get("self_test") or {}).get("status") or {}
+    if ata.get("string"):
+        return clean(ata["string"])
+    log_part = data.get("nvme_self_test_log") or {}
+    table = log_part.get("table") or []
+    if table and isinstance(table[0], dict):
+        result = (table[0].get("self_test_result") or {}).get("string")
+        if result:
+            return clean(result)
+    current = (log_part.get("current_self_test_operation") or {}).get("string")
+    return clean(current)
+
+
 def parse_smartctl(data: dict[str, Any]) -> DiskInfo:
     """Превращает JSON `smartctl -a --json` в DiskInfo с нормализованными SmartData."""
     device = data.get("device") or {}
@@ -137,6 +186,12 @@ def parse_smartctl(data: dict[str, Any]) -> DiskInfo:
         media_type=media,
         bus_type=bus,
         device=clean(device.get("name")),
+        model_family=clean(data.get("model_family")),
+        serial_number=clean(data.get("serial_number")),
+        firmware=clean(data.get("firmware_version")),
+        interface_speed=clean(
+            ((data.get("interface_speed") or {}).get("current") or {}).get("string")
+        ),
     )
     smart_available = (data.get("smart_support") or {}).get("available")
     if exit_status & _SMARTCTL_FATAL_BITS or smart_available is False:
@@ -150,9 +205,13 @@ def parse_smartctl(data: dict[str, Any]) -> DiskInfo:
         temperature_c=to_float((data.get("temperature") or {}).get("current")),
         health_passed=status.get("passed") if isinstance(status.get("passed"), bool) else None,
         source="smartctl",
+        tool_version=_smartctl_version(data),
+        attributes=_all_attributes(data),
+        self_test=_self_test(data),
     )
     nvme = data.get("nvme_smart_health_information_log")
     if isinstance(nvme, dict):
+        smart.nvme_log = {key: value for key, value in nvme.items() if key != "nsid"}
         smart.wear_percent = to_float(nvme.get("percentage_used"))
         smart.media_errors = to_int(nvme.get("media_errors"))
         smart.power_on_hours = smart.power_on_hours or to_int(nvme.get("power_on_hours"))

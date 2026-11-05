@@ -6,6 +6,10 @@
 
 Поток данных: сборщики → HardwareSnapshot → нагрузочные тесты → TestResult[] →
 правила → Finding[] → движок → Verdict.
+
+Версия схемы (`schema_version`, с 2.1): 1 — данные до 2.1 (поля не было), 2 — метаданные
+параметров (`Param`), отметки рядов, состояние проверки. Старые данные приводит к новой схеме
+`hwcheck/schema.py`; все новые поля необязательны.
 """
 
 from __future__ import annotations
@@ -51,6 +55,26 @@ class Decision(StrEnum):
     BUY = "buy"
     NEGOTIATE = "negotiate"
     WALK_AWAY = "walk_away"
+
+
+class Availability(StrEnum):
+    """Удалось ли получить параметр (принцип честности: недоступное не равно нулю)."""
+
+    AVAILABLE = "available"  # значение получено
+    UNSUPPORTED = "unsupported"  # не поддерживается оборудованием или источником
+    UNAVAILABLE = "unavailable"  # не удалось получить (нет прав, драйвера, ошибка)
+
+
+class CheckState(StrEnum):
+    """Четыре состояния проверки из MVP-спеки: непройденное никогда не считается успехом."""
+
+    NOT_CHECKED = "not_checked"  # не проверено
+    PASSED = "passed"  # проверено — ошибок нет
+    PROBLEMS = "problems"  # проверено — обнаружены проблемы
+    INTERRUPTED = "interrupted"  # проверка прервана
+
+
+SCHEMA_VERSION = 2
 
 
 # --------------------------------------------------------------------------
@@ -133,6 +157,33 @@ def _convert(tp: Any, value: Any) -> Any:
 
 
 # --------------------------------------------------------------------------
+# Метаданные параметра
+# --------------------------------------------------------------------------
+
+
+@dataclass
+class Param(JsonModel):
+    """Один параметр для технического отчёта: значение, единица, источник, время и статус.
+
+    У недоступного или неподдерживаемого параметра нет значения, но обязательно есть причина.
+    """
+
+    value: Any = None
+    unit: str = ""
+    source: str = ""
+    obtained_at: str = ""
+    status: Availability = Availability.AVAILABLE
+    reason: str = ""
+
+    def __post_init__(self) -> None:
+        if self.status is not Availability.AVAILABLE:
+            if self.value is not None:
+                raise ValueError(f"Недоступный параметр не может иметь значение: {self.value!r}")
+            if not self.reason.strip():
+                raise ValueError("У недоступного параметра должна быть причина")
+
+
+# --------------------------------------------------------------------------
 # Сведения о железе
 # --------------------------------------------------------------------------
 
@@ -153,6 +204,9 @@ class SystemInfo(JsonModel):
     bios_vendor: str = ""
     bios_version: str = ""
     bios_date: str | None = None
+    # С 2.1: имя компьютера (скрывается при экспорте) и Secure Boot (None — не удалось узнать).
+    computer_name: str = ""
+    secure_boot: bool | None = None
 
 
 @dataclass
@@ -166,6 +220,11 @@ class CpuInfo(JsonModel):
     max_clock_mhz: int | None = None
     current_clock_mhz: int | None = None
     socket: str = ""
+    # С 2.1: «Intel64 Family 6 Model 158 Stepping 10», кэш, виртуализация в прошивке.
+    cpuid: str = ""
+    l2_cache_kb: int | None = None
+    l3_cache_kb: int | None = None
+    virtualization_enabled: bool | None = None
 
 
 @dataclass
@@ -178,6 +237,10 @@ class MemoryModule(JsonModel):
     manufacturer: str = ""
     part_number: str = ""
     slot: str = ""
+    # С 2.1: тип (DDR4 и т.д.), напряжение и серийный номер (скрывается при экспорте).
+    memory_type: str = ""
+    voltage_mv: int | None = None
+    serial_number: str = ""
 
 
 @dataclass
@@ -226,6 +289,21 @@ class GpuInfo(JsonModel):
 
 
 @dataclass
+class SmartAttribute(JsonModel):
+    """Один атрибут S.M.A.R.T. накопителя SATA/ATA (как его отдаёт smartctl)."""
+
+    id: int = 0
+    name: str = ""
+    value: int | None = None  # нормализованное текущее (Current)
+    worst: int | None = None
+    threshold: int | None = None  # None — порог не прочитан (бывает без прав администратора)
+    raw: int | None = None
+    raw_text: str = ""
+    when_failed: str = ""  # «In_the_past», «FAILING_NOW» или пусто
+    prefailure: bool | None = None  # атрибут «предотказный» (Pre-fail) или «старение» (Old_age)
+
+
+@dataclass
 class SmartData(JsonModel):
     """Нормализованные данные S.M.A.R.T. — «медицинская карта» накопителя."""
 
@@ -245,6 +323,11 @@ class SmartData(JsonModel):
     unsafe_shutdowns: int | None = None  # выключений без корректного завершения
     available_spare_pct: int | None = None  # резерв ячеек, %
     available_spare_threshold_pct: int | None = None  # порог резерва от производителя, %
+    tool_version: str = ""  # версия программы, прочитавшей SMART (например «7.5» у smartctl)
+    # С 2.1 — всё, что отдал smartctl: атрибуты SATA, журнал здоровья NVMe, самотест.
+    attributes: list[SmartAttribute] = field(default_factory=list)
+    nvme_log: dict[str, Any] = field(default_factory=dict)
+    self_test: str = ""
 
 
 # Встроенная графика AMD называется «… Radeon(TM) Graphics», «… Vega 8 Graphics», «… 780M Graphics»;
@@ -284,6 +367,20 @@ class DiskInfo(JsonModel):
     device: str = ""
     smart: SmartData | None = None
     note: str = ""
+    # С 2.1: семейство модели, серийный номер (скрывается при экспорте), прошивка, скорость линии.
+    model_family: str = ""
+    serial_number: str = ""
+    firmware: str = ""
+    interface_speed: str = ""
+
+
+def is_external_usb(disk: DiskInfo) -> bool:
+    """Внешний USB-накопитель без S.M.A.R.T. (обычно — флешка с самой программой).
+
+    Ручная проверка 2.1.0-rc1: флешка с ЖелезоЧек попадала в «Оценку компонентов» как
+    «Накопитель: USB DISK 2.0 — Не проверено» и в «Что не удалось проверить», хотя частью
+    покупаемого компьютера не является. Её раздел в отчёте специалиста остаётся."""
+    return disk.bus_type.lower() == "usb" and disk.smart is None
 
 
 @dataclass
@@ -308,6 +405,21 @@ class BatteryInfo(JsonModel):
 
 
 @dataclass
+class EventRecord(JsonModel):
+    """Один вид события журнала Windows (источник + код) с числом повторений (с 2.1)."""
+
+    group: str = ""  # whea / bugcheck / kernel_power_41 / disk / storage / gpu_driver / ...
+    log: str = "System"
+    provider: str = ""
+    event_id: int = 0
+    level: int | None = None  # 1 — критическое, 2 — ошибка, 3 — предупреждение, 4 — сведения
+    count: int = 0
+    first_seen: str = ""
+    last_seen: str = ""
+    message: str = ""  # первая строка текста события, без имени пользователя
+
+
+@dataclass
 class EventSummary(JsonModel):
     """Сводка тревожных событий из журнала Windows за последние дни."""
 
@@ -316,12 +428,29 @@ class EventSummary(JsonModel):
     last_seen: dict[str, str] = field(default_factory=dict)
     partial: bool = False
     note: str = ""
+    items: list[EventRecord] = field(default_factory=list)  # с 2.1: события по видам
+
+    def last_for(self, group: str) -> str:
+        """Время последнего события группы; пусто, если событий нет или время неизвестно.
+
+        Ручная проверка 2.1.0-rc1: ошибки флешки переносились в группу «съёмных», а время
+        оставалось под ключом «disk» — у «Ошибок дисков» с нулём стояла дата, а у съёмных —
+        «дата неизвестна». Нет событий — нет и даты; время берётся и из событий по видам."""
+        if not self.counts.get(group):
+            return ""
+        times = [item.last_seen for item in self.items if item.group == group and item.last_seen]
+        # Общее время «disk» включает и флешки — для внутренних дисков оно верно, только если
+        # ошибок съёмных не было.
+        if group in self.last_seen and not (group == "disk" and self.counts.get("disk_removable")):
+            times.append(self.last_seen[group])
+        return max(times, default="")
 
 
 @dataclass
 class HardwareSnapshot(JsonModel):
     """Всё, что удалось узнать о компьютере без нагрузки."""
 
+    schema_version: int = SCHEMA_VERSION
     collected_at: str = ""
     is_admin: bool = False
     system: SystemInfo | None = None
@@ -334,6 +463,8 @@ class HardwareSnapshot(JsonModel):
     events: EventSummary | None = None
     # Имя сборщика → почему не удалось проверить (показываем в «что не проверено»).
     errors: dict[str, str] = field(default_factory=dict)
+    # Параметры технического отчёта с источником и статусом: «cpu.l3_cache» → Param (с 2.1).
+    params: dict[str, Param] = field(default_factory=dict)
 
 
 # --------------------------------------------------------------------------
@@ -351,6 +482,28 @@ class SensorSample(JsonModel):
 
 
 @dataclass
+class SeriesMarker(JsonModel):
+    """Отметка на временном ряду: начало/конец нагрузки, прерывание, ошибка."""
+
+    elapsed_seconds: float = 0.0
+    kind: str = ""  # start / end / interrupt / error / emergency
+    text: str = ""
+
+
+@dataclass
+class SeriesPoint(JsonModel):
+    """Одна точка временного ряда в полном виде (для экспорта и графиков)."""
+
+    timestamp: str  # местное время точки; пусто, если время начала теста неизвестно
+    elapsed_seconds: float
+    sensor_id: str  # например «gpu0.temperature»
+    value: float
+    unit: str = ""
+    source: str = ""
+    quality: str = "measured"
+
+
+@dataclass
 class TestResult(JsonModel):
     """Итог одного нагрузочного теста."""
 
@@ -363,6 +516,29 @@ class TestResult(JsonModel):
     metrics: dict[str, Any] = field(default_factory=dict)
     samples: list[SensorSample] = field(default_factory=list)
     notes: list[str] = field(default_factory=list)
+    # С 2.1: местное время начала (замеры хранят секунды от начала), отметки на рядах и
+    # источники датчиков, отличные от обычных («cpu.zone_temp» → «perf:ThermalZone»).
+    started_at: str = ""
+    markers: list[SeriesMarker] = field(default_factory=list)
+    sensor_sources: dict[str, str] = field(default_factory=dict)
+
+
+# Пометки, по которым видно, что тест начался и был прерван пользователем.
+_INTERRUPTED_NOTES = ("Тест остановлен пользователем",)
+
+
+def check_state(result: TestResult) -> CheckState:
+    """Состояние проверки по итогу теста (работает и для проверок до 2.1)."""
+    if result.status is TestStatus.PASSED:
+        return CheckState.PASSED
+    if result.metrics.get("emergency_stop") or result.status is TestStatus.ERROR:
+        return CheckState.INTERRUPTED
+    if result.status in (TestStatus.FAILED, TestStatus.WARNING):
+        return CheckState.PROBLEMS
+    started = result.metrics.get("cancelled") or any(
+        note.startswith(_INTERRUPTED_NOTES) for note in result.notes
+    )
+    return CheckState.INTERRUPTED if started else CheckState.NOT_CHECKED
 
 
 @dataclass
@@ -377,6 +553,11 @@ class Finding(JsonModel):
     advice: str = ""
     evidence: str = ""
     weight: float = 0.0
+    # С 2.1 (этап 49): влияние на покупку, ограничение вывода и альтернативные причины,
+    # аргумент для торга по этой находке (если есть).
+    impact: str = ""
+    limitations: str = ""
+    bargain: str = ""
 
 
 @dataclass
@@ -421,6 +602,8 @@ class ListingClaims(JsonModel):
 class CheckSession(JsonModel):
     """Одна проверка целиком: что за компьютер, какие тесты прошли и итоговый вердикт."""
 
+    schema_version: int = SCHEMA_VERSION
+    migrated_from: int | None = None  # версия схемы, из которой проверку привели при чтении
     id: str = ""
     started_at: str = ""
     finished_at: str = ""

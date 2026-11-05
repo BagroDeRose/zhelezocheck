@@ -13,6 +13,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass, field
+from datetime import datetime
 from functools import cache
 from typing import Any
 
@@ -38,6 +39,7 @@ from hwcheck.models import (
     TestStatus,
     is_discrete_gpu,
 )
+from hwcheck.report.labels import format_evidence
 from hwcheck.thresholds import Thresholds, load_thresholds
 
 Evidence = dict[str, Any]
@@ -80,6 +82,9 @@ class RuleText:
     explanation: str
     advice: str
     bargain: str | None
+    impact: str = ""
+    limits: str = ""
+    confidence: str = "высокий"  # насколько правилу можно доверять (косвенные — «средний»)
 
 
 @cache
@@ -96,6 +101,9 @@ def load_rule_texts() -> tuple[dict[str, RuleText], float]:
             explanation=item.get("explanation", ""),
             advice=item.get("advice", ""),
             bargain=item.get("bargain"),
+            impact=item.get("impact", ""),
+            limits=item.get("limits", ""),
+            confidence=item.get("confidence", "высокий"),
         )
         for rule_id, item in data["rules"].items()
     }
@@ -262,7 +270,13 @@ def check_gpu_mining_bios(ctx: RuleContext) -> list[Evidence]:
                 f"{card.boost_clock_mhz} МГц."
             )
         if details:
-            found.append({"component": _gpu_label(gpu), "details": " ".join(details)})
+            # Числа — фактическое основание находки (видны в «Основании» отчёта).
+            facts: Evidence = {"component": _gpu_label(gpu), "details": " ".join(details)}
+            if limit is not None:
+                facts.update(power_limit_w=limit, model_tdp_w=card.tdp_w)
+            if max_core:
+                facts.update(max_core_mhz=max_core, model_boost_mhz=card.boost_clock_mhz)
+            found.append(facts)
     return found
 
 
@@ -350,7 +364,11 @@ def check_cpu_ok(ctx: RuleContext) -> list[Evidence]:
         return []
     if check_cpu_instability(ctx) or check_cpu_clock_drop(ctx):
         return []
-    return [{"component": "cpu"}]
+    # Основание «нормы» — факты теста (на ручной проверке rc2 строка была пустой).
+    facts: Evidence = {"component": "cpu", "mismatches": result.metrics.get("mismatches", 0)}
+    if result.metrics.get("clock_drop_pct") is not None:
+        facts["drop"] = result.metrics["clock_drop_pct"]
+    return [facts]
 
 
 def _cpu_load_done(ctx: RuleContext) -> TestResult | None:
@@ -374,7 +392,8 @@ def check_cpu_temp_unmeasured(ctx: RuleContext) -> list[Evidence]:
         return []
     if "start_clock_mhz" not in result.metrics:
         return []  # без частоты утверждать нечего — это попадёт в «что не проверено»
-    return [{"component": "cpu"}]
+    # Основание находки — само отсутствие источника температуры во время теста.
+    return [{"component": "cpu", "temp_source": "нет (без драйвера)"}]
 
 
 # ---------------------------------------------------------------------------
@@ -532,8 +551,17 @@ def _event(ctx: RuleContext, key: str) -> tuple[int, str, int]:
     events = ctx.snapshot.events
     if events is None:
         return 0, "", 30
-    last = events.last_seen.get(key, "")
-    return events.counts.get(key, 0), last.replace("T", " ")[:16], events.days
+    last = events.last_for(key)
+    return events.counts.get(key, 0), _date_ru(last), events.days
+
+
+def _date_ru(moment: str) -> str:
+    """«2026-10-31T23:48:23» → «31.10.2026 23:48», как в остальном отчёте.
+    Неразборчивое значение — как есть."""
+    try:
+        return datetime.fromisoformat(moment).strftime("%d.%m.%Y %H:%M")
+    except ValueError:
+        return moment.replace("T", " ")[:16]
 
 
 def check_system_whea(ctx: RuleContext) -> list[Evidence]:
@@ -669,11 +697,8 @@ def make_finding(rule_id: str, evidence: Evidence) -> Finding:
     texts, _ = load_rule_texts()
     text = texts[rule_id]
     values = {key: value for key, value in evidence.items() if key != "component"}
-    shown = ", ".join(
-        f"{k}={v:g}" if isinstance(v, float) else f"{k}={v}"
-        for k, v in values.items()
-        if not isinstance(v, str) or len(v) < 40
-    )
+    # С 2.1.0-rc2 основание — по-русски («Модель: …; Температура: 74 °C»), а не «k=v».
+    shown = format_evidence(values)
     return Finding(
         id=rule_id,
         severity=text.severity,
@@ -683,6 +708,8 @@ def make_finding(rule_id: str, evidence: Evidence) -> Finding:
         advice=text.advice.format(**values),
         evidence=shown,
         weight=text.weight,
+        impact=text.impact.format(**values),
+        limitations=text.limits.format(**values),
     )
 
 

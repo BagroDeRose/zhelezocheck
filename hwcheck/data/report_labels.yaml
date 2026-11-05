@@ -1,0 +1,104 @@
+# Подписи для отчёта (этап 50, ручная проверка 2.1.0-rc1): технические ключи улик правил
+# («Основание») и метрик тестов показываются человеческими словами, а не как «model=…».
+#
+# Формат записи: ключ: {label: подпись, unit: единица, digits: знаков после запятой}.
+# label: null — показать только значение (готовый текст правила: details, reasons, *_text).
+# hide: true — служебное поле, в отчёте не показывается (значение остаётся в JSON).
+# Неизвестный ключ показывается как есть: специалисту ничего не прячем.
+
+evidence:
+  model: {label: "Модель"}
+  details: {label: null}
+  reasons: {label: null}
+  temp_text: {label: null}
+  wear_text: {label: null}
+  errors: {label: "Ошибок"}
+  temp: {label: "Температура", unit: "°C", digits: 0}
+  typical: {label: "Обычно для модели", unit: "°C", digits: 0}
+  drop: {label: "Снижение частоты", unit: "%", digits: 1}
+  fan: {label: "Вентилятор", unit: "%", digits: 0}
+  current: {label: "Сейчас линий PCIe"}
+  maximum: {label: "Поддерживается линий PCIe"}
+  power_limit_w: {label: "Лимит мощности", unit: "Вт", digits: 0}
+  model_tdp_w: {label: "Заводской лимит модели", unit: "Вт", digits: 0}
+  max_core_mhz: {label: "Макс. частота ядра", unit: "МГц", digits: 0}
+  model_boost_mhz: {label: "Заводская частота модели", unit: "МГц", digits: 0}
+  mismatches: {label: "Расхождений в вычислениях"}
+  start: {label: "Частота в начале", unit: "МГц", digits: 0}
+  end: {label: "Частота в конце", unit: "МГц", digits: 0}
+  zone: {label: "Температура тепловой зоны", unit: "°C", digits: 1}
+  temp_source: {label: "Источник температуры"}
+  # Заявлено / фактически: число — объём памяти (ГБ), текст — модель (сверка с объявлением).
+  claimed: {label: "Заявлено", unit: "ГБ", digits: 1}
+  actual: {label: "Обнаружено", unit: "ГБ", digits: 1}
+  claimed_vram: {label: "Заявлено видеопамяти", unit: "ГБ", digits: 0}
+  actual_vram: {label: "Обнаружено видеопамяти", unit: "ГБ", digits: 0}
+  vram_text: {hide: true}
+  tested_gb: {label: "Проверено", unit: "ГБ", digits: 1}
+  count: {label: "Количество"}
+  wear: {label: "Износ", unit: "%", digits: 0}
+  hours: {label: "Наработка", unit: "ч", digits: 0}
+  years: {label: "Лет работы", digits: 1}
+  last: {label: "Последний раз"}
+  days: {label: "Период, дней"}
+  bsod: {label: "Синих экранов"}
+  power: {label: "Внезапных выключений"}
+  left: {label: "Осталось", unit: "ч", digits: 1}
+  cycles: {label: "Циклов заряда"}
+
+metrics:
+  # общие
+  errors: {label: "Ошибок"}
+  cancelled: {label: "Остановлен пользователем"}
+  emergency_stop: {label: "Аварийная остановка"}
+  samples: {label: "Замеров датчиков"}
+  iterations: {label: "Проходов (всего)"}
+  # тест видеопамяти (memtest_vulkan)
+  # memtest_vulkan печатает итог раз в ~30 с: это длина последнего такого интервала, а не
+  # всего теста (ручная проверка rc1: «30 с» при тесте в 3 минуты выглядело как ошибка).
+  seconds: {label: "Интервал последнего отчёта memtest_vulkan", unit: "с", digits: 1}
+  write_speed_gbps: {label: "Скорость записи", unit: "ГБ/с", digits: 1}
+  speed_gbps: {label: "Скорость чтения", unit: "ГБ/с", digits: 1}
+  memtest_version: {label: "Версия memtest_vulkan"}
+  device_id: {label: "Код устройства"}
+  tested_gb: {label: "Проверено", unit: "ГБ", digits: 1}
+  init_error: {label: "Ошибка запуска"}
+  last_output: {label: "Последний вывод утилиты"}
+  # нагрузка видеокарты
+  adapter: {label: "Видеокарта"}
+  max_temp_c: {label: "Макс. температура", unit: "°C", digits: 1}
+  avg_temp_c: {label: "Средняя температура", unit: "°C", digits: 1}
+  overheating: {label: "Перегрев"}
+  start_clock_mhz: {label: "Частота в начале", unit: "МГц", digits: 0}
+  end_clock_mhz: {label: "Частота в конце", unit: "МГц", digits: 0}
+  avg_clock_mhz: {label: "Средняя частота", unit: "МГц", digits: 0}
+  clock_drop_pct: {label: "Снижение частоты", unit: "%", digits: 1}
+  clock_stable: {label: "Частота стабильна"}
+  clock_drop_high: {label: "Сильное снижение частоты"}
+  max_fan_pct: {label: "Макс. обороты вентилятора", unit: "%", digits: 0}
+  fan_high_at_moderate_temp: {label: "Вентилятор громкий при умеренной температуре"}
+  fan_not_spinning: {label: "Вентилятор не крутится"}
+  max_power_w: {label: "Макс. потребление", unit: "Вт", digits: 0}
+  throttle_reasons: {label: "Причины снижения частот"}
+  thermal_throttle: {label: "Снижение частот из-за температуры"}
+  power_throttle: {label: "Снижение частот из-за лимита мощности"}
+  # нагрузка процессора
+  workers: {label: "Потоков нагрузки"}
+  mismatches: {label: "Расхождений в вычислениях"}
+  worker_errors: {label: "Ошибки потоков"}
+  checksum_ok: {label: "Контрольные суммы сошлись"}
+  clock_samples: {label: "Замеров частоты"}
+  zone_temp_max_c: {label: "Макс. температура тепловой зоны", unit: "°C", digits: 1}
+  zone_temp_start_c: {label: "Тепловая зона в начале", unit: "°C", digits: 1}
+  zone_temp_frozen: {label: "Тепловая зона не менялась (датчик не отражает нагрев)"}
+  # память
+  tested_mb: {label: "Проверено", unit: "МБ", digits: 0}
+  patterns_done: {label: "Шаблонов пройдено"}
+  passes: {label: "Полных проходов"}
+  first_error: {label: "Первая ошибка"}
+  # диск
+  read_mb: {label: "Прочитано", unit: "МБ", digits: 0}
+  speed_mbps: {label: "Скорость чтения", unit: "МБ/с", digits: 0}
+  read_errors: {label: "Ошибок чтения"}
+  files: {label: "Файлов прочитано"}
+  skipped_files: {label: "Файлов пропущено"}

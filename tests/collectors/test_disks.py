@@ -259,3 +259,48 @@ def test_smartctl_device_without_model_gets_readable_name() -> None:
     disks = collect_smartctl(fake_run, "smartctl")
     assert disks[0].device == "/dev/sdb"
     assert disks[0].model == f"{UNKNOWN_DISK_MODEL} (/dev/sdb)"
+
+
+def test_smartctl_version_is_recorded() -> None:
+    """Паспорт проверки (2.1): версия реально использованной утилиты."""
+    smart = disks.parse_smartctl(_smart("real_ardor_nvme.json")).smart
+    assert smart is not None and smart.tool_version == "7.5"
+
+
+# ---------------------------------------------------------------- 2.1: полный SMART (этап 45)
+
+
+def test_all_ata_attributes_are_kept() -> None:
+    disk = disks.parse_smartctl(_smart("sata_ssd_healthy.json"))
+    smart = disk.smart
+    assert smart is not None and len(smart.attributes) == 14
+    realloc = next(a for a in smart.attributes if a.id == 5)
+    assert realloc.name == "Reallocated_Sector_Ct"
+    assert (realloc.value, realloc.worst, realloc.threshold, realloc.raw) == (100, 100, 10, 0)
+    assert disk.firmware == "RVT04B6Q" and disk.interface_speed == "6.0 Gb/s"
+
+
+def test_real_hdd_without_admin_has_no_invented_thresholds() -> None:
+    """smartctl без прав администратора не прочитал пороги — Threshold None, а не 0."""
+    disk = disks.parse_smartctl(_smart("real_wd_hdd_ata.json"))
+    smart = disk.smart
+    assert smart is not None and len(smart.attributes) == 17
+    assert all(a.threshold is None for a in smart.attributes)
+    assert smart.self_test == "completed without error"
+    assert disk.serial_number == "0000000000"  # в фикстуре обезличен
+
+
+def test_full_nvme_health_log_is_kept() -> None:
+    smart = disks.parse_smartctl(_smart("real_ardor_nvme.json")).smart
+    assert smart is not None
+    for key in (
+        "data_units_read",
+        "host_reads",
+        "controller_busy_time",
+        "num_err_log_entries",
+        "critical_warning",
+        "warning_temp_time",
+        "critical_comp_time",
+    ):
+        assert key in smart.nvme_log, key
+    assert smart.attributes == []

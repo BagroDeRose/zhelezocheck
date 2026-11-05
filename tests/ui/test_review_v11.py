@@ -104,10 +104,12 @@ def test_summary_shows_shared_memory_and_unknown_size() -> None:
 
 def test_report_rows_for_integrated_gpu() -> None:
     from hwcheck.models import CheckSession
-    from hwcheck.report.builder import _gpu_rows
+    from hwcheck.report.specialist import gpu_section
 
-    rows = _gpu_rows(CheckSession(snapshot=_laptop_snapshot()))
-    assert rows[0]["vram"] == "общая с ОЗУ"
+    snapshot = _laptop_snapshot()
+    section = gpu_section(CheckSession(snapshot=snapshot), 0, snapshot.gpus[0])
+    rows = {row.label: row.value for row in section.rows}
+    assert rows["Видеопамять"] == "общая с ОЗУ"
 
 
 # ---------------------------------------------------------------- 15.10 оценка времени

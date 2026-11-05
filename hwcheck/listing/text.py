@@ -1,8 +1,8 @@
-"""Разбор объявления из вставленного текста (SPEC 1.3, задача 25.4).
+"""Объявление из вставленного текста (с 2.1 — необязательное поле на экране выбора режима).
 
-Основной способ «Проверки объявления»: пользователь копирует в любом браузере название,
-цену и описание объявления (или всю страницу — Ctrl+A, Ctrl+C) и вставляет сюда. Разбор —
-обычный Python, без встроенного браузера: не зависит от вёрстки сайта и его защиты.
+Пользователь копирует в любом браузере название, цену и описание объявления (или всю
+страницу — Ctrl+A, Ctrl+C) и вставляет в поле «Сверить с объявлением». Разбор — обычный
+Python: не зависит от вёрстки сайта и его защиты.
 
 Что извлекается:
 - заголовок — первая строка, где упомянуто железо (модель видеокарты, процессор, память);
@@ -10,12 +10,9 @@
   не принимается за заголовок;
 - цена — первое «45 000 ₽» / «45000 руб.» после заголовка (платежи рассрочки не в счёт);
 - характеристики — строки вида «Ключ: значение»;
-- продавец — «На Авито с …», «N объявлений»;
 - всё остальное — описание.
-Затем распознаётся заявленное железо и ищутся тревожные признаки — как и раньше.
-
-Цена на рынке — по тексту страницы поиска: каждая цена относится к ближайшему выше
-названию видеокарты; учитываются только объявления той же модели.
+Затем распознаётся заявленное железо (`recognize.py`) — его программа сверит с найденным.
+Цены по рынку, продавца и «тревожных слов» больше нет (решение владельца, 2.1).
 """
 
 from __future__ import annotations
@@ -24,8 +21,7 @@ import re
 from datetime import datetime
 
 from hwcheck.knowledge.gpu_db import find_in_text
-from hwcheck.listing.extract import cpu_in_text, parse_price, recognize_hardware
-from hwcheck.listing.price import MarketPrice, market_from_prices
+from hwcheck.listing.recognize import cpu_in_text, has_claims, parse_price, recognize_hardware
 from hwcheck.models import ListingClaims
 
 MAX_TEXT_CHARS = 200_000  # вставка больше — это уже не объявление
@@ -33,8 +29,6 @@ TITLE_MAX_CHARS = 150
 
 _PRICE_RE = re.compile(r"(\d[\d ]{0,12}\d|\d)\s*(?:₽|руб\.?|р\.)", re.IGNORECASE)
 _PARAM_RE = re.compile(r"^([^:]{2,40}):\s*(.{1,200})$")
-_SELLER_SINCE_RE = re.compile(r"на\s+\S+\s+с\s+(.+)$|с\s+нами\s+с\s+(.+)$", re.IGNORECASE)
-_SELLER_LISTINGS_RE = re.compile(r"(\d+)\s+(?:активн\w+\s+)?объявлен", re.IGNORECASE)
 # Служебные строки сайтов, которые попадают в копию страницы и не являются заголовком.
 _SERVICE_RE = re.compile(
     r"^(?:главная|объявления|избранное|войти|вход|разместить|написать|показать телефон|"
@@ -140,12 +134,6 @@ def claims_from_text(text: str) -> ListingClaims:
             if key.lower() not in ("http", "https"):
                 claims.params[key] = value
                 continue
-        if since := _SELLER_SINCE_RE.search(line):
-            claims.seller_since = (since.group(1) or since.group(2) or "").strip()
-            continue
-        if (listings := _SELLER_LISTINGS_RE.search(line)) and len(line) < 40:
-            claims.seller_listings = int(listings.group(1))
-            continue
         if any(ch.isalnum() for ch in line):  # строки из одних знаков («---») — не текст
             rest.append(line)
     if claims.price_rub is None:  # цены после заголовка нет — берём первую в тексте
@@ -182,26 +170,25 @@ def _description_section(lines: list[str], title_at: int | None) -> list[str] | 
     return lines[start + 1 : end]
 
 
-def market_from_text(text: str, model: str) -> MarketPrice:
-    """Цена на рынке по тексту страницы поиска для модели `model` (из справочника).
+def listing_from_text(text: str) -> ListingClaims | None:
+    """Объявление для сверки из вставленного текста; None — поле пустое или в тексте не
+    распознано ни видеокарты, ни процессора, ни объёма памяти (сверять нечего)."""
+    if not text or not text.strip():
+        return None
+    claims = claims_from_text(text)
+    return claims if has_claims(claims) else None
 
-    Каждая цена относится к ближайшему выше названию видеокарты; объявления других
-    моделей и строки без названия не учитываются. Выбросы отбрасываются, как и раньше.
-    """
-    if not model:
-        return MarketPrice()
-    prices: list[int] = []
-    current = ""
-    for raw in (text or "")[:MAX_TEXT_CHARS].splitlines():
-        line = _clean(raw)
-        if not line:
-            continue
-        card = find_in_text(line)
-        if card is not None:
-            current = card.model
-        if (match := _PRICE_RE.search(line)) and current:
-            value = parse_price(match.group(1))
-            if value and current == model:
-                prices.append(value)
-            current = ""  # цена «закрывает» карточку объявления
-    return market_from_prices(prices)
+
+def claims_summary(claims: ListingClaims | None) -> str:
+    """Что распознано, одной строкой: «RTX 3070 8 ГБ · Ryzen 5 5600 · ОЗУ 32 ГБ»."""
+    if claims is None:
+        return ""
+    parts = []
+    if claims.gpu_model:
+        vram = f" {claims.gpu_vram_gb:g} ГБ" if claims.gpu_vram_gb else ""
+        parts.append(f"{claims.gpu_model}{vram}")
+    if claims.cpu_model:
+        parts.append(claims.cpu_model)
+    if claims.ram_gb:
+        parts.append(f"ОЗУ {claims.ram_gb:g} ГБ")
+    return " · ".join(parts)

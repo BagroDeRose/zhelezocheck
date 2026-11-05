@@ -56,7 +56,8 @@ def test_create_window_demo(qtbot: QtBot, tmp_path: Path, monkeypatch: pytest.Mo
 
 def test_navigation_has_all_sections(qtbot: QtBot, tmp_path: Path) -> None:
     window, _, _ = make_window(qtbot, tmp_path)
-    assert window.nav_targets == ["check", "listing", "laptop", "history", "settings"]
-    for target in ("listing", "laptop"):
+    # С 2.1 нет раздела «Проверка объявления»: сверка — поле на странице режима.
+    assert window.nav_targets == ["check", "laptop", "history", "settings"]
+    for target in ("laptop", "settings"):
         window.nav.setCurrentRow(window.nav_targets.index(target))
         assert window.current_page_name() == target

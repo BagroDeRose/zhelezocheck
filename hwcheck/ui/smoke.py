@@ -17,7 +17,6 @@ from pathlib import Path
 
 from PySide6.QtCore import QCoreApplication, QEventLoop
 
-from hwcheck.config import package_data_dir, temp_dir
 from hwcheck.models import TestResult, TestStatus
 from hwcheck.ui.main_window import MainWindow
 
@@ -34,10 +33,16 @@ def _wait(condition: Callable[[], bool], deadline: float) -> bool:
 
 def _check_charts() -> bool:
     """Графики отчёта рисуются модулем QtSvg (PDF без движка браузера, 25.4)."""
-    from hwcheck.report.builder import svg_line_chart
+    from hwcheck.report.charts import Chart, ChartSeries, render_svg
     from hwcheck.report.pdf import svg_to_image
+    from hwcheck.schema import SeriesStats
 
-    image = svg_to_image(svg_line_chart([(0.0, 40.0), (10.0, 70.0)], "Проверка", "°C"))
+    stats = SeriesStats(40.0, 55.0, 70.0, 2, 0.0, 10.0, "°C", "проверка")
+    series = ChartSeries(
+        "gpu0.temperature", "Проверка", "#b3261e", stats, [[(0.0, 40.0), (10.0, 70.0)]]
+    )
+    chart = Chart("Проверка", "°C", [series], [], "проверка", 10.0)
+    image = svg_to_image(render_svg(chart, "smoke"))
     return not image.isNull() and image.width() > 0
 
 
@@ -97,31 +102,16 @@ def _keyboard_layout_shots(window: MainWindow) -> list[str]:
     return lines
 
 
-def _check_listing(window: MainWindow, deadline: float) -> tuple[bool, bool]:
-    """Объявление (25.4): (сохранённая страница с кириллицей в пути разобрана,
-    вставленный текст объявления разобран) — без встроенного браузера, как пользователь."""
-    ctx = window.ctx
-    page = window.listing_page
-    page.refresh()
-    window.go_to("listing")
-    html = (package_data_dir() / "smoke" / "listing_sample.html").read_text(encoding="utf-8")
-
-    def saved_gpu() -> str:
-        claims = ctx.listings.load()
-        return claims.gpu_model if claims is not None else ""
-
-    with temp_dir() as folder:
-        sample = folder / "Сохранённая страница Авито.html"
-        sample.write_text(html, encoding="utf-8")
-        page.open_saved_file(sample)
-        from_file = _wait(lambda: page.pending_id is None, deadline) and bool(saved_gpu())
-    ctx.listings.clear()
-    page.text_edit.setPlainText(LISTING_SAMPLE_TEXT)
-    page.analyze()
-    from_text = _wait(lambda: page.pending_id is None, deadline) and bool(saved_gpu())
-    ctx.listings.clear()
-    page.text_edit.clear()
-    return from_file, from_text
+def _listing_line(window: MainWindow) -> tuple[str, bool]:
+    """Сверка с объявлением (2.1): текст, вставленный на странице режима, распознан и после
+    проверки попал в вердикт находкой «listing.*» — без встроенного браузера и сайтов."""
+    session = window.last_session
+    found = [] if session is None or session.verdict is None else [
+        f.id for f in session.verdict.findings if f.id.startswith("listing.")
+    ]  # fmt: skip
+    ok = session is not None and session.listing is not None and bool(found)
+    state = f"сверено ({', '.join(found)})" if ok else "НЕ сверено"
+    return f"Сверка с объявлением: {state}", ok
 
 
 LISTING_SAMPLE_TEXT = "Видеокарта RTX 3070 8GB\n32 000 ₽\nПродаю, работала в играх.\n"
@@ -164,6 +154,7 @@ def run_smoke_test(
         if not _wait(lambda: window.start_page.next_button.isEnabled(), deadline):
             raise TimeoutError("сведения о железе не собраны вовремя")
         window.start_page.next_button.click()
+        window.mode_page.listing_edit.setPlainText(LISTING_SAMPLE_TEXT)
         window.mode_page.start_button.click()
         if not _wait(lambda: window.current_page_name() == "verdict", deadline):
             window.stop_check()
@@ -179,9 +170,8 @@ def run_smoke_test(
         lines.append(f"Вердикт: {session.verdict.decision.value}")
         lines.append(f"Отчёт: {report.name}, PDF: {'есть' if pdfs else 'НЕТ'}")
         lines.append(f"Графики для PDF (QtSvg): {'рисуются' if charts else 'НЕ рисуются'}")
-        from_file, from_text = _check_listing(window, deadline)
-        lines.append(f"Объявление из файла: {'разобрано' if from_file else 'НЕ разобрано'}")
-        lines.append(f"Объявление из текста: {'разобрано' if from_text else 'НЕ разобрано'}")
+        listing_line, listing_ok = _listing_line(window)
+        lines.append(listing_line)
         metadata_line, metadata_ok = _check_exe_metadata(exe_dir())
         if metadata_line:
             lines.append(metadata_line)
@@ -210,7 +200,6 @@ def run_smoke_test(
             workers_ok = result.status is TestStatus.PASSED
             state = "работают" if workers_ok else f"НЕ работают ({'; '.join(result.notes)})"
             lines.append(f"Процессы нагрузки: {state}")
-        listing_ok = from_file and from_text
         all_ok = pdfs and charts and listing_ok and workers_ok and keyboard_ok and metadata_ok
         code = 0 if all_ok else 1
         lines.append("OK" if code == 0 else "FAIL: см. строки выше")

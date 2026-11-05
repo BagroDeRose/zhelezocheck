@@ -26,7 +26,16 @@ GALLERY = ROOT / "docs" / "SCREENSHOTS.md"
 WINDOW_SIZE = (1150, 860)
 # Тема → демо-сценарий: светлая — компьютер с майнинговой видеокартой, тёмная — ноутбук.
 SCENARIOS = {"light": "mining_gpu", "dark": "laptop_worn_battery"}
-PAGES = ["start", "mode", "progress", "verdict", "history", "listing", "laptop", "settings"]
+PAGES = [
+    "start",
+    "mode",
+    "progress",
+    "verdict",
+    "verdict_specialist",
+    "history",
+    "laptop",
+    "settings",
+]
 # Тест клавиатуры ноутбука (25.2): размер экрана и масштаб Windows. 150 % снимается в
 # отдельном процессе с QT_SCALE_FACTOR=1.5 (окно того же физического размера).
 KEYBOARD_SCREENS = [(1280, 720, 100), (1366, 768, 100), (1920, 1080, 100), (1920, 1080, 150)]
@@ -41,11 +50,11 @@ SAMPLE_LISTING = (
 
 TITLES = {
     "start": "Старт: сводка «Что найдено»",
-    "mode": "Выбор режима проверки",
+    "mode": "Выбор режима и сверка с объявлением",
     "progress": "Идёт проверка",
     "verdict": "Вердикт",
+    "verdict_specialist": "Вердикт: вид «Для специалиста»",
     "history": "История и отчёты",
-    "listing": "Проверка объявления",
     "laptop": "Ноутбук",
     "settings": "Настройки",
 }
@@ -178,6 +187,14 @@ def main() -> int:
         while not condition() and loop_end.isActive():
             QCoreApplication.processEvents(QEventLoop.ProcessEventsFlag.AllEvents, 50)
 
+    def settle(ms: int) -> None:
+        """Обрабатывает события ms миллисекунд (анимации стиля Windows)."""
+        done = QTimer()
+        done.setSingleShot(True)
+        done.start(ms)
+        while done.isActive():
+            QCoreApplication.processEvents(QEventLoop.ProcessEventsFlag.AllEvents, 20)
+
     def shoot(window: MainWindow, name: str) -> None:
         for _ in range(20):
             QCoreApplication.processEvents()
@@ -192,6 +209,7 @@ def main() -> int:
             backend = FakeBackend(scenario, time_scale=0.004)
             data = get_paths(Path(tmp) / theme)
             ctx = AppContext.create(backend, data, scenario)
+            ctx.settings.theme = theme  # список «Тема оформления» показывает снимаемую тему
             ctx.open_path = lambda _path: None
             ctx.admin_check = lambda: False
             window = MainWindow(ctx)
@@ -203,22 +221,25 @@ def main() -> int:
             suffix = f"_{theme}"
             shoot(window, f"start{suffix}")
             window.go_to("mode")
+            # Пример объявления (выдуманный): видно, что распознано для сверки (2.1).
+            window.mode_page.listing_edit.setPlainText(SAMPLE_LISTING)
+            settle(600)
             shoot(window, f"mode{suffix}")
             window.start_check("quick")
             wait_until(lambda w=window: w.progress_page.bar.value() > 400)
             shoot(window, f"progress{suffix}")
             wait_until(lambda w=window: w.current_page_name() == "verdict")
             shoot(window, f"verdict{suffix}")
+            # Вид специалиста (2.1): тот же снимок проверки, без повторных тестов. Анимация
+            # переключателя стиля Windows дорисовывается не сразу — ждём перед снимком.
+            window.verdict_page.specialist_radio.setChecked(True)
+            settle(400)
+            shoot(window, f"verdict_specialist{suffix}")
+            window.verdict_page.buyer_radio.setChecked(True)
+            settle(400)
             window.verdict_page.save_report()
-            for page in ("history", "listing", "laptop", "settings"):
+            for page in ("history", "laptop", "settings"):
                 window.go_to(page)
-                if page == "listing":
-                    # Пример объявления (выдуманный), чтобы видеть карточки результата.
-                    listing = window.listing_page
-                    listing.text_edit.setPlainText(SAMPLE_LISTING)
-                    listing.analyze()
-                    wait_until(lambda lp=listing: lp.pending_id is None)
-                    listing.scroll_area.verticalScrollBar().setValue(listing.results.y() - 120)
                 shoot(window, f"{page}{suffix}")
             window.close()
         shoot_keyboard(app, Path(tmp), [s for s in KEYBOARD_SCREENS if s[2] == 100])

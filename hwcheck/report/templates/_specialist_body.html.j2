@@ -1,0 +1,139 @@
+{# Вид «Для специалиста» (SPEC_V2_1, этапы 43–46): паспорт, все параметры с источником и
+   статусом, тесты, графики, события, находки, неполученные данные, источники. #}
+<nav>
+  <a href="#passport">Паспорт</a>
+{% for section in sections %}  <a href="#{{ section.anchor }}">{{ section.title }}</a>
+{% endfor %}
+  <a href="#tests">Тесты</a>
+{% if charts %}  <a href="#charts">Графики</a>
+{% endif %}{% if events %}  <a href="#events">События Windows</a>
+{% endif %}
+{% if listing %}  <a href="#listing">Объявление</a>
+{% endif %}
+  <a href="#assessment">Оценка компонентов</a>
+  <a href="#findings">Находки</a>
+  <a href="#missing">Неполученные данные</a>
+  <a href="#sources">Источники</a>
+</nav>
+
+{% macro param_table(section) %}
+<h2 id="{{ section.anchor }}">{{ section.title }}</h2>
+<div class="wrap"><table class="data">
+  <thead><tr><th>Параметр</th><th>Значение</th><th>Источник</th><th>Статус</th><th>Пояснение</th></tr></thead>
+  <tbody>
+{% for row in section.rows %}
+    <tr><td>{{ row.label }}</td><td>{{ row.value }}</td><td class="src">{{ row.source }}</td>
+      <td class="st-{{ row.status.value }}">{{ row.status_name }}</td><td class="note">{{ row.note }}</td></tr>
+{% endfor %}
+  </tbody>
+</table></div>
+{% endmacro %}
+
+{{ param_table(passport) }}
+
+{% for section in sections %}
+{{ param_table(section) }}
+{% endfor %}
+
+<h2 id="tests">Тесты</h2>
+<div class="wrap"><table class="data">
+  <thead><tr><th>Тест</th><th>Состояние</th><th>Начало</th><th>Длительность</th><th>Метрики</th><th>Отметки и заметки</th></tr></thead>
+  <tbody>
+{% for t in tests %}
+    <tr><td>{{ t.name }}</td><td class="state-{{ t.state_key }}">{{ t.state }}</td><td>{{ t.started }}</td><td>{{ t.duration }}</td>
+      <td>{% for key, value in t.metrics %}{{ key }}: {{ value }}{% if not loop.last %}<br>{% endif %}{% else %}—{% endfor %}</td>
+      <td>{% for m in t.markers %}{{ m }}<br>{% endfor %}{% for note in t.notes %}<small>{{ note }}</small><br>{% endfor %}</td></tr>
+{% else %}
+    <tr><td colspan="6">Нагрузочные тесты не проводились.</td></tr>
+{% endfor %}
+  </tbody>
+</table></div>
+{% if charts %}
+<h2 id="charts">Графики датчиков под нагрузкой</h2>
+<p class="meta">Графики построены по сохранённым замерам. Нет датчика — нет графика; пропуски не заполняются. Серии можно скрыть галочками.</p>
+{% for chart in charts %}
+<div class="chart">{{ chart | safe }}</div>
+{% endfor %}
+{% endif %}
+
+{% if events %}
+<h2 id="events">Журнал Windows за {{ events.days }} дней</h2>
+<div class="wrap"><table class="data">
+  <thead><tr><th>Событие</th><th>Сколько раз</th><th>Последний раз</th></tr></thead>
+  <tbody>
+{% for e in events.rows %}
+    <tr><td>{{ e.name }}</td><td>{{ e.count }}</td><td>{{ e.last }}</td></tr>
+{% endfor %}
+  </tbody>
+</table></div>
+{% if events.partial %}<p class="meta">Журнал прочитан не полностью{% if events.note %}: {{ events.note }}{% endif %}.</p>{% endif %}
+{% if events["items"] %}
+<h3>События по видам</h3>
+<div class="wrap"><table class="data">
+  <thead><tr><th>Группа</th><th>Журнал / источник</th><th>Event ID</th><th>Уровень</th><th>Раз</th><th>Первое — последнее</th><th>Что это</th><th>Компонент</th><th>Значимость</th><th>Когда</th></tr></thead>
+  <tbody>
+{% for e in events["items"] %}
+    <tr><td>{{ e.group }}</td><td class="src">{{ e.log }} / {{ e.provider }}</td><td>{{ e.event_id }}</td><td>{{ e.level }}</td><td>{{ e.count }}</td>
+      <td>{{ e.first }} — {{ e.last }}</td><td><b>{{ e.title }}</b>{% if e.message %}<br><small>{{ e.message }}</small>{% endif %}{% if e.note %}<br><small class="note">{{ e.note }}</small>{% endif %}</td>
+      <td>{{ e.component }}</td><td>{{ e.significance }}</td><td>{{ e.when }}</td></tr>
+{% endfor %}
+  </tbody>
+</table></div>
+{% else %}
+<p class="meta">Подробностей по видам событий нет: событий не было или проверка сделана до версии 2.1.</p>
+{% endif %}
+{% endif %}
+
+{% if listing %}
+<h2 id="listing">Объявление</h2>
+<div class="wrap"><table class="data">
+  <tbody>
+    <tr><th>Заголовок</th><td>{{ listing.title }}</td></tr>
+    {% if listing.url %}<tr><th>Адрес страницы</th><td>{{ listing.url }}</td></tr>{% endif %}
+    <tr><th>Цена</th><td>{{ listing.price }}{% if listing.market_count %} (средняя на рынке {{ listing.market }}, объявлений: {{ listing.market_count }}){% endif %}</td></tr>
+    <tr><th>Заявлено</th><td>{{ listing.claimed }}</td></tr>
+  </tbody>
+</table></div>
+{% endif %}
+
+<h2 id="assessment">Оценка компонентов</h2>
+<div class="wrap"><table class="data">
+  <thead><tr><th>Компонент</th><th>Состояние</th><th>Уверенность</th><th>Причина</th><th>Основание</th><th>Не проверено</th></tr></thead>
+  <tbody>
+{% for a in assessments %}
+    <tr><td>{{ a.name }}</td><td>{{ a.state }}</td><td>{{ a.confidence }}</td><td>{{ a.reason }}</td>
+      <td class="note">{{ a.facts | join("; ") or "—" }}</td><td class="note">{{ a.not_checked | join("; ") or "—" }}</td></tr>
+{% endfor %}
+  </tbody>
+</table></div>
+<p class="meta">Итоговой оценки числом нет: состояние — по находкам и итогам тестов. Недоступный датчик снижает уверенность, а не состояние.</p>
+
+<h2 id="findings">Находки и правила вердикта</h2>
+<div class="wrap"><table class="data">
+  <thead><tr><th>Правило</th><th>Важность</th><th>Находка</th><th>Основание (данные)</th><th>Влияние на покупку</th><th>Ограничения вывода</th></tr></thead>
+  <tbody>
+{% for f in findings %}
+    <tr><td class="src">{{ f.rule }}</td><td class="sev-{{ f.severity_key }}">{{ f.severity }}</td>
+      <td><b>{{ f.title }}.</b> {{ f.explanation }}{% if f.bargain %}<br><small>Для торга: {{ f.bargain }}</small>{% endif %}</td>
+      <td class="note">{{ f.evidence }}</td><td class="note">{{ f.impact or "—" }}</td><td class="note">{{ f.limitations or "—" }}</td></tr>
+{% else %}
+    <tr><td colspan="6">Вердикт не выносился.</td></tr>
+{% endfor %}
+  </tbody>
+</table></div>
+
+<h2 id="missing">Неполученные данные и ограничения</h2>
+<div class="wrap"><table class="data">
+  <thead><tr><th>Раздел</th><th>Параметр</th><th>Статус</th><th>Причина</th></tr></thead>
+  <tbody>
+{% for title, row in missing %}
+    <tr><td>{{ title }}</td><td>{{ row.label }}</td><td class="st-{{ row.status.value }}">{{ row.status_name }}</td><td class="note">{{ row.note }}</td></tr>
+{% endfor %}
+  </tbody>
+</table></div>
+
+<h2 id="sources">Источники данных</h2>
+<ul>
+{% for source in sources %}  <li>{{ source }}</li>
+{% endfor %}
+</ul>

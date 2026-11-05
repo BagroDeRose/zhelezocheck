@@ -21,7 +21,6 @@ from hwcheck.models import Finding
 from hwcheck.platform.elevation import ElevatedProcess, is_admin, relaunch_elevated
 from hwcheck.single_instance import InstanceLock
 from hwcheck.storage.history import History
-from hwcheck.storage.listings import ListingStore
 from hwcheck.storage.settings import Settings, load_settings, save_settings
 
 
@@ -86,10 +85,6 @@ class AppContext:
             if self._history is None:
                 self._history = History(self.paths.history_db)
             return self._history
-
-    @property
-    def listings(self) -> ListingStore:
-        return ListingStore(self.paths.listings)
 
     def save_settings(self) -> None:
         save_settings(self.paths.settings_file, self.settings)

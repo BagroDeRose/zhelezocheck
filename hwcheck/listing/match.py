@@ -4,16 +4,19 @@
 (knowledge/gpu_db.identify), а не по имени в Windows: так перепрошитая под другую модель
 карта не пройдёт сверку. Также сравниваются объём видеопамяти и процессор.
 Объём оперативной памяти сверяет правило вердикта `ram.less_than_claimed`.
-Тексты находок — в `data/red_flags.yaml`, раздел `match`.
+Тексты находок — в `data/listing_match.yaml`.
 """
 
 from __future__ import annotations
 
+from functools import cache
 from typing import Any
 
+import yaml
+
+from hwcheck.config import package_data_dir
 from hwcheck.knowledge.gpu_db import IdentStatus, identify, vram_matches
-from hwcheck.listing.extract import cpu_in_text
-from hwcheck.listing.flags import FlagResult, load_flags
+from hwcheck.listing.recognize import cpu_in_text
 from hwcheck.models import (
     Finding,
     GpuInfo,
@@ -22,6 +25,16 @@ from hwcheck.models import (
     Severity,
     is_discrete_gpu,
 )
+from hwcheck.report.labels import format_evidence
+
+FlagResult = tuple[Finding, str | None]  # находка и аргумент для торга
+
+
+@cache
+def load_match_texts() -> dict[str, Any]:
+    """Тексты находок сверки (`data/listing_match.yaml`, раздел `match`)."""
+    text = (package_data_dir() / "listing_match.yaml").read_text(encoding="utf-8")
+    return yaml.safe_load(text)["match"]
 
 
 def cpu_key(name: str) -> str:
@@ -30,7 +43,7 @@ def cpu_key(name: str) -> str:
 
 
 def _finding(key: str, **values: Any) -> FlagResult:
-    spec = load_flags()["match"][key]
+    spec = load_match_texts()[key]
     finding = Finding(
         id=f"listing.{key}",
         severity=Severity(spec["severity"]),
@@ -39,6 +52,10 @@ def _finding(key: str, **values: Any) -> FlagResult:
         explanation=spec["explanation"].format(**values),
         advice=spec.get("advice", "").format(**values),
         weight=float(spec.get("weight", 0)),
+        impact=spec.get("impact", "").format(**values),
+        limitations=spec.get("limits", "").format(**values),
+        # Основание — что заявлено и что найдено (на ручной проверке rc3 оно было пустым).
+        evidence=format_evidence(values),
     )
     bargain = spec.get("bargain")
     return finding, bargain.format(**values) if bargain else None

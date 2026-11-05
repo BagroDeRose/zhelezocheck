@@ -26,8 +26,27 @@ def test_parse_normal_line() -> None:
         "power_w": 118.2,
         "fan_pct": 45.0,
         "util_pct": 99.0,
+        "mem_util_pct": 87.0,
+        "vram_used_mb": 5120.0,
         "throttle_mask": 4.0,
     }
+
+
+def test_parse_real_gtx1660_stream() -> None:
+    """Настоящий вывод nvidia-smi (GTX 1660, драйвер 617) с полями VRAM (этап 42 v2.1)."""
+    lines = fixture_text("nvidia_smi", "real_gtx1660_stream.csv").splitlines()
+    samples = [sensors.parse_nvidia_line(line, t=float(i)) for i, line in enumerate(lines)]
+    assert all(s is not None for s in samples)
+    first = samples[0]
+    assert first is not None
+    assert first.values["temp_c"] == 59.0 and first.values["vram_used_mb"] == 1029.0
+    assert first.values["mem_util_pct"] == 2.0 and first.values["throttle_mask"] == 1.0
+
+
+def test_query_asks_for_vram_fields() -> None:
+    command = sensors.nvidia_query_command("nvidia-smi", sensors.REASON_FIELD_NEW)
+    query = next(part for part in command if part.startswith("--query-gpu="))
+    assert "utilization.memory" in query and "memory.used" in query
 
 
 def test_parse_second_gpu_with_na() -> None:
@@ -185,8 +204,26 @@ def test_cpu_line_with_thermal_zone() -> None:
     assert empty is not None and "zone_temp_c" not in empty.values
 
 
+def test_cpu_script_prefers_thermal_counter_without_admin() -> None:
+    """Аудит 2.1: класс root/wmi без прав администратора отвечает «отказано в доступе», а
+    счётчик ThermalZoneInformation той же ACPI-зоны читается — он основной, root/wmi запасной."""
+    script = sensors.CPU_SCRIPT
+    assert "Win32_PerfFormattedData_Counters_ThermalZoneInformation" in script
+    assert script.index("ThermalZoneInformation") < script.index("MSAcpi_ThermalZoneTemperature")
+    assert "HighPrecisionTemperature" in script  # десятые доли кельвина, если есть
+
+
+def test_cpu_load_is_processor_time_not_utility() -> None:
+    """Ручная проверка 2.1.0-rc1: «% Processor Utility» давал загрузку 134 % (он считает
+    относительно номинальной частоты). Загрузка — «% Processor Time», 0–100 %."""
+    script = sensors.CPU_SCRIPT
+    assert "PercentProcessorTime" in script and "PercentProcessorUtility" not in script
+
+
 def test_cpu_script_reads_thermal_zone_once_and_invariant() -> None:
     script = sensors.CPU_SCRIPT
     assert "MSAcpi_ThermalZoneTemperature" in script and "root/wmi" in script
-    assert "$zoneOk = $false" in script  # после первой неудачи класс больше не спрашивается
+    # После неудачи источник больше не спрашивается: счётчик → root/wmi → «не спрашивать».
+    assert "catch { $zoneMode = 'acpi' }" in script
+    assert "catch { $zoneMode = 'none' }" in script
     assert "InvariantCulture" in script  # «61.5», а не «61,5» на русской Windows

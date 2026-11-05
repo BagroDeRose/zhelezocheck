@@ -41,7 +41,19 @@ def test_chart_limit_from_thresholds() -> None:
         units=base.units,
         durations=base.durations,
     )
-    assert builder.build_charts(session, custom) != builder.build_charts(session, base)
+    from hwcheck.report.charts import build_series_charts, render_svg
+
+    def drawn(thresholds: Thresholds) -> list[str]:
+        charts = build_series_charts(session, thresholds)
+        return [render_svg(chart, f"c{i}") for i, chart in enumerate(charts)]
+
+    assert drawn(custom) != drawn(base)
+    temperature = next(
+        c
+        for c in build_series_charts(session, custom)
+        if "видеокарты" in c.title and "температура" in c.title
+    )
+    assert (50.0, "порог «сильно греется»") in temperature.limits
 
 
 def test_pawnio_path_follows_windir(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:

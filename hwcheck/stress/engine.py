@@ -18,9 +18,17 @@ import threading
 import time
 from collections.abc import Callable
 from dataclasses import dataclass
+from datetime import datetime
 
 from hwcheck.backends.base import HardwareBackend
-from hwcheck.models import SensorSample, TestResult, TestStatus
+from hwcheck.models import (
+    CheckState,
+    SensorSample,
+    SeriesMarker,
+    TestResult,
+    TestStatus,
+    check_state,
+)
 from hwcheck.thresholds import Thresholds, load_thresholds
 
 log = logging.getLogger(__name__)
@@ -125,6 +133,8 @@ class StressEngine:
         step_cancel = threading.Event()
         box: dict[str, object] = {}
         emergency: list[str] = []
+        emergency_at: list[float] = []  # секунда замера, на котором сработала аварийная остановка
+        started_at = datetime.now().isoformat(timespec="seconds")
 
         def progress(fraction: float) -> None:
             self._report_progress(start + share * min(max(fraction, 0.0), 1.0), step.name)
@@ -134,6 +144,7 @@ class StressEngine:
             if reason and not emergency:
                 log.warning("Аварийная остановка шага %s: %s", step.name, reason)
                 emergency.append(reason)
+                emergency_at.append(item.t)
                 step_cancel.set()
             if self.on_sample:
                 self.on_sample(step.name, item)
@@ -189,4 +200,27 @@ class StressEngine:
             result.status = TestStatus.SKIPPED
             result.notes.append("Тест остановлен пользователем.")
         result.name = result.name or step.name
+        result.started_at = result.started_at or started_at
+        result.markers = _markers(result, emergency, emergency_at, timed_out or "error" in box)
         return result
+
+
+def _markers(
+    result: TestResult, emergency: list[str], emergency_at: list[float], failed: bool
+) -> list[SeriesMarker]:
+    """Отметки на рядах: начало нагрузки и чем она закончилась (конец, прерывание, ошибка).
+
+    Время конца — по последнему замеру датчиков, чтобы отметка совпадала с графиком; если
+    замеров нет — по длительности теста.
+    """
+    end = result.samples[-1].t if result.samples else result.duration_s
+    markers = [SeriesMarker(elapsed_seconds=0.0, kind="start", text="Начало нагрузки")]
+    if emergency:
+        markers.append(SeriesMarker(emergency_at[0], "emergency", emergency[0]))
+    elif failed or result.status is TestStatus.ERROR:
+        markers.append(SeriesMarker(end, "error", "Тест завершился с ошибкой"))
+    elif check_state(result) is CheckState.INTERRUPTED:
+        markers.append(SeriesMarker(end, "interrupt", "Тест остановлен пользователем"))
+    else:
+        markers.append(SeriesMarker(end, "end", "Конец нагрузки"))
+    return markers

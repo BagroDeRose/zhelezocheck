@@ -1,0 +1,13 @@
+{
+  "Name": "Intel(R) Core(TM) i5-9400F CPU @ 2.90GHz",
+  "Manufacturer": "GenuineIntel",
+  "NumberOfCores": 6,
+  "NumberOfLogicalProcessors": 6,
+  "MaxClockSpeed": 2904,
+  "CurrentClockSpeed": 2904,
+  "SocketDesignation": "LGA1151",
+  "Caption": "Intel64 Family 6 Model 158 Stepping 10",
+  "L2CacheSize": 1536,
+  "L3CacheSize": 9216,
+  "VirtualizationFirmwareEnabled": false
+}

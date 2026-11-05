@@ -13,7 +13,7 @@ from datetime import datetime
 
 from hwcheck import __version__
 from hwcheck.backends.base import ALL_STRESS_TESTS, HardwareBackend
-from hwcheck.listing.analyze import listing_findings
+from hwcheck.listing.match import match_listing
 from hwcheck.models import CheckSession, Finding, HardwareSnapshot, ListingClaims
 from hwcheck.stress.engine import ProgressFn, SampleFn, StepDoneFn, StressEngine, StressStep
 from hwcheck.thresholds import Thresholds, load_thresholds
@@ -74,7 +74,8 @@ def run_check(
         session.snapshot,
         session.results,
         claimed_ram_gb=listing.ram_gb if listing else None,
-        extra_findings=(listing_findings(listing, session.snapshot) if listing else [])
+        # С 2.1 объявление — только сверка заявленного с найденным (без «тревожных слов»).
+        extra_findings=(match_listing(listing, session.snapshot) if listing else [])
         + list(manual_findings or []),
         expected_tests=[step.name for step in steps],
     )

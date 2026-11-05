@@ -1,0 +1,4605 @@
+{
+  "id": "00000000-1111-2222-3333-444444444444",
+  "started_at": "2026-10-05T12:00:00",
+  "finished_at": "2026-10-05T12:10:00",
+  "mode": "quick",
+  "demo_scenario": "mining_gpu",
+  "app_version": "2.0.1",
+  "snapshot": {
+    "collected_at": "2026-10-05T12:00:00",
+    "is_admin": true,
+    "system": {
+      "os_name": "Microsoft Windows 11 Pro",
+      "os_version": "10.0.22631",
+      "os_build": "22631",
+      "architecture": "64-bit",
+      "install_date": "2024-03-14T10:22:00",
+      "last_boot": "2026-10-05T09:01:00",
+      "manufacturer": "Micro-Star International Co., Ltd.",
+      "model": "MS-7C56",
+      "is_laptop": false,
+      "bios_vendor": "American Megatrends International, LLC.",
+      "bios_version": "A.H0",
+      "bios_date": "2023-08-21"
+    },
+    "cpu": {
+      "name": "AMD Ryzen 5 5600 6-Core Processor",
+      "manufacturer": "AuthenticAMD",
+      "cores": 6,
+      "threads": 12,
+      "max_clock_mhz": 3501,
+      "current_clock_mhz": 3501,
+      "socket": "AM4"
+    },
+    "memory": {
+      "total_mb": 32768,
+      "available_mb": 16384,
+      "modules": [
+        {
+          "capacity_mb": 16384,
+          "speed_mhz": 3200,
+          "configured_speed_mhz": 3200,
+          "manufacturer": "Kingston",
+          "part_number": "KF3200C16D4/16GX",
+          "slot": "DIMM_A2"
+        },
+        {
+          "capacity_mb": 16384,
+          "speed_mhz": 3200,
+          "configured_speed_mhz": 3200,
+          "manufacturer": "Kingston",
+          "part_number": "KF3200C16D4/16GX",
+          "slot": "DIMM_B2"
+        }
+      ],
+      "slots_total": 4
+    },
+    "board": {
+      "manufacturer": "Micro-Star International Co., Ltd.",
+      "product": "B550-A PRO (MS-7C56)",
+      "version": "2.0"
+    },
+    "gpus": [
+      {
+        "vendor": "NVIDIA",
+        "name": "NVIDIA GeForce RTX 3070",
+        "pci_vendor_id": "10de",
+        "pci_device_id": "2484",
+        "subsystem_id": "146b10de",
+        "vram_mb": 8192,
+        "vbios_version": "94.04.3A.00.7C",
+        "driver_version": "560.94",
+        "default_power_limit_w": 130.0,
+        "enforced_power_limit_w": 130.0,
+        "max_power_limit_w": 130.0,
+        "max_clocks": {
+          "graphics": 1500,
+          "sm": 1500,
+          "memory": 6001,
+          "video": 1400
+        },
+        "pcie_gen_current": 1,
+        "pcie_gen_max": 4,
+        "pcie_width_current": 1,
+        "pcie_width_max": 16,
+        "fan_speed_percent": 0.0,
+        "throttle_reasons": [
+          "gpu_idle"
+        ],
+        "pnp_device_id": "PCI\\VEN_10DE&DEV_2484&SUBSYS_146B10DE&REV_A1\\4&2F3C9A7&0&0008",
+        "source": "nvidia-smi"
+      }
+    ],
+    "disks": [
+      {
+        "model": "Samsung SSD 980 1TB",
+        "size_gb": 1000.2,
+        "media_type": "ssd",
+        "bus_type": "nvme",
+        "device": "/dev/sda",
+        "smart": {
+          "power_on_hours": 3120,
+          "power_cycles": 812,
+          "reallocated_sectors": null,
+          "pending_sectors": null,
+          "uncorrectable_sectors": null,
+          "wear_percent": 4.0,
+          "temperature_c": 38.0,
+          "crc_errors": null,
+          "media_errors": 0,
+          "health_passed": true,
+          "source": "smartctl",
+          "data_written_tb": null,
+          "unsafe_shutdowns": null,
+          "available_spare_pct": null,
+          "available_spare_threshold_pct": null
+        },
+        "note": ""
+      },
+      {
+        "model": "WDC WD20EZBX-00AYRA0",
+        "size_gb": 2000.4,
+        "media_type": "hdd",
+        "bus_type": "sata",
+        "device": "/dev/sdb",
+        "smart": {
+          "power_on_hours": 14210,
+          "power_cycles": 1630,
+          "reallocated_sectors": 0,
+          "pending_sectors": 0,
+          "uncorrectable_sectors": 0,
+          "wear_percent": null,
+          "temperature_c": 34.0,
+          "crc_errors": 0,
+          "media_errors": null,
+          "health_passed": true,
+          "source": "smartctl",
+          "data_written_tb": null,
+          "unsafe_shutdowns": null,
+          "available_spare_pct": null,
+          "available_spare_threshold_pct": null
+        },
+        "note": ""
+      }
+    ],
+    "battery": null,
+    "events": {
+      "days": 30,
+      "counts": {
+        "whea": 0,
+        "kernel_power_41": 0,
+        "bugcheck": 0,
+        "disk": 0
+      },
+      "last_seen": {},
+      "partial": false,
+      "note": ""
+    },
+    "errors": {}
+  },
+  "results": [
+    {
+      "name": "vram",
+      "status": "passed",
+      "component": "gpu0",
+      "duration_s": 180.0,
+      "metrics": {
+        "errors": 0,
+        "iterations": 120,
+        "speed_gbps": 190.1,
+        "tested_mb": 7168
+      },
+      "samples": [
+        {
+          "t": 0.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 40.0,
+            "fan_pct": 30.0,
+            "clock_mhz": 1777.0,
+            "power_w": 60.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 1.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 40.37,
+            "fan_pct": 30.25,
+            "clock_mhz": 1778.89,
+            "power_w": 61.34,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 2.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 40.74,
+            "fan_pct": 30.5,
+            "clock_mhz": 1780.79,
+            "power_w": 62.68,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 3.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 41.11,
+            "fan_pct": 30.75,
+            "clock_mhz": 1782.68,
+            "power_w": 64.02,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 4.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 41.47,
+            "fan_pct": 31.01,
+            "clock_mhz": 1784.58,
+            "power_w": 65.36,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 5.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 41.84,
+            "fan_pct": 31.26,
+            "clock_mhz": 1786.47,
+            "power_w": 66.7,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 6.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 42.21,
+            "fan_pct": 31.51,
+            "clock_mhz": 1788.36,
+            "power_w": 68.04,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 7.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 42.58,
+            "fan_pct": 31.76,
+            "clock_mhz": 1790.26,
+            "power_w": 69.39,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 8.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 42.95,
+            "fan_pct": 32.01,
+            "clock_mhz": 1792.15,
+            "power_w": 70.73,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 9.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 43.32,
+            "fan_pct": 32.26,
+            "clock_mhz": 1794.04,
+            "power_w": 72.07,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 10.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 43.69,
+            "fan_pct": 32.51,
+            "clock_mhz": 1795.94,
+            "power_w": 73.41,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 11.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 44.06,
+            "fan_pct": 32.77,
+            "clock_mhz": 1797.83,
+            "power_w": 74.75,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 12.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 44.42,
+            "fan_pct": 33.02,
+            "clock_mhz": 1799.73,
+            "power_w": 76.09,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 13.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 44.79,
+            "fan_pct": 33.27,
+            "clock_mhz": 1801.62,
+            "power_w": 77.43,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 14.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 45.16,
+            "fan_pct": 33.52,
+            "clock_mhz": 1803.51,
+            "power_w": 78.77,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 15.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 45.53,
+            "fan_pct": 33.77,
+            "clock_mhz": 1805.41,
+            "power_w": 80.11,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 16.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 45.9,
+            "fan_pct": 34.02,
+            "clock_mhz": 1807.3,
+            "power_w": 81.45,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 17.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 46.27,
+            "fan_pct": 34.27,
+            "clock_mhz": 1809.2,
+            "power_w": 82.79,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 18.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 46.64,
+            "fan_pct": 34.53,
+            "clock_mhz": 1811.09,
+            "power_w": 84.13,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 19.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 47.01,
+            "fan_pct": 34.78,
+            "clock_mhz": 1812.98,
+            "power_w": 85.47,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 20.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 47.37,
+            "fan_pct": 35.03,
+            "clock_mhz": 1814.88,
+            "power_w": 86.82,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 21.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 47.74,
+            "fan_pct": 35.28,
+            "clock_mhz": 1816.77,
+            "power_w": 88.16,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 22.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 48.11,
+            "fan_pct": 35.53,
+            "clock_mhz": 1818.66,
+            "power_w": 89.5,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 23.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 48.48,
+            "fan_pct": 35.78,
+            "clock_mhz": 1820.56,
+            "power_w": 90.84,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 24.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 48.85,
+            "fan_pct": 36.03,
+            "clock_mhz": 1822.45,
+            "power_w": 92.18,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 25.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 49.22,
+            "fan_pct": 36.28,
+            "clock_mhz": 1824.35,
+            "power_w": 93.52,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 26.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 49.59,
+            "fan_pct": 36.54,
+            "clock_mhz": 1826.24,
+            "power_w": 94.86,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 27.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 49.96,
+            "fan_pct": 36.79,
+            "clock_mhz": 1828.13,
+            "power_w": 96.2,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 28.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 50.32,
+            "fan_pct": 37.04,
+            "clock_mhz": 1830.03,
+            "power_w": 97.54,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 29.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 50.69,
+            "fan_pct": 37.29,
+            "clock_mhz": 1831.92,
+            "power_w": 98.88,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 30.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 51.06,
+            "fan_pct": 37.54,
+            "clock_mhz": 1833.82,
+            "power_w": 100.22,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 31.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 51.43,
+            "fan_pct": 37.79,
+            "clock_mhz": 1835.71,
+            "power_w": 101.56,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 32.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 51.8,
+            "fan_pct": 38.04,
+            "clock_mhz": 1837.6,
+            "power_w": 102.91,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 33.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 52.17,
+            "fan_pct": 38.3,
+            "clock_mhz": 1839.5,
+            "power_w": 104.25,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 34.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 52.54,
+            "fan_pct": 38.55,
+            "clock_mhz": 1841.39,
+            "power_w": 105.59,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 35.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 52.91,
+            "fan_pct": 38.8,
+            "clock_mhz": 1843.28,
+            "power_w": 106.93,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 36.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 53.27,
+            "fan_pct": 39.05,
+            "clock_mhz": 1845.18,
+            "power_w": 108.27,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 37.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 53.64,
+            "fan_pct": 39.3,
+            "clock_mhz": 1847.07,
+            "power_w": 109.61,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 38.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 54.01,
+            "fan_pct": 39.55,
+            "clock_mhz": 1848.97,
+            "power_w": 110.95,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 39.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 54.38,
+            "fan_pct": 39.8,
+            "clock_mhz": 1850.86,
+            "power_w": 112.29,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 40.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 54.75,
+            "fan_pct": 40.06,
+            "clock_mhz": 1852.75,
+            "power_w": 113.63,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 41.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 55.12,
+            "fan_pct": 40.31,
+            "clock_mhz": 1854.65,
+            "power_w": 114.97,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 42.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 55.49,
+            "fan_pct": 40.56,
+            "clock_mhz": 1856.54,
+            "power_w": 116.31,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 43.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 55.85,
+            "fan_pct": 40.81,
+            "clock_mhz": 1858.44,
+            "power_w": 117.65,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 44.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 56.22,
+            "fan_pct": 41.06,
+            "clock_mhz": 1860.33,
+            "power_w": 118.99,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 45.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 56.59,
+            "fan_pct": 41.31,
+            "clock_mhz": 1862.22,
+            "power_w": 120.34,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 46.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 56.96,
+            "fan_pct": 41.56,
+            "clock_mhz": 1864.12,
+            "power_w": 121.68,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 47.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 57.33,
+            "fan_pct": 41.82,
+            "clock_mhz": 1866.01,
+            "power_w": 123.02,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 48.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 57.7,
+            "fan_pct": 42.07,
+            "clock_mhz": 1867.91,
+            "power_w": 124.36,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 49.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 58.07,
+            "fan_pct": 42.32,
+            "clock_mhz": 1869.8,
+            "power_w": 125.7,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 50.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 58.44,
+            "fan_pct": 42.57,
+            "clock_mhz": 1871.69,
+            "power_w": 127.04,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 51.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 58.8,
+            "fan_pct": 42.82,
+            "clock_mhz": 1873.59,
+            "power_w": 128.38,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 52.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 59.17,
+            "fan_pct": 43.07,
+            "clock_mhz": 1875.48,
+            "power_w": 129.72,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 53.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 59.54,
+            "fan_pct": 43.32,
+            "clock_mhz": 1877.37,
+            "power_w": 131.06,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 54.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 59.91,
+            "fan_pct": 43.58,
+            "clock_mhz": 1879.27,
+            "power_w": 132.4,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 55.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 60.28,
+            "fan_pct": 43.83,
+            "clock_mhz": 1881.16,
+            "power_w": 133.74,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 56.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 60.65,
+            "fan_pct": 44.08,
+            "clock_mhz": 1883.06,
+            "power_w": 135.08,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 57.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 61.02,
+            "fan_pct": 44.33,
+            "clock_mhz": 1884.95,
+            "power_w": 136.42,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 58.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 61.39,
+            "fan_pct": 44.58,
+            "clock_mhz": 1886.84,
+            "power_w": 137.77,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 59.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 61.75,
+            "fan_pct": 44.83,
+            "clock_mhz": 1888.74,
+            "power_w": 139.11,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 60.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 62.02,
+            "fan_pct": 45.03,
+            "clock_mhz": 1889.92,
+            "power_w": 140.03,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 61.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 62.09,
+            "fan_pct": 45.11,
+            "clock_mhz": 1889.66,
+            "power_w": 140.11,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 62.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 62.16,
+            "fan_pct": 45.2,
+            "clock_mhz": 1889.41,
+            "power_w": 140.2,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 63.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 62.22,
+            "fan_pct": 45.28,
+            "clock_mhz": 1889.16,
+            "power_w": 140.28,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 64.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 62.29,
+            "fan_pct": 45.36,
+            "clock_mhz": 1888.91,
+            "power_w": 140.36,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 65.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 62.36,
+            "fan_pct": 45.45,
+            "clock_mhz": 1888.66,
+            "power_w": 140.45,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 66.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 62.42,
+            "fan_pct": 45.53,
+            "clock_mhz": 1888.41,
+            "power_w": 140.53,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 67.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 62.49,
+            "fan_pct": 45.61,
+            "clock_mhz": 1888.16,
+            "power_w": 140.61,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 68.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 62.56,
+            "fan_pct": 45.7,
+            "clock_mhz": 1887.91,
+            "power_w": 140.7,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 69.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 62.63,
+            "fan_pct": 45.78,
+            "clock_mhz": 1887.65,
+            "power_w": 140.78,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 70.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 62.69,
+            "fan_pct": 45.87,
+            "clock_mhz": 1887.4,
+            "power_w": 140.87,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 71.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 62.76,
+            "fan_pct": 45.95,
+            "clock_mhz": 1887.15,
+            "power_w": 140.95,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 72.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 62.83,
+            "fan_pct": 46.03,
+            "clock_mhz": 1886.9,
+            "power_w": 141.03,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 73.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 62.89,
+            "fan_pct": 46.12,
+            "clock_mhz": 1886.65,
+            "power_w": 141.12,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 74.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 62.96,
+            "fan_pct": 46.2,
+            "clock_mhz": 1886.4,
+            "power_w": 141.2,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 75.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 63.03,
+            "fan_pct": 46.28,
+            "clock_mhz": 1886.15,
+            "power_w": 141.28,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 76.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 63.09,
+            "fan_pct": 46.37,
+            "clock_mhz": 1885.89,
+            "power_w": 141.37,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 77.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 63.16,
+            "fan_pct": 46.45,
+            "clock_mhz": 1885.64,
+            "power_w": 141.45,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 78.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 63.23,
+            "fan_pct": 46.54,
+            "clock_mhz": 1885.39,
+            "power_w": 141.54,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 79.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 63.3,
+            "fan_pct": 46.62,
+            "clock_mhz": 1885.14,
+            "power_w": 141.62,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 80.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 63.36,
+            "fan_pct": 46.7,
+            "clock_mhz": 1884.89,
+            "power_w": 141.7,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 81.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 63.43,
+            "fan_pct": 46.79,
+            "clock_mhz": 1884.64,
+            "power_w": 141.79,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 82.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 63.5,
+            "fan_pct": 46.87,
+            "clock_mhz": 1884.39,
+            "power_w": 141.87,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 83.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 63.56,
+            "fan_pct": 46.96,
+            "clock_mhz": 1884.13,
+            "power_w": 141.96,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 84.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 63.63,
+            "fan_pct": 47.04,
+            "clock_mhz": 1883.88,
+            "power_w": 142.04,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 85.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 63.7,
+            "fan_pct": 47.12,
+            "clock_mhz": 1883.63,
+            "power_w": 142.12,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 86.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 63.77,
+            "fan_pct": 47.21,
+            "clock_mhz": 1883.38,
+            "power_w": 142.21,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 87.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 63.83,
+            "fan_pct": 47.29,
+            "clock_mhz": 1883.13,
+            "power_w": 142.29,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 88.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 63.9,
+            "fan_pct": 47.37,
+            "clock_mhz": 1882.88,
+            "power_w": 142.37,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 89.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 63.97,
+            "fan_pct": 47.46,
+            "clock_mhz": 1882.63,
+            "power_w": 142.46,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 90.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 64.03,
+            "fan_pct": 47.54,
+            "clock_mhz": 1882.37,
+            "power_w": 142.54,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 91.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 64.1,
+            "fan_pct": 47.63,
+            "clock_mhz": 1882.12,
+            "power_w": 142.63,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 92.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 64.17,
+            "fan_pct": 47.71,
+            "clock_mhz": 1881.87,
+            "power_w": 142.71,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 93.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 64.23,
+            "fan_pct": 47.79,
+            "clock_mhz": 1881.62,
+            "power_w": 142.79,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 94.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 64.3,
+            "fan_pct": 47.88,
+            "clock_mhz": 1881.37,
+            "power_w": 142.88,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 95.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 64.37,
+            "fan_pct": 47.96,
+            "clock_mhz": 1881.12,
+            "power_w": 142.96,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 96.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 64.44,
+            "fan_pct": 48.04,
+            "clock_mhz": 1880.87,
+            "power_w": 143.04,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 97.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 64.5,
+            "fan_pct": 48.13,
+            "clock_mhz": 1880.61,
+            "power_w": 143.13,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 98.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 64.57,
+            "fan_pct": 48.21,
+            "clock_mhz": 1880.36,
+            "power_w": 143.21,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 99.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 64.64,
+            "fan_pct": 48.3,
+            "clock_mhz": 1880.11,
+            "power_w": 143.3,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 100.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 64.7,
+            "fan_pct": 48.38,
+            "clock_mhz": 1879.86,
+            "power_w": 143.38,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 101.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 64.77,
+            "fan_pct": 48.46,
+            "clock_mhz": 1879.61,
+            "power_w": 143.46,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 102.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 64.84,
+            "fan_pct": 48.55,
+            "clock_mhz": 1879.36,
+            "power_w": 143.55,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 103.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 64.91,
+            "fan_pct": 48.63,
+            "clock_mhz": 1879.11,
+            "power_w": 143.63,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 104.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 64.97,
+            "fan_pct": 48.72,
+            "clock_mhz": 1878.85,
+            "power_w": 143.72,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 105.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.04,
+            "fan_pct": 48.8,
+            "clock_mhz": 1878.6,
+            "power_w": 143.8,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 106.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.11,
+            "fan_pct": 48.88,
+            "clock_mhz": 1878.35,
+            "power_w": 143.88,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 107.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.17,
+            "fan_pct": 48.97,
+            "clock_mhz": 1878.1,
+            "power_w": 143.97,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 108.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.24,
+            "fan_pct": 49.05,
+            "clock_mhz": 1877.85,
+            "power_w": 144.05,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 109.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.31,
+            "fan_pct": 49.13,
+            "clock_mhz": 1877.6,
+            "power_w": 144.13,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 110.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.37,
+            "fan_pct": 49.22,
+            "clock_mhz": 1877.35,
+            "power_w": 144.22,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 111.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.44,
+            "fan_pct": 49.3,
+            "clock_mhz": 1877.09,
+            "power_w": 144.3,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 112.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.51,
+            "fan_pct": 49.39,
+            "clock_mhz": 1876.84,
+            "power_w": 144.39,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 113.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.58,
+            "fan_pct": 49.47,
+            "clock_mhz": 1876.59,
+            "power_w": 144.47,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 114.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.64,
+            "fan_pct": 49.55,
+            "clock_mhz": 1876.34,
+            "power_w": 144.55,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 115.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.71,
+            "fan_pct": 49.64,
+            "clock_mhz": 1876.09,
+            "power_w": 144.64,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 116.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.78,
+            "fan_pct": 49.72,
+            "clock_mhz": 1875.84,
+            "power_w": 144.72,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 117.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.84,
+            "fan_pct": 49.8,
+            "clock_mhz": 1875.59,
+            "power_w": 144.8,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 118.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.91,
+            "fan_pct": 49.89,
+            "clock_mhz": 1875.34,
+            "power_w": 144.89,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 119.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.98,
+            "fan_pct": 49.97,
+            "clock_mhz": 1875.08,
+            "power_w": 144.97,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 120.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.01,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 121.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.03,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 122.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.04,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 123.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.06,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 124.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.08,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 125.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.09,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 126.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.11,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 127.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.13,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 128.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.15,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 129.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.16,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 130.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.18,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 131.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.2,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 132.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.21,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 133.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.23,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 134.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.25,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 135.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.26,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 136.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.28,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 137.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.3,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 138.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.31,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 139.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.33,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 140.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.35,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 141.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.36,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 142.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.38,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 143.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.4,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 144.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.41,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 145.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.43,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 146.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.45,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 147.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.46,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 148.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.48,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 149.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.5,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 150.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.51,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 151.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.53,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 152.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.55,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 153.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.56,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 154.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.58,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 155.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.6,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 156.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.61,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 157.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.63,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 158.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.65,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 159.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.66,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 160.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.68,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 161.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.7,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 162.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.72,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 163.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.73,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 164.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.75,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 165.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.77,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 166.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.78,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 167.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.8,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 168.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.82,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 169.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.83,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 170.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.85,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 171.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.87,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 172.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.88,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 173.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.9,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 174.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.92,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 175.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.93,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 176.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.95,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 177.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.97,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 178.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.98,
+            "fan_pct": 50.0,
+            "clock_mhz": 1875.0,
+            "power_w": 145.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 179.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 67,
+            "fan_pct": 50,
+            "clock_mhz": 1875,
+            "power_w": 145,
+            "util_pct": 99
+          }
+        }
+      ],
+      "notes": []
+    },
+    {
+      "name": "gpu_load",
+      "status": "passed",
+      "component": "gpu0",
+      "duration_s": 120.0,
+      "metrics": {
+        "max_temp_c": 66.0,
+        "avg_temp_c": 63.0,
+        "max_fan_pct": 100.0,
+        "clock_drop_pct": 4.0,
+        "max_power_w": 129.0,
+        "throttle_reasons": [
+          "sw_power_cap"
+        ]
+      },
+      "samples": [
+        {
+          "t": 0.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 45.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1500.0,
+            "power_w": 90.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 1.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 45.5,
+            "fan_pct": 100.0,
+            "clock_mhz": 1499.33,
+            "power_w": 91.28,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 2.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 46.01,
+            "fan_pct": 100.0,
+            "clock_mhz": 1498.66,
+            "power_w": 92.55,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 3.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 46.51,
+            "fan_pct": 100.0,
+            "clock_mhz": 1497.98,
+            "power_w": 93.83,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 4.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 47.02,
+            "fan_pct": 100.0,
+            "clock_mhz": 1497.31,
+            "power_w": 95.11,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 5.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 47.52,
+            "fan_pct": 100.0,
+            "clock_mhz": 1496.64,
+            "power_w": 96.39,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 6.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 48.03,
+            "fan_pct": 100.0,
+            "clock_mhz": 1495.97,
+            "power_w": 97.66,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 7.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 48.53,
+            "fan_pct": 100.0,
+            "clock_mhz": 1495.29,
+            "power_w": 98.94,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 8.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 49.03,
+            "fan_pct": 100.0,
+            "clock_mhz": 1494.62,
+            "power_w": 100.22,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 9.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 49.54,
+            "fan_pct": 100.0,
+            "clock_mhz": 1493.95,
+            "power_w": 101.5,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 10.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 50.04,
+            "fan_pct": 100.0,
+            "clock_mhz": 1493.28,
+            "power_w": 102.77,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 11.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 50.55,
+            "fan_pct": 100.0,
+            "clock_mhz": 1492.61,
+            "power_w": 104.05,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 12.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 51.05,
+            "fan_pct": 100.0,
+            "clock_mhz": 1491.93,
+            "power_w": 105.33,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 13.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 51.55,
+            "fan_pct": 100.0,
+            "clock_mhz": 1491.26,
+            "power_w": 106.61,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 14.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 52.06,
+            "fan_pct": 100.0,
+            "clock_mhz": 1490.59,
+            "power_w": 107.88,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 15.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 52.56,
+            "fan_pct": 100.0,
+            "clock_mhz": 1489.92,
+            "power_w": 109.16,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 16.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 53.07,
+            "fan_pct": 100.0,
+            "clock_mhz": 1489.24,
+            "power_w": 110.44,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 17.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 53.57,
+            "fan_pct": 100.0,
+            "clock_mhz": 1488.57,
+            "power_w": 111.71,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 18.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 54.08,
+            "fan_pct": 100.0,
+            "clock_mhz": 1487.9,
+            "power_w": 112.99,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 19.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 54.58,
+            "fan_pct": 100.0,
+            "clock_mhz": 1487.23,
+            "power_w": 114.27,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 20.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 55.08,
+            "fan_pct": 100.0,
+            "clock_mhz": 1486.55,
+            "power_w": 115.55,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 21.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 55.59,
+            "fan_pct": 100.0,
+            "clock_mhz": 1485.88,
+            "power_w": 116.82,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 22.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 56.09,
+            "fan_pct": 100.0,
+            "clock_mhz": 1485.21,
+            "power_w": 118.1,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 23.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 56.6,
+            "fan_pct": 100.0,
+            "clock_mhz": 1484.54,
+            "power_w": 119.38,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 24.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 57.1,
+            "fan_pct": 100.0,
+            "clock_mhz": 1483.87,
+            "power_w": 120.66,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 25.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 57.61,
+            "fan_pct": 100.0,
+            "clock_mhz": 1483.19,
+            "power_w": 121.93,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 26.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 58.11,
+            "fan_pct": 100.0,
+            "clock_mhz": 1482.52,
+            "power_w": 123.21,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 27.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 58.61,
+            "fan_pct": 100.0,
+            "clock_mhz": 1481.85,
+            "power_w": 124.49,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 28.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 59.12,
+            "fan_pct": 100.0,
+            "clock_mhz": 1481.18,
+            "power_w": 125.76,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 29.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 59.62,
+            "fan_pct": 100.0,
+            "clock_mhz": 1480.5,
+            "power_w": 127.04,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 30.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 60.04,
+            "fan_pct": 100.0,
+            "clock_mhz": 1479.75,
+            "power_w": 128.01,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 31.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 60.21,
+            "fan_pct": 100.0,
+            "clock_mhz": 1478.74,
+            "power_w": 128.04,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 32.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 60.38,
+            "fan_pct": 100.0,
+            "clock_mhz": 1477.73,
+            "power_w": 128.08,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 33.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 60.55,
+            "fan_pct": 100.0,
+            "clock_mhz": 1476.72,
+            "power_w": 128.11,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 34.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 60.71,
+            "fan_pct": 100.0,
+            "clock_mhz": 1475.71,
+            "power_w": 128.14,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 35.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 60.88,
+            "fan_pct": 100.0,
+            "clock_mhz": 1474.71,
+            "power_w": 128.18,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 36.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 61.05,
+            "fan_pct": 100.0,
+            "clock_mhz": 1473.7,
+            "power_w": 128.21,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 37.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 61.22,
+            "fan_pct": 100.0,
+            "clock_mhz": 1472.69,
+            "power_w": 128.24,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 38.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 61.39,
+            "fan_pct": 100.0,
+            "clock_mhz": 1471.68,
+            "power_w": 128.28,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 39.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 61.55,
+            "fan_pct": 100.0,
+            "clock_mhz": 1470.67,
+            "power_w": 128.31,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 40.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 61.72,
+            "fan_pct": 100.0,
+            "clock_mhz": 1469.66,
+            "power_w": 128.34,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 41.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 61.89,
+            "fan_pct": 100.0,
+            "clock_mhz": 1468.66,
+            "power_w": 128.38,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 42.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 62.06,
+            "fan_pct": 100.0,
+            "clock_mhz": 1467.65,
+            "power_w": 128.41,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 43.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 62.23,
+            "fan_pct": 100.0,
+            "clock_mhz": 1466.64,
+            "power_w": 128.45,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 44.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 62.39,
+            "fan_pct": 100.0,
+            "clock_mhz": 1465.63,
+            "power_w": 128.48,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 45.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 62.56,
+            "fan_pct": 100.0,
+            "clock_mhz": 1464.62,
+            "power_w": 128.51,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 46.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 62.73,
+            "fan_pct": 100.0,
+            "clock_mhz": 1463.61,
+            "power_w": 128.55,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 47.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 62.9,
+            "fan_pct": 100.0,
+            "clock_mhz": 1462.61,
+            "power_w": 128.58,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 48.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 63.07,
+            "fan_pct": 100.0,
+            "clock_mhz": 1461.6,
+            "power_w": 128.61,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 49.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 63.24,
+            "fan_pct": 100.0,
+            "clock_mhz": 1460.59,
+            "power_w": 128.65,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 50.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 63.4,
+            "fan_pct": 100.0,
+            "clock_mhz": 1459.58,
+            "power_w": 128.68,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 51.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 63.57,
+            "fan_pct": 100.0,
+            "clock_mhz": 1458.57,
+            "power_w": 128.71,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 52.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 63.74,
+            "fan_pct": 100.0,
+            "clock_mhz": 1457.56,
+            "power_w": 128.75,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 53.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 63.91,
+            "fan_pct": 100.0,
+            "clock_mhz": 1456.55,
+            "power_w": 128.78,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 54.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 64.08,
+            "fan_pct": 100.0,
+            "clock_mhz": 1455.55,
+            "power_w": 128.82,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 55.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 64.24,
+            "fan_pct": 100.0,
+            "clock_mhz": 1454.54,
+            "power_w": 128.85,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 56.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 64.41,
+            "fan_pct": 100.0,
+            "clock_mhz": 1453.53,
+            "power_w": 128.88,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 57.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 64.58,
+            "fan_pct": 100.0,
+            "clock_mhz": 1452.52,
+            "power_w": 128.92,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 58.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 64.75,
+            "fan_pct": 100.0,
+            "clock_mhz": 1451.51,
+            "power_w": 128.95,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 59.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 64.92,
+            "fan_pct": 100.0,
+            "clock_mhz": 1450.5,
+            "power_w": 128.98,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 60.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.02,
+            "fan_pct": 100.0,
+            "clock_mhz": 1449.83,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 61.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.05,
+            "fan_pct": 100.0,
+            "clock_mhz": 1449.5,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 62.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.08,
+            "fan_pct": 100.0,
+            "clock_mhz": 1449.16,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 63.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.12,
+            "fan_pct": 100.0,
+            "clock_mhz": 1448.82,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 64.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.15,
+            "fan_pct": 100.0,
+            "clock_mhz": 1448.49,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 65.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.18,
+            "fan_pct": 100.0,
+            "clock_mhz": 1448.15,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 66.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.22,
+            "fan_pct": 100.0,
+            "clock_mhz": 1447.82,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 67.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.25,
+            "fan_pct": 100.0,
+            "clock_mhz": 1447.48,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 68.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.29,
+            "fan_pct": 100.0,
+            "clock_mhz": 1447.14,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 69.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.32,
+            "fan_pct": 100.0,
+            "clock_mhz": 1446.81,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 70.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.35,
+            "fan_pct": 100.0,
+            "clock_mhz": 1446.47,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 71.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.39,
+            "fan_pct": 100.0,
+            "clock_mhz": 1446.13,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 72.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.42,
+            "fan_pct": 100.0,
+            "clock_mhz": 1445.8,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 73.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.45,
+            "fan_pct": 100.0,
+            "clock_mhz": 1445.46,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 74.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.49,
+            "fan_pct": 100.0,
+            "clock_mhz": 1445.13,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 75.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.52,
+            "fan_pct": 100.0,
+            "clock_mhz": 1444.79,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 76.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.55,
+            "fan_pct": 100.0,
+            "clock_mhz": 1444.45,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 77.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.59,
+            "fan_pct": 100.0,
+            "clock_mhz": 1444.12,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 78.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.62,
+            "fan_pct": 100.0,
+            "clock_mhz": 1443.78,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 79.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.66,
+            "fan_pct": 100.0,
+            "clock_mhz": 1443.45,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 80.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.69,
+            "fan_pct": 100.0,
+            "clock_mhz": 1443.11,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 81.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.72,
+            "fan_pct": 100.0,
+            "clock_mhz": 1442.77,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 82.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.76,
+            "fan_pct": 100.0,
+            "clock_mhz": 1442.44,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 83.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.79,
+            "fan_pct": 100.0,
+            "clock_mhz": 1442.1,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 84.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.82,
+            "fan_pct": 100.0,
+            "clock_mhz": 1441.76,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 85.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.86,
+            "fan_pct": 100.0,
+            "clock_mhz": 1441.43,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 86.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.89,
+            "fan_pct": 100.0,
+            "clock_mhz": 1441.09,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 87.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.92,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.76,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 88.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.96,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.42,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 89.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 65.99,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.08,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 90.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.0,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 91.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.0,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 92.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.0,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 93.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.0,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 94.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.0,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 95.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.0,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 96.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.0,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 97.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.0,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 98.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.0,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 99.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.0,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 100.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.0,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 101.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.0,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 102.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.0,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 103.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.0,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 104.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.0,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 105.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.0,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 106.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.0,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 107.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.0,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 108.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.0,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 109.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.0,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 110.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.0,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 111.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.0,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 112.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.0,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 113.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.0,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 114.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.0,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 115.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.0,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 116.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.0,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 117.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.0,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 118.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66.0,
+            "fan_pct": 100.0,
+            "clock_mhz": 1440.0,
+            "power_w": 129.0,
+            "util_pct": 99.0
+          }
+        },
+        {
+          "t": 119.0,
+          "component": "gpu0",
+          "values": {
+            "temp_c": 66,
+            "fan_pct": 100,
+            "clock_mhz": 1440,
+            "power_w": 129,
+            "util_pct": 99
+          }
+        }
+      ],
+      "notes": []
+    },
+    {
+      "name": "cpu_load",
+      "status": "passed",
+      "component": "cpu",
+      "duration_s": 120.0,
+      "metrics": {
+        "checksum_ok": true,
+        "clock_drop_pct": 2.5,
+        "start_clock_mhz": 4400,
+        "avg_clock_mhz": 4290,
+        "workers": 12
+      },
+      "samples": [
+        {
+          "t": 0.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4400.0,
+            "perf_pct": 125.0
+          }
+        },
+        {
+          "t": 1.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4397.73,
+            "perf_pct": 124.95
+          }
+        },
+        {
+          "t": 2.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4395.46,
+            "perf_pct": 124.9
+          }
+        },
+        {
+          "t": 3.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4393.19,
+            "perf_pct": 124.85
+          }
+        },
+        {
+          "t": 4.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4390.92,
+            "perf_pct": 124.8
+          }
+        },
+        {
+          "t": 5.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4388.66,
+            "perf_pct": 124.75
+          }
+        },
+        {
+          "t": 6.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4386.39,
+            "perf_pct": 124.7
+          }
+        },
+        {
+          "t": 7.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4384.12,
+            "perf_pct": 124.65
+          }
+        },
+        {
+          "t": 8.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4381.85,
+            "perf_pct": 124.6
+          }
+        },
+        {
+          "t": 9.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4379.58,
+            "perf_pct": 124.55
+          }
+        },
+        {
+          "t": 10.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4377.31,
+            "perf_pct": 124.5
+          }
+        },
+        {
+          "t": 11.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4375.04,
+            "perf_pct": 124.45
+          }
+        },
+        {
+          "t": 12.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4372.77,
+            "perf_pct": 124.39
+          }
+        },
+        {
+          "t": 13.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4370.5,
+            "perf_pct": 124.34
+          }
+        },
+        {
+          "t": 14.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4368.24,
+            "perf_pct": 124.29
+          }
+        },
+        {
+          "t": 15.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4365.97,
+            "perf_pct": 124.24
+          }
+        },
+        {
+          "t": 16.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4363.7,
+            "perf_pct": 124.19
+          }
+        },
+        {
+          "t": 17.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4361.43,
+            "perf_pct": 124.14
+          }
+        },
+        {
+          "t": 18.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4359.16,
+            "perf_pct": 124.09
+          }
+        },
+        {
+          "t": 19.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4356.89,
+            "perf_pct": 124.04
+          }
+        },
+        {
+          "t": 20.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4354.62,
+            "perf_pct": 123.99
+          }
+        },
+        {
+          "t": 21.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4352.35,
+            "perf_pct": 123.94
+          }
+        },
+        {
+          "t": 22.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4350.08,
+            "perf_pct": 123.89
+          }
+        },
+        {
+          "t": 23.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4347.82,
+            "perf_pct": 123.84
+          }
+        },
+        {
+          "t": 24.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4345.55,
+            "perf_pct": 123.79
+          }
+        },
+        {
+          "t": 25.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4343.28,
+            "perf_pct": 123.74
+          }
+        },
+        {
+          "t": 26.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4341.01,
+            "perf_pct": 123.69
+          }
+        },
+        {
+          "t": 27.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4338.74,
+            "perf_pct": 123.64
+          }
+        },
+        {
+          "t": 28.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4336.47,
+            "perf_pct": 123.59
+          }
+        },
+        {
+          "t": 29.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4334.2,
+            "perf_pct": 123.54
+          }
+        },
+        {
+          "t": 30.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4331.93,
+            "perf_pct": 123.49
+          }
+        },
+        {
+          "t": 31.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4329.66,
+            "perf_pct": 123.44
+          }
+        },
+        {
+          "t": 32.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4327.39,
+            "perf_pct": 123.39
+          }
+        },
+        {
+          "t": 33.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4325.13,
+            "perf_pct": 123.34
+          }
+        },
+        {
+          "t": 34.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4322.86,
+            "perf_pct": 123.29
+          }
+        },
+        {
+          "t": 35.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4320.59,
+            "perf_pct": 123.24
+          }
+        },
+        {
+          "t": 36.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4318.32,
+            "perf_pct": 123.18
+          }
+        },
+        {
+          "t": 37.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4316.05,
+            "perf_pct": 123.13
+          }
+        },
+        {
+          "t": 38.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4313.78,
+            "perf_pct": 123.08
+          }
+        },
+        {
+          "t": 39.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4311.51,
+            "perf_pct": 123.03
+          }
+        },
+        {
+          "t": 40.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4309.83,
+            "perf_pct": 122.99
+          }
+        },
+        {
+          "t": 41.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4309.33,
+            "perf_pct": 122.97
+          }
+        },
+        {
+          "t": 42.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4308.82,
+            "perf_pct": 122.94
+          }
+        },
+        {
+          "t": 43.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4308.32,
+            "perf_pct": 122.92
+          }
+        },
+        {
+          "t": 44.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4307.82,
+            "perf_pct": 122.89
+          }
+        },
+        {
+          "t": 45.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4307.31,
+            "perf_pct": 122.87
+          }
+        },
+        {
+          "t": 46.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4306.81,
+            "perf_pct": 122.84
+          }
+        },
+        {
+          "t": 47.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4306.3,
+            "perf_pct": 122.82
+          }
+        },
+        {
+          "t": 48.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4305.8,
+            "perf_pct": 122.79
+          }
+        },
+        {
+          "t": 49.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4305.29,
+            "perf_pct": 122.76
+          }
+        },
+        {
+          "t": 50.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4304.79,
+            "perf_pct": 122.74
+          }
+        },
+        {
+          "t": 51.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4304.29,
+            "perf_pct": 122.71
+          }
+        },
+        {
+          "t": 52.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4303.78,
+            "perf_pct": 122.69
+          }
+        },
+        {
+          "t": 53.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4303.28,
+            "perf_pct": 122.66
+          }
+        },
+        {
+          "t": 54.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4302.77,
+            "perf_pct": 122.64
+          }
+        },
+        {
+          "t": 55.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4302.27,
+            "perf_pct": 122.61
+          }
+        },
+        {
+          "t": 56.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4301.76,
+            "perf_pct": 122.59
+          }
+        },
+        {
+          "t": 57.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4301.26,
+            "perf_pct": 122.56
+          }
+        },
+        {
+          "t": 58.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4300.76,
+            "perf_pct": 122.54
+          }
+        },
+        {
+          "t": 59.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4300.25,
+            "perf_pct": 122.51
+          }
+        },
+        {
+          "t": 60.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4299.75,
+            "perf_pct": 122.49
+          }
+        },
+        {
+          "t": 61.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4299.24,
+            "perf_pct": 122.46
+          }
+        },
+        {
+          "t": 62.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4298.74,
+            "perf_pct": 122.44
+          }
+        },
+        {
+          "t": 63.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4298.24,
+            "perf_pct": 122.41
+          }
+        },
+        {
+          "t": 64.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4297.73,
+            "perf_pct": 122.39
+          }
+        },
+        {
+          "t": 65.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4297.23,
+            "perf_pct": 122.36
+          }
+        },
+        {
+          "t": 66.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4296.72,
+            "perf_pct": 122.34
+          }
+        },
+        {
+          "t": 67.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4296.22,
+            "perf_pct": 122.31
+          }
+        },
+        {
+          "t": 68.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4295.71,
+            "perf_pct": 122.29
+          }
+        },
+        {
+          "t": 69.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4295.21,
+            "perf_pct": 122.26
+          }
+        },
+        {
+          "t": 70.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4294.71,
+            "perf_pct": 122.24
+          }
+        },
+        {
+          "t": 71.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4294.2,
+            "perf_pct": 122.21
+          }
+        },
+        {
+          "t": 72.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4293.7,
+            "perf_pct": 122.18
+          }
+        },
+        {
+          "t": 73.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4293.19,
+            "perf_pct": 122.16
+          }
+        },
+        {
+          "t": 74.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4292.69,
+            "perf_pct": 122.13
+          }
+        },
+        {
+          "t": 75.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4292.18,
+            "perf_pct": 122.11
+          }
+        },
+        {
+          "t": 76.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4291.68,
+            "perf_pct": 122.08
+          }
+        },
+        {
+          "t": 77.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4291.18,
+            "perf_pct": 122.06
+          }
+        },
+        {
+          "t": 78.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.67,
+            "perf_pct": 122.03
+          }
+        },
+        {
+          "t": 79.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.17,
+            "perf_pct": 122.01
+          }
+        },
+        {
+          "t": 80.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 81.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 82.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 83.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 84.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 85.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 86.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 87.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 88.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 89.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 90.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 91.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 92.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 93.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 94.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 95.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 96.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 97.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 98.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 99.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 100.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 101.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 102.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 103.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 104.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 105.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 106.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 107.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 108.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 109.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 110.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 111.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 112.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 113.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 114.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 115.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 116.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 117.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 118.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290.0,
+            "perf_pct": 122.0
+          }
+        },
+        {
+          "t": 119.0,
+          "component": "cpu",
+          "values": {
+            "clock_mhz": 4290,
+            "perf_pct": 122
+          }
+        }
+      ],
+      "notes": []
+    },
+    {
+      "name": "ram_quick",
+      "status": "passed",
+      "component": "memory",
+      "duration_s": 90.0,
+      "metrics": {
+        "tested_mb": 11200,
+        "errors": 0,
+        "passes": 2
+      },
+      "samples": [],
+      "notes": [
+        "Быстрый тест, не заменяет MemTest86."
+      ]
+    },
+    {
+      "name": "disk_read",
+      "status": "passed",
+      "component": "disk",
+      "duration_s": 60.0,
+      "metrics": {
+        "read_mb": 2048,
+        "speed_mbps": 1850.0,
+        "read_errors": 0,
+        "files": 412
+      },
+      "samples": [],
+      "notes": []
+    }
+  ],
+  "verdict": {
+    "decision": "negotiate",
+    "findings": [
+      {
+        "id": "gpu.mining_bios",
+        "severity": "warning",
+        "component": "gpu:NVIDIA GeForce RTX 3070",
+        "title": "Похоже, у видеокарты майнинговая прошивка",
+        "explanation": "Лимит мощности по умолчанию 130 Вт, а у этой модели должен быть около 220 Вт. Майнеры часто урезают лимиты, чтобы карта меньше потребляла. Такая карта работала круглосуточно, а в играх будет слабее, чем должна.",
+        "advice": "Спросите про майнинг прямо. Прошивку можно вернуть на заводскую, но износ от круглосуточной работы останется.",
+        "evidence": "",
+        "weight": 2.0
+      },
+      {
+        "id": "gpu.fan_worn",
+        "severity": "warning",
+        "component": "gpu:NVIDIA GeForce RTX 3070",
+        "title": "Вентиляторы видеокарты работают на пределе",
+        "explanation": "Вентиляторы крутились на 100% при умеренной температуре 66 °C. Так бывает при изношенных подшипниках, забитом радиаторе или прошивке после майнинга, где обороты зафиксированы на максимуме.",
+        "advice": "Послушайте вентиляторы на слух: гул или треск — признак износа. Замена вентиляторов стоит 1–3 тыс. ₽.",
+        "evidence": "fan=100, temp=66",
+        "weight": 1.5
+      },
+      {
+        "id": "gpu.pcie_reduced",
+        "severity": "warning",
+        "component": "gpu:NVIDIA GeForce RTX 3070",
+        "title": "Видеокарта подключена по урезанной шине",
+        "explanation": "Сейчас задействовано линий шины PCIe (канал связи с материнской платой): 1 из 16 возможных. Возможно повреждение разъёма или контактов, либо карта стоит не в том слоте.",
+        "advice": "Проверьте, в какой слот вставлена карта, и осмотрите её контакты: на них не должно быть потемнений и сколов.",
+        "evidence": "current=1, maximum=16",
+        "weight": 0.5
+      },
+      {
+        "id": "gpu.mining_popular",
+        "severity": "info",
+        "component": "gpu:NVIDIA GeForce RTX 3070",
+        "title": "Эту модель часто использовали для майнинга",
+        "explanation": "GeForce RTX 3070 была популярна у майнеров. Это не значит, что именно эта карта майнила, но стоит уточнить у продавца.",
+        "advice": "Спросите, где и как использовалась карта, есть ли чек и коробка.",
+        "evidence": "model=GeForce RTX 3070",
+        "weight": 0.0
+      },
+      {
+        "id": "cpu.temp_unmeasured",
+        "severity": "info",
+        "component": "cpu",
+        "title": "Температура процессора проверена по частоте",
+        "explanation": "Температура процессора на этом компьютере напрямую не измеряется. Перегрев проверен по главному признаку — снижению частоты под нагрузкой. Если бы охлаждение не справлялось, частота бы упала.",
+        "advice": "",
+        "evidence": "",
+        "weight": 0.0
+      },
+      {
+        "id": "cpu.ok",
+        "severity": "ok",
+        "component": "cpu",
+        "title": "Процессор прошёл проверку",
+        "explanation": "Под нагрузкой на всех ядрах ошибок вычислений нет, частота держится.",
+        "advice": "",
+        "evidence": "",
+        "weight": 0.0
+      },
+      {
+        "id": "ram.ok",
+        "severity": "ok",
+        "component": "memory",
+        "title": "Оперативная память прошла быстрый тест",
+        "explanation": "Проверено 10.9 ГБ — ошибок нет. Это быстрый тест, он не заменяет многочасовой MemTest86.",
+        "advice": "",
+        "evidence": "tested_gb=10.9375",
+        "weight": 0.0
+      },
+      {
+        "id": "disk.ok",
+        "severity": "ok",
+        "component": "disk:Samsung SSD 980 1TB",
+        "title": "Диск «Samsung SSD 980 1TB» в порядке",
+        "explanation": "Повреждённых участков нет, износ 4%.",
+        "advice": "",
+        "evidence": "model=Samsung SSD 980 1TB, wear_text=, износ 4%",
+        "weight": 0.0
+      },
+      {
+        "id": "disk.ok",
+        "severity": "ok",
+        "component": "disk:WDC WD20EZBX-00AYRA0",
+        "title": "Диск «WDC WD20EZBX-00AYRA0» в порядке",
+        "explanation": "Повреждённых участков нет.",
+        "advice": "",
+        "evidence": "model=WDC WD20EZBX-00AYRA0, wear_text=",
+        "weight": 0.0
+      }
+    ],
+    "not_checked": [],
+    "score": 4.0,
+    "bargaining_points": [
+      "Признаки майнинговой прошивки (урезанные лимиты) — карта, вероятно, работала круглосуточно.",
+      "Вентиляторы видеокарты постоянно на максимуме — вероятно, изношены (замена 1–3 тыс. ₽).",
+      "Видеокарта работает на урезанной шине (1 из 16 линий) — возможно, повреждены контакты."
+    ],
+    "summary": "Есть недостатки — это повод снизить цену."
+  },
+  "listing": null
+}

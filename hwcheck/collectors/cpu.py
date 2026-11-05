@@ -21,7 +21,8 @@ log = logging.getLogger(__name__)
 
 SCRIPT = (
     "Get-CimInstance Win32_Processor | Select-Object Name,Manufacturer,NumberOfCores,"
-    "NumberOfLogicalProcessors,MaxClockSpeed,CurrentClockSpeed,SocketDesignation"
+    "NumberOfLogicalProcessors,MaxClockSpeed,CurrentClockSpeed,SocketDesignation,"
+    "Caption,L2CacheSize,L3CacheSize,VirtualizationFirmwareEnabled"
 )
 
 
@@ -45,7 +46,16 @@ def parse(
         max_clock_mhz=max_mhz,
         current_clock_mhz=to_int(raw.get("CurrentClockSpeed")),
         socket=clean(raw.get("SocketDesignation")),
+        cpuid=clean(raw.get("Caption")),
+        l2_cache_kb=to_int(raw.get("L2CacheSize")) or None,
+        l3_cache_kb=to_int(raw.get("L3CacheSize")) or None,
+        virtualization_enabled=_bool(raw.get("VirtualizationFirmwareEnabled")),
     )
+
+
+def _bool(value: Any) -> bool | None:
+    """True/False из WMI; всё остальное — «не удалось узнать»."""
+    return value if isinstance(value, bool) else None
 
 
 def collect(run_fn: RunFn = runner.run) -> CpuInfo:

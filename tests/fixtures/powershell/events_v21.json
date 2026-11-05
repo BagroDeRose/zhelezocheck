@@ -1,0 +1,126 @@
+[
+ {
+  "Key": "whea",
+  "Count": 3,
+  "Last": "2026-10-03T18:40:12",
+  "Error": null,
+  "Disks": null,
+  "Items": [
+   {
+    "Provider": "Microsoft-Windows-WHEA-Logger",
+    "Id": 17,
+    "Level": 3,
+    "Count": 2,
+    "First": "2026-10-01T10:00:00",
+    "Last": "2026-10-03T18:40:12",
+    "Message": "Произошла исправленная аппаратная ошибка."
+   },
+   {
+    "Provider": "Microsoft-Windows-WHEA-Logger",
+    "Id": 18,
+    "Level": 2,
+    "Count": 1,
+    "First": "2026-09-30T09:00:00",
+    "Last": "2026-09-30T09:00:00",
+    "Message": "Произошла неустранимая аппаратная ошибка."
+   }
+  ]
+ },
+ {
+  "Key": "kernel_power_41",
+  "Count": 2,
+  "Last": "2026-09-28T07:15:00",
+  "Error": null,
+  "Disks": null,
+  "Items": [
+   {
+    "Provider": "Microsoft-Windows-Kernel-Power",
+    "Id": 41,
+    "Level": 1,
+    "Count": 2,
+    "First": "2026-09-20T07:15:00",
+    "Last": "2026-09-28T07:15:00",
+    "Message": "Система перезагрузилась, завершив работу с ошибками."
+   }
+  ]
+ },
+ {
+  "Key": "bugcheck",
+  "Count": 0,
+  "Last": null,
+  "Error": null,
+  "Disks": null,
+  "Items": []
+ },
+ {
+  "Key": "disk",
+  "Count": 0,
+  "Last": null,
+  "Error": null,
+  "Disks": [],
+  "Items": []
+ },
+ {
+  "Key": "storage",
+  "Count": 1,
+  "Last": "2026-10-04T21:13:05",
+  "Error": null,
+  "Disks": null,
+  "Items": [
+   {
+    "Provider": "stornvme",
+    "Id": 11,
+    "Level": 2,
+    "Count": 1,
+    "First": "2026-10-04T21:13:05",
+    "Last": "2026-10-04T21:13:05",
+    "Message": "Драйвер обнаружил ошибку контроллера в \\Device\\RaidPort1."
+   }
+  ]
+ },
+ {
+  "Key": "gpu_driver",
+  "Count": 5,
+  "Last": "2026-10-05T12:05:00",
+  "Error": null,
+  "Disks": null,
+  "Items": [
+   {
+    "Provider": "Display",
+    "Id": 4101,
+    "Level": 3,
+    "Count": 4,
+    "First": "2026-10-02T20:00:00",
+    "Last": "2026-10-05T12:05:00",
+    "Message": "Видеодрайвер nvlddmkm перестал отвечать и был успешно восстановлен."
+   },
+   {
+    "Provider": "nvlddmkm",
+    "Id": 13,
+    "Level": 2,
+    "Count": 1,
+    "First": "2026-10-02T19:59:58",
+    "Last": "2026-10-02T19:59:58",
+    "Message": "Graphics Exception: ESR 0x404490=0x80000002 при запуске C:\\Games\\Game\\game.exe"
+   }
+  ]
+ },
+ {
+  "Key": "unexpected_shutdown",
+  "Count": 1,
+  "Last": "2026-09-28T07:16:00",
+  "Error": null,
+  "Disks": null,
+  "Items": [
+   {
+    "Provider": "EventLog",
+    "Id": 6008,
+    "Level": 2,
+    "Count": 1,
+    "First": "2026-09-28T07:16:00",
+    "Last": "2026-09-28T07:16:00",
+    "Message": "Предыдущее завершение работы системы было неожиданным."
+   }
+  ]
+ }
+]

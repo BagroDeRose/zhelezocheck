@@ -1,0 +1,29 @@
+{# Вид «Для специалиста» внутри окна программы (QTextBrowser, этап 47 v2.1). Встроенный
+   просмотрщик Qt понимает только простой HTML: таблицы без графиков и переключателей.
+   Графики и полный отчёт — в HTML-файле. Данные те же: specialist_context. #}
+<html><body>
+<p><i>{{ hint }}</i></p>
+{% for section in [passport] + sections %}
+<h3>{{ section.title }}</h3>
+<table border="1" cellspacing="0" cellpadding="3" width="100%">
+  <tr><th align="left">Параметр</th><th align="left">Значение</th><th align="left">Источник</th><th align="left">Статус</th><th align="left">Пояснение</th></tr>
+{% for row in section.rows %}
+  <tr><td>{{ row.label }}</td><td>{{ row.value }}</td><td>{{ row.source }}</td><td>{{ row.status_name }}</td><td>{{ row.note }}</td></tr>
+{% endfor %}
+</table>
+{% endfor %}
+<h3>Тесты</h3>
+<table border="1" cellspacing="0" cellpadding="3" width="100%">
+  <tr><th align="left">Тест</th><th align="left">Состояние</th><th align="left">Длительность</th><th align="left">Метрики</th></tr>
+{% for t in tests %}
+  <tr><td>{{ t.name }}</td><td>{{ t.state }}</td><td>{{ t.duration }}</td>
+    <td>{% for key, value in t.metrics %}{{ key }}: {{ value }}{% if not loop.last %}<br>{% endif %}{% endfor %}</td></tr>
+{% endfor %}
+</table>
+<h3>Находки и правила вердикта</h3>
+<table border="1" cellspacing="0" cellpadding="3" width="100%">
+{% for f in findings %}
+  <tr><td>{{ f.rule }}</td><td>{{ f.severity }}</td><td><b>{{ f.title }}.</b> {{ f.explanation }}</td><td>{{ f.evidence }}</td></tr>
+{% endfor %}
+</table>
+</body></html>

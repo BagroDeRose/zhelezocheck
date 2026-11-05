@@ -29,7 +29,6 @@ from hwcheck.ui.keyboard_guard import KeyboardGuard
 from hwcheck.ui.pages.common import escape
 from hwcheck.ui.pages.history import HistoryPage
 from hwcheck.ui.pages.laptop import LaptopPage
-from hwcheck.ui.pages.listing import ListingPage
 from hwcheck.ui.pages.mode import ModePage
 from hwcheck.ui.pages.progress import ProgressPage
 from hwcheck.ui.pages.settings import SettingsPage
@@ -61,10 +60,7 @@ class MainWindow(QMainWindow):
         self.verdict_page = VerdictPage(ctx)
         self.history_page = HistoryPage(ctx)
         self.settings_page = SettingsPage(ctx)
-        self.listing_page = ListingPage(ctx)
         self.laptop_page = LaptopPage(ctx)
-        # Сверка объявления с железом — по сведениям, собранным на стартовой странице (25.4).
-        self.listing_page.snapshot_provider = lambda: self.start_page.snapshot
         # Вопрос «Да/Нет»; в тестах и самопроверке подменяется (без окна сообщения).
         self.confirm: Callable[[str, str], bool] = self.ask_yes_no
         # Alt+F4, Alt и F10 во время теста клавиатуры не закрывают окно и не открывают меню.
@@ -80,7 +76,6 @@ class MainWindow(QMainWindow):
             ("progress", self.progress_page),
             ("verdict", self.verdict_page),
             ("history", self.history_page),
-            ("listing", self.listing_page),
             ("laptop", self.laptop_page),
             ("settings", self.settings_page),
         ):
@@ -95,7 +90,6 @@ class MainWindow(QMainWindow):
         self.nav.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.nav_targets: list[str] = []
         self.add_nav(strings.NAV_CHECK, "check")
-        self.add_nav(strings.NAV_LISTING, "listing")
         self.add_nav(strings.NAV_LAPTOP, "laptop")
         self.add_nav(strings.NAV_HISTORY, "history")
         self.add_nav(strings.NAV_SETTINGS, "settings")
@@ -158,8 +152,6 @@ class MainWindow(QMainWindow):
             self.mode_page.refresh()
         if name == "laptop":
             self.laptop_page.refresh()
-        if name == "listing":
-            self.listing_page.refresh()
         self.stack.setCurrentWidget(self.pages[name])
         if row >= 0 and self.nav.currentRow() != row:
             self.nav.blockSignals(True)
@@ -224,6 +216,8 @@ class MainWindow(QMainWindow):
         # Результаты тестов ноутбука относятся к прошлому компьютеру — сбрасываем.
         self.ctx.manual_findings.clear()
         self.laptop_page.clear_results()
+        # Объявление тоже относится к прошлой покупке.
+        self.mode_page.clear_listing()
         self.go_to("start")
         self.start_page.start_collect()
 

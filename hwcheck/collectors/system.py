@@ -19,10 +19,16 @@ SCRIPT = (
     "$cs = Get-CimInstance Win32_ComputerSystem; "
     "$bios = Get-CimInstance Win32_BIOS; "
     "$enc = Get-CimInstance Win32_SystemEnclosure; "
+    # Secure Boot читается из реестра без прав администратора (аудит 2.1); ключа нет — значит
+    # загрузка без UEFI Secure Boot или Windows не сообщает — тогда $null.
+    "$sb = $null; try { $sb = Get-ItemPropertyValue "
+    "'HKLM:\\SYSTEM\\CurrentControlSet\\Control\\SecureBoot\\State' "
+    "-Name UEFISecureBootEnabled -ErrorAction Stop } catch { }; "
     "[PSCustomObject]@{ "
     "OS = $os | Select-Object Caption,Version,BuildNumber,OSArchitecture,"
     "InstallDate,LastBootUpTime; "
-    "CS = $cs | Select-Object Manufacturer,Model,PCSystemType; "
+    "CS = $cs | Select-Object Manufacturer,Model,PCSystemType,Name; "
+    "SecureBoot = $sb; "
     "BIOS = $bios | Select-Object Manufacturer,SMBIOSBIOSVersion,ReleaseDate; "
     "ChassisTypes = $enc.ChassisTypes }"
 )
@@ -61,7 +67,15 @@ def parse(data: Any) -> SystemInfo:
         bios_vendor=clean(bios.get("Manufacturer")),
         bios_version=clean(bios.get("SMBIOSBIOSVersion")),
         bios_date=parse_ps_date(bios.get("ReleaseDate")),
+        computer_name=clean(computer.get("Name")),
+        secure_boot=_secure_boot(data.get("SecureBoot")),
     )
+
+
+def _secure_boot(value: Any) -> bool | None:
+    """1 — включён, 0 — выключен; нет значения — не удалось узнать (None, а не «выключен»)."""
+    number = to_int(value)
+    return None if number is None else number == 1
 
 
 def collect(run_fn: RunFn = runner.run) -> SystemInfo:

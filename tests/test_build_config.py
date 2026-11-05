@@ -36,7 +36,6 @@ def test_notices_mention_all_components() -> None:
         "pci.ids",
         "wgpu",
         "numpy",
-        "beautifulsoup4",
     ):
         assert name in notices, name
 

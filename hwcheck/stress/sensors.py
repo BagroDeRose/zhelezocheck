@@ -10,10 +10,11 @@
   и на любой языковой версии Windows). Реальная частота = номинальная × процент / 100;
 - температура процессора напрямую — только если на компьютере УЖЕ установлен драйвер PawnIO
   и рядом с программой лежит LibreHardwareMonitorLib (чтение пока не реализовано);
-- температура «тепловой зоны» ACPI (`MSAcpi_ThermalZoneTemperature`, root/wmi) — датчик
-  материнской платы рядом с процессором, «примерно» (задача 25.3). Нужны права
-  администратора и есть не на всех компьютерах; если класс недоступен, опрос сразу
-  перестаёт его спрашивать. Значения в десятых долях кельвина переводятся в °C.
+- температура «тепловой зоны» ACPI — датчик материнской платы рядом с процессором,
+  «примерно» (задача 25.3), не температура ядер. Основной источник — счётчик Windows
+  `ThermalZoneInformation`: читается без прав администратора (аудит 2.1); запасной — класс
+  WMI `MSAcpi_ThermalZoneTemperature` (root/wmi, нужны права). Есть не на всех компьютерах;
+  если оба молчат, опрос перестаёт спрашивать. Кельвины переводятся в °C.
 
 Недоступный датчик — это не ошибка: в `status` пишется понятная пометка.
 """
@@ -48,6 +49,8 @@ NVIDIA_BASE_FIELDS = [
     "power.draw",
     "fan.speed",
     "utilization.gpu",
+    "utilization.memory",
+    "memory.used",
 ]
 REASON_FIELD_NEW = "clocks_event_reasons.active"
 REASON_FIELD_OLD = "clocks_throttle_reasons.active"
@@ -60,6 +63,8 @@ _NVIDIA_VALUE_KEYS = [
     "power_w",
     "fan_pct",
     "util_pct",
+    "mem_util_pct",
+    "vram_used_mb",
     "throttle_mask",
 ]
 
@@ -76,20 +81,32 @@ THROTTLE_BITS = {
     0x100: "display_clock_setting",
 }
 
+# Температура тепловой зоны ACPI: сначала счётчик Windows ThermalZoneInformation (читается без
+# прав администратора, аудит 2.1), если его нет — класс WMI root/wmi (нужны права). Оба читают
+# одну и ту же зону платы; если ни один не ответил, дальше зону не спрашиваем.
 CPU_SCRIPT = (
-    "$zoneOk = $true; "
+    "$zoneMode = 'perf'; "
     "while ($true) { "
     "$x = Get-CimInstance Win32_PerfFormattedData_Counters_ProcessorInformation "
     "-Filter \"Name='_Total'\"; "
     "$zone = ''; "
-    "if ($zoneOk) { try { "
+    "if ($zoneMode -eq 'perf') { try { "
+    "$p = @(Get-CimInstance Win32_PerfFormattedData_Counters_ThermalZoneInformation "
+    "-ErrorAction Stop); "
+    "$k = ($p | ForEach-Object { if ($_.HighPrecisionTemperature -gt 0) "
+    "{ $_.HighPrecisionTemperature / 10 } else { $_.Temperature } } "
+    "| Measure-Object -Maximum).Maximum; "
+    "if ($k -gt 0) { $zone = ([math]::Round($k - 273.15, 1))"
+    ".ToString([cultureinfo]::InvariantCulture) } else { $zoneMode = 'acpi' } "
+    "} catch { $zoneMode = 'acpi' } }; "
+    "if ($zoneMode -eq 'acpi') { try { "
     "$z = Get-CimInstance -Namespace root/wmi -ClassName MSAcpi_ThermalZoneTemperature "
     "-ErrorAction Stop | Measure-Object -Property CurrentTemperature -Maximum; "
     "if ($z.Maximum) { $zone = ([math]::Round($z.Maximum / 10 - 273.15, 1))"
     ".ToString([cultureinfo]::InvariantCulture) } "
-    "} catch { $zoneOk = $false } }; "
+    "} catch { $zoneMode = 'none' } }; "
     "'{0},{1},{2},{3}' -f $x.PercentProcessorPerformance,$x.ProcessorFrequency,"
-    "$x.PercentProcessorUtility,$zone; "
+    "$x.PercentProcessorTime,$zone; "
     "Start-Sleep -Milliseconds {interval} }"
 )
 

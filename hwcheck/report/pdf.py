@@ -30,6 +30,7 @@ from PySide6.QtSvg import QSvgRenderer
 
 from hwcheck.models import CheckSession
 from hwcheck.report.builder import build_print_html
+from hwcheck.report.privacy import mask_identifiers
 
 log = logging.getLogger(__name__)
 
@@ -84,10 +85,11 @@ def pdf_from_print_html(html: str, charts: list[str], path: Path) -> bool:
     return path.is_file() and path.stat().st_size > 0
 
 
-def save_report_pdf(session: CheckSession, path: Path) -> Path:
-    """Сохраняет отчёт о проверке в PDF. Возвращает путь или бросает RuntimeError."""
+def save_report_pdf(session: CheckSession, path: Path, hide_identifiers: bool = True) -> Path:
+    """Сохраняет отчёт о проверке в PDF (идентификаторы по умолчанию скрыты).
+    Возвращает путь или бросает RuntimeError."""
     path.parent.mkdir(parents=True, exist_ok=True)
-    html, charts = build_print_html(session)
+    html, charts = build_print_html(mask_identifiers(session) if hide_identifiers else session)
     if not pdf_from_print_html(html, charts, path):
         raise RuntimeError("Не удалось сохранить отчёт в PDF")
     log.info("PDF сохранён: %s", path.name)

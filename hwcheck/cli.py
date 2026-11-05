@@ -19,7 +19,8 @@ from pathlib import Path
 
 from hwcheck.backends import create_backend
 from hwcheck.backends.fake import list_scenarios
-from hwcheck.models import CheckSession, Severity, TestResult, Verdict
+from hwcheck.models import Severity, TestResult, Verdict
+from hwcheck.schema import load_session
 from hwcheck.session import run_check
 from hwcheck.ui import strings
 from hwcheck.verdict.engine import decide
@@ -139,7 +140,7 @@ def format_verdict(verdict: Verdict) -> str:
 def cmd_verdict(args: argparse.Namespace) -> int:
     """Команда verdict: вердикт по демо-сценарию или по сохранённому прогону."""
     if args.source:
-        session = CheckSession.from_json(Path(args.source).read_text(encoding="utf-8"))
+        session = load_session(Path(args.source).read_text(encoding="utf-8"))
         verdict = decide(session.snapshot, session.results)
     elif args.demo:
         if not _check_demo(args.demo):

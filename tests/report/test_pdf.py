@@ -6,6 +6,7 @@ from PySide6.QtGui import QImage
 from pytestqt.qtbot import QtBot
 
 from hwcheck.report import builder, pdf
+from hwcheck.report.charts import build_series_charts, render_svg
 from tests.report.helpers import demo_session
 
 
@@ -25,10 +26,12 @@ def test_print_html_has_charts_as_images(qtbot: QtBot) -> None:
 
 
 def test_chart_svg_becomes_image(qtbot: QtBot) -> None:
-    svg = builder.svg_line_chart([(0.0, 40.0), (60.0, 72.0)], "Температура", "°C")
+    chart = build_series_charts(demo_session("overheating_cpu"))[0]
+    svg = render_svg(chart, "c0")
     image = pdf.svg_to_image(svg)
     assert isinstance(image, QImage) and not image.isNull()
-    width, height = builder.CHART_SIZE
+    width = int(svg.split('width="')[1].split('"')[0])
+    height = int(svg.split('height="')[1].split('"')[0])
     assert image.width() == width * pdf.CHART_SCALE and image.height() == height * pdf.CHART_SCALE
     # На картинке есть не только белый фон: линия графика нарисована.
     colors = {

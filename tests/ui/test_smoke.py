@@ -19,8 +19,8 @@ def test_smoke_test_passes(qtbot: QtBot, tmp_path: Path) -> None:
     log = (ctx.paths.logs / "smoke_test.txt").read_text(encoding="utf-8")
     assert "OK" in log and "negotiate" in log
     assert "Графики для PDF (QtSvg): рисуются" in log  # 25.4: PDF без движка браузера
-    assert "Объявление из файла: разобрано" in log  # 22.2: сохранённая страница
-    assert "Объявление из текста: разобрано" in log
+    # 2.1: объявление вставляется на странице режима и сверяется с железом в той же проверке.
+    assert "Сверка с объявлением: сверено (listing.gpu_match" in log
     if QGuiApplication.platformName() == "windows":  # 25.1: настоящее окно Windows
         assert "Alt+F4 в тесте клавиатуры: окно не закрылось, F4 засчитана" in log
         assert "Закрытие окна во время теста: спрошено подтверждение" in log

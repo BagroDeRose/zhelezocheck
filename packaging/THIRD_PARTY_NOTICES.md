@@ -47,23 +47,18 @@ SPEC 1.4, 30.3): зависимости программы из `pyproject.toml`
 <!-- python-packages:start -->
 | Пакет | Версия | Лицензия | Источник |
 |---|---|---|---|
-| beautifulsoup4 | 4.15.0 | MIT License | https://www.crummy.com/software/BeautifulSoup/bs4/ |
 | cffi | 2.1.1 | MIT-0 |  |
 | Jinja2 | 3.1.6 | BSD License | https://github.com/pallets/jinja/ |
 | MarkupSafe | 3.0.4 | BSD-3-Clause | https://github.com/pallets/markupsafe/ |
-| numpy | 2.5.4 | BSD-3-Clause AND 0BSD AND MIT AND Zlib AND CC0-1.0 | https://numpy.org |
+| numpy | 2.5.3 | BSD-3-Clause AND 0BSD AND MIT AND Zlib AND CC0-1.0 | https://numpy.org |
 | psutil | 7.2.2 | BSD-3-Clause | https://github.com/giampaolo/psutil |
-| pycparser | 3.12 | BSD-3-Clause | https://github.com/eliben/pycparser |
-| PySide6 | 6.12.0 | LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only | https://pyside.org |
-| PySide6_Addons | 6.12.0 | LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only | https://pyside.org |
-| PySide6_Essentials | 6.12.0 | LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only | https://pyside.org |
-| PySide6_Pdf | 6.12.0.140 | LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only | https://pyside.org |
-| PySide6_WebEngine | 6.12.0.140 | LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only | https://pyside.org |
+| pycparser | 3.0 | BSD-3-Clause | https://github.com/eliben/pycparser |
+| PySide6 | 6.11.2 | LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only | https://pyside.org |
+| PySide6_Addons | 6.11.2 | LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only | https://pyside.org |
+| PySide6_Essentials | 6.11.2 | LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only | https://pyside.org |
 | PyYAML | 6.0.3 | MIT | https://pyyaml.org/ |
 | rendercanvas | 2.7.2 | BSD 2-Clause License | https://github.com/pygfx/rendercanvas |
-| shiboken6 | 6.12.0 | LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only | https://pyside.org |
-| soupsieve | 3.0.4 | MIT | https://github.com/facelessuser/soupsieve |
-| typing_extensions | 4.16.0 | PSF-2.0 | https://github.com/python/typing_extensions |
+| shiboken6 | 6.11.2 | LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only | https://pyside.org |
 | wgpu | 0.32.0 | BSD 2-Clause License | https://github.com/pygfx/wgpu-py |
 <!-- python-packages:end -->
 
@@ -80,7 +75,6 @@ SPEC 1.4, 30.3): зависимости программы из `pyproject.toml`
 | psutil | Сведения о процессоре, памяти, процессах | BSD-3-Clause | https://github.com/giampaolo/psutil |
 | Jinja2, MarkupSafe | HTML-отчёт | BSD-3-Clause | https://palletsprojects.com/ |
 | PyYAML | Чтение правил и справочников | MIT | https://pyyaml.org/ |
-| beautifulsoup4, soupsieve | Разбор страниц объявлений | MIT | https://www.crummy.com/software/BeautifulSoup/ |
 | cffi, pycparser | Зависимости wgpu | MIT, BSD-3-Clause | https://cffi.readthedocs.io/ |
 
 ### Об LGPL (Qt / PySide6)

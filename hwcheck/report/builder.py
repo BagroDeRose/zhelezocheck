@@ -10,8 +10,10 @@ HTML-отчёт полностью самодостаточный: стили и
 
 from __future__ import annotations
 
+import base64
 import hashlib
 import json
+import re
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -19,31 +21,24 @@ from typing import Any
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from hwcheck import __version__
-from hwcheck.knowledge.gpu_db import identify
+from hwcheck.knowledge.events_db import describe, group_title
 from hwcheck.laptop.details import laptop_details
 from hwcheck.models import (
     CheckSession,
-    MemoryModule,
-    SensorSample,
-    Severity,
-    SmartData,
-    TestResult,
-    vram_text,
 )
-from hwcheck.thresholds import Thresholds, load_thresholds
+from hwcheck.report.buyer import buyer_context
+from hwcheck.report.charts import build_series_charts, chart_html, render_svg
+from hwcheck.report.privacy import mask_identifiers
+from hwcheck.report.specialist import specialist_context
 from hwcheck.ui import strings
 from hwcheck.ui.summary_cards import (
     EVENT_PARAMS,
-    computer_name,
-    hours_text,
     moment,
-    pcie_text,
-    written_text,
 )
 
 TEMPLATES = Path(__file__).resolve().parent / "templates"
 
-MODE_TITLES = {"quick": "Быстрая проверка", "full": "Полная проверка", "short": "Короткий прогон"}
+MODE_TITLES = strings.MODE_TITLES
 DECISION_COLORS = {"buy": "#1b7f3b", "negotiate": "#b26a00", "walk_away": "#b3261e"}
 SEVERITY_COLORS = {"critical": "#b3261e", "warning": "#b26a00", "info": "#3b5bab", "ok": "#1b7f3b"}
 
@@ -59,145 +54,9 @@ def session_digest(session: CheckSession) -> str:
 # ---------------------------------------------------------------------------
 
 
-def svg_line_chart(
-    points: list[tuple[float, float]],
-    title: str,
-    unit: str,
-    limit: float | None = None,
-    width: int = 640,
-    height: int = 180,
-    color: str = "#b3261e",
-) -> str:
-    """Простой линейный график в виде SVG-строки (без внешних библиотек)."""
-    if len(points) < 2:
-        return ""
-    pad_left, pad_right, pad_top, pad_bottom = 48, 12, 24, 28
-    xs = [p[0] for p in points]
-    ys = [p[1] for p in points]
-    x_min, x_max = min(xs), max(xs)
-    y_values = ys + ([limit] if limit is not None else [])
-    y_min = min(y_values)
-    y_max = max(y_values)
-    spread = (y_max - y_min) or 1.0
-    y_min -= spread * 0.1
-    y_max += spread * 0.1
-    plot_w = width - pad_left - pad_right
-    plot_h = height - pad_top - pad_bottom
-
-    def sx(x: float) -> float:
-        return pad_left + (x - x_min) / ((x_max - x_min) or 1.0) * plot_w
-
-    def sy(y: float) -> float:
-        return pad_top + (1 - (y - y_min) / (y_max - y_min)) * plot_h
-
-    path = " ".join(f"{sx(x):.1f},{sy(y):.1f}" for x, y in points)
-    parts = [
-        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
-        f'viewBox="0 0 {width} {height}" role="img" aria-label="{title}">',
-        f'<rect x="0" y="0" width="{width}" height="{height}" fill="#ffffff"/>',
-        f'<text x="{pad_left}" y="16" font-size="13" fill="#222">{title}</text>',
-        f'<line x1="{pad_left}" y1="{pad_top + plot_h}" x2="{pad_left + plot_w}" '
-        f'y2="{pad_top + plot_h}" stroke="#999"/>',
-        f'<line x1="{pad_left}" y1="{pad_top}" x2="{pad_left}" '
-        f'y2="{pad_top + plot_h}" stroke="#999"/>',
-    ]
-    for value in (min(ys), max(ys)):
-        parts.append(
-            f'<text x="{pad_left - 6}" y="{sy(value) + 4:.1f}" font-size="11" fill="#444" '
-            f'text-anchor="end">{value:.0f}</text>'
-        )
-    parts.append(
-        f'<text x="{pad_left + plot_w}" y="{height - 8}" font-size="11" fill="#444" '
-        f'text-anchor="end">{x_max - x_min:.0f} с</text>'
-    )
-    parts.append(f'<text x="{pad_left}" y="{height - 8}" font-size="11" fill="#444">{unit}</text>')
-    if limit is not None:
-        parts.append(
-            f'<line x1="{pad_left}" y1="{sy(limit):.1f}" x2="{pad_left + plot_w}" '
-            f'y2="{sy(limit):.1f}" stroke="#b3261e" stroke-dasharray="4 3"/>'
-        )
-    parts.append(f'<polyline fill="none" stroke="{color}" stroke-width="2" points="{path}"/>')
-    parts.append("</svg>")
-    return "".join(parts)
-
-
-def _series(
-    samples: list[SensorSample], component_prefix: str, key: str
-) -> list[tuple[float, float]]:
-    return [
-        (s.t, float(v))
-        for s in samples
-        if s.component.startswith(component_prefix) and (v := s.values.get(key)) is not None
-    ]
-
-
-def build_charts(session: CheckSession, thresholds: Thresholds | None = None) -> list[str]:
-    """Графики температуры видеокарты и частоты процессора под нагрузкой."""
-    th = thresholds or load_thresholds()
-    charts: list[str] = []
-    results = {r.name: r for r in session.results}
-    gpu = results.get("gpu_load")
-    if gpu is not None:
-        chart = svg_line_chart(
-            _series(gpu.samples, "gpu", "temp_c"),
-            "Температура видеокарты под нагрузкой",
-            "°C",
-            limit=th.get("gpu.warning_c"),
-        )
-        if chart:
-            charts.append(chart)
-    cpu = results.get("cpu_load")
-    if cpu is not None:
-        chart = svg_line_chart(
-            _series(cpu.samples, "cpu", "clock_mhz"),
-            "Частота процессора под нагрузкой",
-            "МГц",
-            color="#3b5bab",
-        )
-        if chart:
-            charts.append(chart)
-    return charts
-
-
 # ---------------------------------------------------------------------------
 # Данные для шаблона
 # ---------------------------------------------------------------------------
-
-
-def metrics_summary(result: TestResult) -> str:
-    """Главные цифры теста одной строкой."""
-    m = result.metrics
-    parts: list[str] = []
-    if result.name == "vram":
-        if m.get("errors") is not None:
-            parts.append(f"ошибок: {m['errors']}")
-        if m.get("speed_gbps"):
-            parts.append(f"скорость {m['speed_gbps']:.0f} ГБ/с")
-    elif result.name == "gpu_load":
-        if m.get("max_temp_c") is not None:
-            parts.append(f"макс. {m['max_temp_c']:.0f} °C")
-        if m.get("max_fan_pct") is not None:
-            parts.append(f"вентилятор до {m['max_fan_pct']:.0f}%")
-        if m.get("clock_drop_pct") is not None:
-            parts.append(f"падение частоты {m['clock_drop_pct']:.0f}%")
-    elif result.name == "cpu_load":
-        if m.get("checksum_ok") is not None:
-            parts.append("вычисления верны" if m["checksum_ok"] else "ОШИБКИ вычислений")
-        if m.get("clock_drop_pct") is not None:
-            parts.append(f"падение частоты {m['clock_drop_pct']:.0f}%")
-    elif result.name == "ram_quick":
-        if m.get("tested_mb"):
-            parts.append(f"проверено {m['tested_mb'] / 1024:.1f} ГБ")
-        if m.get("errors") is not None:
-            parts.append(f"ошибок: {m['errors']}")
-    elif result.name == "disk_read":
-        if m.get("read_mb") is not None:
-            parts.append(f"прочитано {m['read_mb']} МБ")
-        if m.get("speed_mbps"):
-            parts.append(f"{m['speed_mbps']:.0f} МБ/с")
-        if m.get("read_errors"):
-            parts.append(f"ошибок чтения: {m['read_errors']}")
-    return ", ".join(parts)
 
 
 def _date_text(text: str | None, with_time: bool = False) -> str:
@@ -208,216 +67,66 @@ def _date_text(text: str | None, with_time: bool = False) -> str:
     return value.strftime("%d.%m.%Y %H:%M" if with_time else "%d.%m.%Y")
 
 
-def _gb(megabytes: int) -> str:
-    """16384 МБ → «16 ГБ», 7680 → «7.5 ГБ»."""
-    return f"{round(megabytes / 1024, 1):g} ГБ"
+EVENT_LEVELS = {1: "критическое", 2: "ошибка", 3: "предупреждение", 4: "сведения"}
+# Группы, которые собираются с 2.1: в старых проверках их нет — строк не показываем.
+NEW_EVENT_GROUPS = ("storage", "gpu_driver", "unexpected_shutdown")
+UNREAD = "не прочитано"
 
 
-def _module_note(module: MemoryModule) -> str:
-    """Строка о планке памяти: слот, объём, производитель, модель и частота."""
-    parts = [f"{module.slot}:" if module.slot else "", _gb(module.capacity_mb)]
-    parts += [module.manufacturer, module.part_number]
-    working, rated = module.configured_speed_mhz, module.speed_mhz
-    if working and rated and working < rated:
-        parts.append(f"— работает на {working} МГц, умеет {rated} МГц")
-    elif working or rated:
-        parts.append(f"— {working or rated} МГц")
-    return " ".join(part.strip() for part in parts if part and part.strip())
-
-
-def _hardware_rows(session: CheckSession) -> list[dict[str, Any]]:
-    """Раздел «Железо»: строки (название, текст, пояснения мелким шрифтом)."""
-    snap = session.snapshot
-    rows: list[dict[str, Any]] = []
-
-    def add(label: str, text: str, notes: list[str] | None = None) -> None:
-        rows.append({"label": label, "text": text.strip() or "—", "notes": notes or []})
-
-    system = snap.system
-    if system:
-        name = computer_name(system.manufacturer, system.model)
-        if name:
-            add("Компьютер", name + (" (ноутбук)" if system.is_laptop else ""))
-        notes = []
-        if _date_text(system.install_date):
-            notes.append(f"установлена {_date_text(system.install_date)}")
-        if _date_text(system.last_boot, with_time=True):
-            notes.append(f"последний запуск {_date_text(system.last_boot, with_time=True)}")
-        arch = f" ({system.architecture})" if system.architecture else ""
-        add("Windows", f"{system.os_name} {system.os_version}".strip() + arch, notes)
-        bios_date = f", {system.bios_date[:10]}" if system.bios_date else ""
-        add("BIOS платы", f"{system.bios_vendor} {system.bios_version}".strip() + bios_date)
-    if snap.board:
-        add("Материнская плата", f"{snap.board.manufacturer} {snap.board.product}")
-    cpu = snap.cpu
-    if cpu:
-        parts = [f"{cpu.name} — {cpu.cores} ядер / {cpu.threads} потоков"]
-        if cpu.max_clock_mhz:
-            parts.append(f"до {cpu.max_clock_mhz} МГц")
-        if cpu.socket.strip():
-            parts.append(f"сокет {cpu.socket.strip()}")
-        add("Процессор", ", ".join(parts))
-    memory = snap.memory
-    if memory:
-        text = _gb(memory.total_mb) if memory.total_mb else "—"
-        if memory.modules:
-            slots = f" из {memory.slots_total}" if memory.slots_total else ""
-            text += f", занято {len(memory.modules)}{slots} слотов"
-        add("Оперативная память", text, [_module_note(m) for m in memory.modules])
-    battery = snap.battery
-    if battery:
-        wear = battery.wear_percent
-        parts = [f"износ {wear:.0f}%" if wear is not None else "износ не определён"]
-        parts.append(
-            f"циклов: {battery.cycle_count}" if battery.cycle_count is not None else "циклов: —"
-        )
-        if battery.full_charge_capacity_mwh and battery.design_capacity_mwh:
-            parts.append(
-                f"ёмкость {battery.full_charge_capacity_mwh} из {battery.design_capacity_mwh} мВт·ч"
-            )
-        add("Батарея", ", ".join(parts))
-    return rows
-
-
-def _gpu_rows(session: CheckSession) -> list[dict[str, Any]]:
-    rows = []
-    for gpu in session.snapshot.gpus:
-        ident = identify(gpu)
-        power = gpu.enforced_power_limit_w or gpu.default_power_limit_w
-        extra = []
-        if pcie_text(gpu):
-            extra.append(f"шина {pcie_text(gpu)}")
-        if gpu.max_power_limit_w and power and gpu.max_power_limit_w > power:
-            extra.append(f"лимит мощности можно поднять до {gpu.max_power_limit_w:.0f} Вт")
-        rows.append(
-            {
-                "name": gpu.name,
-                "chip": ident.real_chip or "—",
-                "vram": vram_text(gpu) or "—",
-                "vbios": gpu.vbios_version or "—",
-                "driver": gpu.driver_version or "—",
-                "power": f"{power:.0f} Вт" if power else "—",
-                "ids": f"{gpu.pci_vendor_id}:{gpu.pci_device_id}",
-                "extra": "; ".join(extra),
-            }
-        )
-    return rows
-
-
-def _disk_extra(smart: SmartData | None) -> str:
-    """Дополнительные сведения SMART одной строкой (что известно)."""
-    if smart is None:
-        return ""
-    parts = []
-    if smart.power_cycles is not None:
-        parts.append(f"включений: {smart.power_cycles}")
-    if smart.temperature_c is not None:
-        parts.append(f"температура {smart.temperature_c:.0f} °C")
-    if smart.data_written_tb is not None:
-        parts.append(f"записано {written_text(smart.data_written_tb)}")
-    if smart.unsafe_shutdowns is not None:
-        parts.append(f"аварийных выключений: {smart.unsafe_shutdowns}")
-    if smart.available_spare_pct is not None:
-        limit = smart.available_spare_threshold_pct
-        parts.append(
-            f"резерв ячеек {smart.available_spare_pct}%"
-            + (f" (порог {limit}%)" if limit is not None else "")
-        )
-    if smart.crc_errors:
-        parts.append(f"ошибок передачи (CRC): {smart.crc_errors}")
-    return "; ".join(parts)
+def _event_when(last_seen: str, started_at: str) -> str:
+    """Было ли событие во время проверки или только раньше (в истории Windows)."""
+    if last_seen and started_at and last_seen >= started_at:
+        return "в том числе во время проверки"
+    return "в истории Windows (до проверки)"
 
 
 def _event_context(session: CheckSession) -> dict[str, Any] | None:
-    """Журнал Windows: сколько сбоев каждого вида и когда был последний."""
+    """Журнал Windows: сводка по группам и (с 2.1) каждый вид события с расшифровкой.
+
+    Группа, которую не удалось прочитать, — «не прочитано», а не ноль.
+    """
     events = session.snapshot.events
     if events is None:
         return None
     names = [*EVENT_PARAMS, ("disk_removable", "Ошибки съёмных дисков")]
+    names += [(key, group_title(key)) for key in NEW_EVENT_GROUPS]
+    optional = {"disk_removable", *NEW_EVENT_GROUPS}
     rows = [
         {
             "name": name,
-            "count": events.counts.get(key, 0),
-            "last": _date_text(events.last_seen.get(key), with_time=True) or "—",
+            "count": events.counts.get(key, UNREAD),
+            "last": _date_text(events.last_for(key), with_time=True) or "—",
         }
         for key, name in names
-        if key in events.counts or key != "disk_removable"
+        if key in events.counts or key not in optional
     ]
-    return {"days": events.days, "partial": events.partial, "note": events.note, "rows": rows}
-
-
-def _disk_rows(session: CheckSession) -> list[dict[str, Any]]:
-    rows = []
-    for disk in session.snapshot.disks:
-        smart = disk.smart
-        rows.append(
+    items = []
+    for item in events.items:
+        info = describe(item.provider, item.event_id, item.group)
+        items.append(
             {
-                "model": disk.model,
-                "size": f"{disk.size_gb:.0f} ГБ" if disk.size_gb else "—",
-                "type": {"ssd": "SSD", "hdd": "HDD"}.get(disk.media_type, "—"),
-                "hours": hours_text(smart.power_on_hours)
-                if smart and smart.power_on_hours is not None
-                else "—",
-                "extra": _disk_extra(smart),
-                "wear": f"{smart.wear_percent:.0f}%"
-                if smart and smart.wear_percent is not None
-                else "—",
-                "sectors": (
-                    (smart.reallocated_sectors or 0) + (smart.pending_sectors or 0)
-                    if smart
-                    and (smart.reallocated_sectors is not None or smart.pending_sectors is not None)
-                    else "—"
-                ),
-                "health": "—"
-                if not smart or smart.health_passed is None
-                else ("в норме" if smart.health_passed else "НЕИСПРАВЕН"),
+                "group": group_title(item.group),
+                "log": item.log,
+                "provider": item.provider,
+                "event_id": item.event_id,
+                "level": EVENT_LEVELS.get(item.level or 0, "—"),
+                "count": item.count,
+                "first": _date_text(item.first_seen, with_time=True) or "—",
+                "last": _date_text(item.last_seen, with_time=True) or "—",
+                "title": info.title,
+                "component": info.component or "—",
+                "significance": info.significance,
+                "note": info.note,
+                "message": item.message,
+                "when": _event_when(item.last_seen, session.started_at),
             }
         )
-    return rows
-
-
-def build_context(session: CheckSession, generated_at: datetime | None = None) -> dict[str, Any]:
-    """Всё, что нужно шаблону отчёта."""
-    verdict = session.verdict
-    decision = verdict.decision.value if verdict else "negotiate"
-    findings = verdict.findings if verdict else []
     return {
-        "app_name": strings.APP_NAME,
-        "version": session.app_version or __version__,
-        "report_id": session.id,
-        "digest": session_digest(session),
-        "generated_at": (generated_at or datetime.now()).strftime("%d.%m.%Y %H:%M"),
-        "started_at": session.started_at.replace("T", " "),
-        "mode": MODE_TITLES.get(session.mode, session.mode),
-        "demo": session.demo_scenario,
-        "decision": decision,
-        "decision_title": strings.DECISION_TITLES[decision],
-        "decision_color": DECISION_COLORS[decision],
-        "summary": verdict.summary if verdict else "",
-        "problems": [f for f in findings if f.severity is not Severity.OK],
-        "good": [f for f in findings if f.severity is Severity.OK],
-        "severity_names": strings.SEVERITY_NAMES,
-        "severity_colors": SEVERITY_COLORS,
-        "bargaining": verdict.bargaining_points if verdict else [],
-        "not_checked": verdict.not_checked if verdict else [],
-        "hardware": _hardware_rows(session),
-        "gpus": _gpu_rows(session),
-        "disks": _disk_rows(session),
-        "events": _event_context(session),
-        "laptop": laptop_details(session),
-        "tests": [
-            {
-                "name": strings.TEST_NAMES.get(r.name, r.name),
-                "status": strings.STATUS_NAMES.get(r.status.value, r.status.value),
-                "status_key": r.status.value,
-                "duration": f"{r.duration_s:.0f} с",
-                "summary": metrics_summary(r),
-                "notes": r.notes,
-            }
-            for r in session.results
-        ],
-        "charts": build_charts(session),
-        "listing": _listing_context(session),
+        "days": events.days,
+        "partial": events.partial,
+        "note": events.note,
+        "rows": rows,
+        "items": items,
     }
 
 
@@ -460,28 +169,106 @@ def _environment() -> Environment:
     )
 
 
-def build_html(session: CheckSession, generated_at: datetime | None = None) -> str:
-    """HTML-отчёт по проверке."""
+REPORT_MODES = ("buyer", "specialist")
+
+
+def report_context(
+    session: CheckSession, generated_at: datetime | None = None, mode: str = "buyer"
+) -> dict[str, Any]:
+    """Контекст общего отчёта: вид покупателя и вид специалиста из одного снимка."""
+    if mode not in REPORT_MODES:
+        raise ValueError(f"Неизвестный режим отчёта: {mode}")
+    verdict = session.verdict
+    decision = verdict.decision.value if verdict else "negotiate"
+    context = specialist_context(session)
+    context.update(
+        app_name=strings.APP_NAME,
+        version=session.app_version or __version__,
+        report_id=session.id,
+        digest=session_digest(session),
+        generated_at=(generated_at or datetime.now()).strftime("%d.%m.%Y %H:%M"),
+        started_at=session.started_at.replace("T", " "),
+        demo=session.demo_scenario,
+        mode=mode,
+        mode_buyer_title=strings.REPORT_MODE_BUYER,
+        mode_specialist_title=strings.REPORT_MODE_SPECIALIST,
+        buyer=buyer_context(session),
+        decision_color=DECISION_COLORS[decision],
+        laptop=laptop_details(session),
+        events=_event_context(session),
+        listing=_listing_context(session),
+        charts=[
+            chart_html(chart, f"c{index}")
+            for index, chart in enumerate(build_series_charts(session))
+        ],
+        json_href=json_data_uri(session),
+        json_name=f"{report_file_name(session)}.json",
+    )
+    return context
+
+
+def json_data_uri(session: CheckSession) -> str:
+    """Полный снимок проверки как ссылка data: — отчёт остаётся одним самодостаточным файлом."""
+    data = base64.b64encode(session.to_json(indent=None).encode("utf-8")).decode("ascii")
+    return f"data:application/json;base64,{data}"
+
+
+def build_html(
+    session: CheckSession, generated_at: datetime | None = None, mode: str = "buyer"
+) -> str:
+    """HTML-отчёт: оба режима в одном файле, `mode` — какой открыт сразу (переключение без
+    повторных тестов: оба вида строятся из одного снимка)."""
     template = _environment().get_template("report.html.j2")
-    return template.render(**build_context(session, generated_at))
+    return template.render(**report_context(session, generated_at, mode))
 
 
-CHART_SIZE = (640, 180)  # размер графиков svg_line_chart по умолчанию
+def build_specialist_html(session: CheckSession, generated_at: datetime | None = None) -> str:
+    """Тот же отчёт, открытый в режиме «Для специалиста»."""
+    return build_html(session, generated_at, mode="specialist")
+
+
+def build_inapp_specialist_html(session: CheckSession) -> str:
+    """Вид специалиста для окна программы: те же данные, простые таблицы без графиков."""
+    context = specialist_context(session)
+    context["hint"] = strings.VERDICT_SPECIALIST_HINT
+    return _environment().get_template("report_inapp.html.j2").render(**context)
+
+
+PRINT_CHART_WIDTH = 640  # ширина графика в PDF (точки); высота — по пропорциям SVG
 
 
 def build_print_html(
     session: CheckSession, generated_at: datetime | None = None
 ) -> tuple[str, list[str]]:
-    """PDF-версия отчёта для QTextDocument (25.4): HTML и SVG графиков.
+    """PDF-версия отчёта для QTextDocument: HTML и SVG графиков (для `report/pdf.py`).
 
-    Графики в HTML — ссылки `chart_N.png`; сами картинки рисует `report/pdf.py` из SVG.
+    Содержимое — как в HTML: вид покупателя, затем технический протокол. Графики в разметке —
+    ссылки `chart_N.png`, сами картинки рисуются из SVG.
     """
-    context = build_context(session, generated_at)
-    charts: list[str] = list(context.get("charts", []))
-    context["chart_images"] = [f"chart_{index}.png" for index in range(len(charts))]
-    context["chart_width"], context["chart_height"] = CHART_SIZE
+    context = report_context(session, generated_at)
+    charts = build_series_charts(session)
+    svgs = [render_svg(chart, f"p{index}") for index, chart in enumerate(charts)]
+    images = []
+    for index, (chart, svg) in enumerate(zip(charts, svgs, strict=True)):
+        width, height = _svg_size(svg)
+        images.append(
+            {
+                "src": f"chart_{index}.png",
+                "title": chart.title,
+                "unit": chart.unit,
+                "period": chart.period,
+                "width": PRINT_CHART_WIDTH,
+                "height": round(height * PRINT_CHART_WIDTH / width),
+            }
+        )
+    context["chart_images"] = images
     html = _environment().get_template("report_print.html.j2").render(**context)
-    return html, charts
+    return html, svgs
+
+
+def _svg_size(svg: str) -> tuple[float, float]:
+    match = re.search(r'width="(\d+)" height="(\d+)"', svg)
+    return (float(match.group(1)), float(match.group(2))) if match else (760.0, 260.0)
 
 
 def report_file_name(session: CheckSession) -> str:
@@ -489,9 +276,26 @@ def report_file_name(session: CheckSession) -> str:
     return f"report_{stamp[:16]}_{session.id[:8]}"
 
 
-def save_html(session: CheckSession, folder: Path) -> Path:
-    """Сохраняет HTML-отчёт в папку отчётов и возвращает путь к файлу."""
+def _exported(session: CheckSession, hide_identifiers: bool) -> CheckSession:
+    return mask_identifiers(session) if hide_identifiers else session
+
+
+def save_html(
+    session: CheckSession, folder: Path, mode: str = "buyer", hide_identifiers: bool = True
+) -> Path:
+    """Сохраняет HTML-отчёт в папку отчётов и возвращает путь к файлу (`mode` — какой режим
+    открыт сразу; второй — переключателем в самом отчёте). Идентификаторы по умолчанию скрыты."""
     folder.mkdir(parents=True, exist_ok=True)
     path = folder / f"{report_file_name(session)}.html"
-    path.write_text(build_html(session), encoding="utf-8")
+    exported = _exported(session, hide_identifiers)
+    path.write_text(build_html(exported, mode=mode), encoding="utf-8")
+    return path
+
+
+def save_json(session: CheckSession, folder: Path, hide_identifiers: bool = True) -> Path:
+    """Полный технический снимок проверки в JSON (рядом с отчётом). Идентификаторы по умолчанию
+    скрыты. Открывается обратно через `schema.load_session`."""
+    folder.mkdir(parents=True, exist_ok=True)
+    path = folder / f"{report_file_name(session)}.json"
+    path.write_text(_exported(session, hide_identifiers).to_json(), encoding="utf-8")
     return path

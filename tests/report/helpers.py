@@ -13,4 +13,6 @@ def demo_session(scenario: str) -> CheckSession:
     session.started_at = "2026-10-05T12:00:00"
     session.finished_at = "2026-10-05T12:10:00"
     session.app_version = "0.0.0-test"
+    for result in session.results:  # движок пишет настоящее время начала теста (с 2.1)
+        result.started_at = session.started_at
     return session

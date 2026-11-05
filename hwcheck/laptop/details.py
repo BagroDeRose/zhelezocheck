@@ -37,6 +37,8 @@ def laptop_details(session: CheckSession) -> list[tuple[str, str]]:
         parts = []
         if battery.wear_percent is not None:
             parts.append(f"износ {battery.wear_percent:.0f}%")
+        else:  # неизвестное называем неизвестным, а не пропускаем молча
+            parts.append("износ не определён (Windows не сообщила проектную ёмкость)")
         if battery.cycle_count is not None:
             parts.append(f"циклов зарядки: {battery.cycle_count}")
         if battery.design_capacity_mwh:

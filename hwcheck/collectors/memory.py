@@ -22,11 +22,28 @@ log = logging.getLogger(__name__)
 SCRIPT = (
     "[PSCustomObject]@{ "
     "Modules = @(Get-CimInstance Win32_PhysicalMemory | Select-Object Capacity,Speed,"
-    "ConfiguredClockSpeed,Manufacturer,PartNumber,DeviceLocator,BankLabel); "
+    "ConfiguredClockSpeed,Manufacturer,PartNumber,DeviceLocator,BankLabel,"
+    "SMBIOSMemoryType,ConfiguredVoltage,SerialNumber); "
     "Arrays = @(Get-CimInstance Win32_PhysicalMemoryArray | Select-Object MemoryDevices) }"
 )
 
 _MB = 1024 * 1024
+
+# Код типа памяти SMBIOS (Win32_PhysicalMemory.SMBIOSMemoryType) → название. Остальные коды
+# (0 — «неизвестно», служебные) не переводим: тип не выдумываем.
+SMBIOS_MEMORY_TYPES = {
+    18: "DDR",
+    19: "DDR2",
+    20: "DDR2 FB-DIMM",
+    24: "DDR3",
+    26: "DDR4",
+    27: "LPDDR",
+    28: "LPDDR2",
+    29: "LPDDR3",
+    30: "LPDDR4",
+    34: "DDR5",
+    35: "LPDDR5",
+}
 
 
 def parse(
@@ -42,6 +59,9 @@ def parse(
             manufacturer=clean(item.get("Manufacturer")),
             part_number=clean(item.get("PartNumber")),
             slot=clean(item.get("DeviceLocator")),
+            memory_type=SMBIOS_MEMORY_TYPES.get(to_int(item.get("SMBIOSMemoryType")) or 0, ""),
+            voltage_mv=to_int(item.get("ConfiguredVoltage")) or None,
+            serial_number=clean(item.get("SerialNumber")),
         )
         for item in as_list(raw.get("Modules"))
     ]

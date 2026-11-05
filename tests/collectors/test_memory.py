@@ -48,3 +48,19 @@ def test_collect() -> None:
     info = memory.collect(run_fn=fake)
     assert info.total_mb == 32768
     assert info.available_mb is not None
+
+
+def test_parse_real_extended_fields_v21() -> None:
+    """2.1: тип памяти, напряжение и серийный номер (в фикстуре обезличен)."""
+    info = memory.parse(fixture_json("powershell", "real_memory_v21.json"))
+    assert [m.memory_type for m in info.modules] == ["DDR4", "DDR4", "DDR4"]
+    assert all(m.voltage_mv == 1200 for m in info.modules)
+    assert info.modules[0].serial_number == "00000000"
+
+
+def test_unknown_memory_type_is_not_invented() -> None:
+    data = fixture_json("powershell", "real_memory_v21.json")
+    data["Modules"][0]["SMBIOSMemoryType"] = 0  # «неизвестно» по SMBIOS
+    data["Modules"][0]["ConfiguredVoltage"] = 0
+    module = memory.parse(data).modules[0]
+    assert module.memory_type == "" and module.voltage_mv is None

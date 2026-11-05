@@ -61,10 +61,6 @@ class AppPaths:
         return self.data / "history.sqlite"
 
     @property
-    def listings(self) -> Path:
-        return self.data / "listings"
-
-    @property
     def settings_file(self) -> Path:
         return self.data / "settings.json"
 
@@ -78,7 +74,9 @@ class AppPaths:
         """Создаёт папки данных, если их ещё нет. False — записать нельзя
         (флешка защищена от записи или переполнена): программа работает без сохранения."""
         try:
-            for folder in (self.data, self.reports, self.logs, self.listings):
+            # Папки data/listings больше нет: объявление вставляется только для текущей
+            # проверки (2.1). Старая папка на флешке не мешает и не удаляется.
+            for folder in (self.data, self.reports, self.logs):
                 folder.mkdir(parents=True, exist_ok=True)
         except OSError:
             return False

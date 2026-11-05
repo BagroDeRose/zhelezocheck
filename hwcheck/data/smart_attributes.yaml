@@ -1,0 +1,134 @@
+# Расшифровка S.M.A.R.T. для технического отчёта (SPEC_V2_1, этап 45).
+#
+# ata — ключевые атрибуты SATA/ATA по номеру: название по-русски, что это значит и что
+# означает ненулевое Raw (raw_nonzero; {raw} — подставляется значение). Остальные атрибуты
+# показываются как есть с общей оговоркой (default_note): Raw у производителей разное.
+# nvme — поля журнала здоровья NVMe: название, единица, вид (data_units — «единицы» по
+# 512 000 байт, minutes — минуты) и оговорки (note) или пояснение для ненулевого значения.
+# Это справка для специалиста, а не правила вердикта: вердикт — в rules.yaml.
+
+default_note: "Атрибут производителя: Raw у разных производителей означает разное; ориентир — нормализованное значение и порог."
+
+ata:
+  5:
+    title: "Переназначенные сектора (Reallocated Sectors)"
+    meaning: "Сколько повреждённых секторов накопитель заменил запасными."
+    raw_nonzero: "Заменено запасными повреждённых секторов: {raw} — поверхность или память изнашивается."
+  9:
+    title: "Наработка (Power-On Hours)"
+    meaning: "Сколько часов накопитель был включён. У некоторых моделей Raw хранит не только часы — смотрите и отчёт."
+  10:
+    title: "Повторные раскрутки (Spin Retry Count)"
+    meaning: "Только HDD: сколько раз двигатель не раскрутил диски с первой попытки."
+    raw_nonzero: "Неудачных раскруток с первой попытки: {raw} — признак износа механики или проблем с питанием."
+  12:
+    title: "Включений (Power Cycle Count)"
+    meaning: "Сколько раз накопитель включали."
+  187:
+    title: "Неисправимые ошибки, сообщённые системе (Reported Uncorrectable)"
+    meaning: "Ошибки чтения, которые накопитель не смог исправить сам."
+    raw_nonzero: "Неисправленных ошибок чтения: {raw}."
+  188:
+    title: "Таймауты команд (Command Timeout)"
+    meaning: "Команды, не выполненные вовремя."
+    raw_nonzero: "Таймаутов команд: {raw} — требует интерпретации: кабель, питание или сам накопитель."
+  190:
+    title: "Температура воздушного потока (Airflow Temperature)"
+    meaning: "Температура по датчику накопителя, °C (младший байт Raw)."
+  194:
+    title: "Температура (Temperature)"
+    meaning: "Температура накопителя, °C; в Raw часто ещё минимум и максимум."
+  196:
+    title: "События переназначения (Reallocation Event Count)"
+    meaning: "Сколько раз накопитель переносил данные из плохих секторов."
+    raw_nonzero: "Событий переназначения секторов: {raw}."
+  197:
+    title: "Ожидающие сектора (Current Pending Sectors)"
+    meaning: "Нестабильные сектора, которые ждут повторной записи или переназначения."
+    raw_nonzero: "Нестабильных секторов ждут переназначения: {raw} — данные в них могут не прочитаться."
+  198:
+    title: "Неисправимые сектора (Offline Uncorrectable)"
+    meaning: "Сектора, которые не прочитались при фоновой самопроверке."
+    raw_nonzero: "Не прочитано секторов при самопроверке: {raw}."
+  199:
+    title: "Ошибки передачи (UDMA CRC Error Count)"
+    meaning: "Ошибки на линии между накопителем и платой."
+    raw_nonzero: "Ошибок передачи: {raw} — обычно кабель или разъём, а не износ самого накопителя; счётчик не обнуляется."
+  169:
+    title: "Оставшийся ресурс (Remaining Life)"
+    meaning: "SSD: оставшийся ресурс по оценке накопителя — смотрите нормализованное значение."
+  177:
+    title: "Износ ячеек (Wear Leveling Count)"
+    meaning: "SSD: оставшийся ресурс по оценке накопителя — смотрите нормализованное значение."
+  202:
+    title: "Израсходовано ресурса (Percent Lifetime Used)"
+    meaning: "SSD: ресурс по оценке накопителя; трактовка Raw у производителей разная."
+  231:
+    title: "Оставшийся ресурс SSD (SSD Life Left)"
+    meaning: "SSD: оставшийся ресурс по оценке накопителя — смотрите нормализованное значение."
+  233:
+    title: "Индикатор износа носителя (Media Wearout Indicator)"
+    meaning: "SSD: оставшийся ресурс по оценке накопителя — смотрите нормализованное значение."
+
+nvme:
+  critical_warning:
+    title: "Критическое предупреждение (Critical Warning)"
+  temperature:
+    title: "Температура (Composite Temperature)"
+    unit: "°C"
+  temperature_sensors:
+    title: "Датчики температуры"
+    unit: "°C"
+  available_spare:
+    title: "Резерв ячеек (Available Spare)"
+    unit: "%"
+  available_spare_threshold:
+    title: "Порог резерва (Available Spare Threshold)"
+    unit: "%"
+  percentage_used:
+    title: "Израсходовано ресурса (Percentage Used)"
+    unit: "%"
+    note: "Оценка производителя; может быть больше 100 %, это не значит, что накопитель уже отказал."
+  data_units_read:
+    title: "Прочитано (Data Units Read)"
+    kind: data_units
+  data_units_written:
+    title: "Записано (Data Units Written)"
+    kind: data_units
+  host_reads:
+    title: "Команд чтения (Host Read Commands)"
+  host_writes:
+    title: "Команд записи (Host Write Commands)"
+  controller_busy_time:
+    title: "Время занятости контроллера (Controller Busy Time)"
+    kind: minutes
+  power_cycles:
+    title: "Включений (Power Cycles)"
+  power_on_hours:
+    title: "Наработка (Power On Hours)"
+    unit: "ч"
+  unsafe_shutdowns:
+    title: "Выключений без завершения работы (Unsafe Shutdowns)"
+    note: "Пропадание питания или выключение кнопкой; само по себе не диагноз — требует интерпретации."
+  media_errors:
+    title: "Ошибки целостности данных (Media and Data Integrity Errors)"
+    nonzero: "Ненулевое значение — накопитель находил неисправимые ошибки данных; серьёзный признак."
+  num_err_log_entries:
+    title: "Записей в журнале ошибок (Error Information Log Entries)"
+    nonzero: "Записи журнала ошибок контроллера часто безобидны (например, неподдерживаемые команды драйвера) — требует интерпретации."
+  warning_temp_time:
+    title: "Время выше предупредительной температуры (Warning Composite Temperature Time)"
+    kind: minutes
+  critical_comp_time:
+    title: "Время выше критической температуры (Critical Composite Temperature Time)"
+    kind: minutes
+  thermal_temp1_transition_count:
+    title: "Переходов в тепловое ограничение 1 (Thermal Management T1 Transitions)"
+  thermal_temp2_transition_count:
+    title: "Переходов в тепловое ограничение 2 (Thermal Management T2 Transitions)"
+  thermal_temp1_total_time:
+    title: "Время в тепловом ограничении 1 (Thermal Management T1 Time)"
+    unit: "с"
+  thermal_temp2_total_time:
+    title: "Время в тепловом ограничении 2 (Thermal Management T2 Time)"
+    unit: "с"

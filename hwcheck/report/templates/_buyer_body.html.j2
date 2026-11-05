@@ -1,0 +1,84 @@
+{# Вид «Для покупателя» (SPEC_V2_1, этап 47; MVP-спека, 8.2). Только существенное для решения
+   о покупке; графиков и сырых данных здесь нет — они в виде «Для специалиста». #}
+<div class="verdict" style="background: {{ decision_color }};">
+  <div class="decision">{{ buyer.decision_title | upper }}</div>
+  <div class="summary">{{ buyer.summary }}</div>
+</div>
+
+<h2>Главные причины</h2>
+{% for r in buyer.reasons %}
+<div class="finding sev-border-{{ r.severity_key }}">
+  <div class="tag sev-{{ r.severity_key }}">{{ r.severity }}</div>
+  <div class="title">{{ r.title }}</div>
+  <div>{{ r.explanation }}</div>
+</div>
+{% else %}
+<p>Вердикт не выносился.</p>
+{% endfor %}
+
+<h2>Состояние компонентов</h2>
+<div class="wrap"><table class="data">
+  <thead><tr><th>Компонент</th><th>Состояние</th><th>Почему</th><th>Уверенность</th></tr></thead>
+  <tbody>
+{% for c in buyer.components %}
+    <tr><td>{{ c.name }}</td><td class="comp-{{ c.state_key }}">{{ c.state }}</td><td>{{ c.text }}</td><td>{{ c.confidence }}</td></tr>
+{% endfor %}
+  </tbody>
+</table></div>
+
+{% if buyer.problems %}
+<h2>Найденные проблемы и что они значат</h2>
+{% for p in buyer.problems %}
+<div class="finding sev-border-{{ p.severity_key }}">
+  <div class="title">{{ p.title }}</div>
+  <div>{{ p.explanation }}</div>
+  {% if p.impact %}<div><b>Для покупки:</b> {{ p.impact }}</div>{% endif %}
+  {% if p.advice %}<div class="advice"><b>Что делать:</b> {{ p.advice }}</div>{% endif %}
+</div>
+{% endfor %}
+{% endif %}
+
+{% if buyer.listing_mismatches %}
+<h2>Несовпадения с объявлением</h2>
+<ul>
+{% for m in buyer.listing_mismatches %}  <li><b>{{ m.title }}.</b> {{ m.explanation }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+<h2>Что не удалось проверить</h2>
+{% if buyer.not_checked %}
+<ul>
+{% for item in buyer.not_checked %}  <li>{{ item }}</li>
+{% endfor %}
+</ul>
+<p class="meta">Непроверенное — не «всё хорошо»: по этим пунктам программа ничего не утверждает.</p>
+{% else %}
+<p>Все запланированные проверки выполнены.</p>
+{% endif %}
+
+{% if laptop %}
+<h2>Ноутбук</h2>
+<div class="wrap"><table class="data">
+{% for label, text in laptop %}
+  <tr><th>{{ label }}</th><td>{{ text }}</td></tr>
+{% endfor %}
+</table></div>
+{% endif %}
+
+<h2>Что проверить перед оплатой</h2>
+<ul>
+{% for item in buyer.manual_checks %}  <li>{{ item }}</li>
+{% endfor %}
+</ul>
+
+{% if buyer.bargaining %}
+<h2>Аргументы для торга</h2>
+<ul>
+{% for point in buyer.bargaining %}  <li>{{ point }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+<h2>Параметры проверки</h2>
+<p>{{ started_at }} · длительность {{ buyer.duration }} · {{ buyer.mode }}</p>
